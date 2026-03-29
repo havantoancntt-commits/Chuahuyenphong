@@ -1,6 +1,6 @@
 import { useRef, useState, useMemo } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { OrbitControls, Sparkles, Environment, Float, useTexture, MeshReflectorMaterial, PointMaterial } from '@react-three/drei';
+import { OrbitControls, Sparkles, Environment, Float, useTexture, MeshReflectorMaterial, PointMaterial, SpotLight } from '@react-three/drei';
 import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing';
 import * as THREE from 'three';
 
@@ -26,10 +26,12 @@ function Statue({ hasDonated, isBowing }: { hasDonated: boolean, isBowing: boole
   const innerHaloRef = useRef<THREE.MeshBasicMaterial>(null);
   const lightRef = useRef<THREE.PointLight>(null);
   
-  const statueMaterial = useMemo(() => new THREE.MeshStandardMaterial({
+  const statueMaterial = useMemo(() => new THREE.MeshPhysicalMaterial({
     color: "#FFD700",
-    metalness: 0.85,
-    roughness: 0.25,
+    metalness: 0.95,
+    roughness: 0.1,
+    clearcoat: 1.0,
+    clearcoatRoughness: 0.1,
     emissive: new THREE.Color("#FFD700"),
     emissiveIntensity: 0.05
   }), []);
@@ -186,6 +188,9 @@ function Statue({ hasDonated, isBowing }: { hasDonated: boolean, isBowing: boole
           </mesh>
         </group>
       </Float>
+      
+      {/* Sacred floating gold dust around the statue */}
+      <Sparkles count={100} scale={5} size={3} speed={0.4} opacity={0.3} color="#ffcc00" position={[0, 2, 0]} />
       
       {/* Lotus Base */}
       <group position={[0, 0, 0]}>
@@ -767,15 +772,21 @@ export function TempleScene({ isIncenseLit, isBowing, hasDonated }: { isIncenseL
         {/* Lighting */}
         <ambientLight intensity={hasDonated ? 0.3 : 0.1} />
         
-        {/* Golden sunlight ray from window */}
-        <spotLight
+        {/* Golden sunlight ray from window - Volumetric God Rays */}
+        <SpotLight
           position={[5, 8, 2]}
-          angle={0.3}
+          angle={0.4}
           penumbra={1}
-          intensity={hasDonated ? 80 : 40}
+          intensity={hasDonated ? 150 : 80}
           color="#ffb347"
           castShadow
-          distance={20}
+          distance={25}
+          attenuation={5}
+          anglePower={4}
+          volumetric
+          opacity={hasDonated ? 0.4 : 0.2}
+          radiusTop={0.1}
+          radiusBottom={4}
         />
         
         {/* Fill light */}
@@ -791,6 +802,13 @@ export function TempleScene({ isIncenseLit, isBowing, hasDonated }: { isIncenseL
 
         <CameraController isBowing={isBowing} controlsRef={controlsRef} />
         
+        {/* Premium Post-Processing Effects */}
+        <Environment preset="city" environmentIntensity={0.15} />
+        <EffectComposer disableNormalPass>
+          <Bloom luminanceThreshold={0.8} mipmapBlur intensity={1.2} />
+          <Vignette eskil={false} offset={0.1} darkness={1.2} />
+        </EffectComposer>
+
         <OrbitControls 
           ref={controlsRef}
           target={[0, 2.5, -4]}

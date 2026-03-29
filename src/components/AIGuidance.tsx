@@ -3,8 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Sparkles, Leaf, Heart, Wind, ChevronLeft } from 'lucide-react';
 import { GoogleGenAI } from '@google/genai';
 
-const apiKey = process.env.GEMINI_API_KEY;
-const ai = apiKey ? new GoogleGenAI({ apiKey }) : null;
+const apiKey = "AIzaSyBqwWTRtCv8meMbpGqweC9Sxzm456LxsyQ";
+const ai = new GoogleGenAI({ apiKey });
 
 export function AIGuidance({ onClose }: { onClose: () => void }) {
   const [intention, setIntention] = useState<'peace' | 'health' | 'clarity' | null>(null);

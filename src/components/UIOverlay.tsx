@@ -40,14 +40,14 @@ export function UIOverlay({
         <div className="flex gap-2">
           <button 
             onClick={onOpenGuide}
-            className="pointer-events-auto p-2 sm:p-3 rounded-full bg-black/30 backdrop-blur-md border border-amber-500/20 text-amber-200/80 hover:text-amber-200 hover:bg-amber-500/20 transition-all duration-500"
+            className="pointer-events-auto p-2 sm:p-3 rounded-full bg-black/40 backdrop-blur-xl border border-amber-500/30 text-amber-200/90 hover:text-amber-100 hover:bg-amber-500/30 hover:border-amber-400/50 hover:shadow-[0_0_15px_rgba(245,158,11,0.3)] transition-all duration-500"
             title="Hướng dẫn lễ bái"
           >
             <BookOpen size={20} strokeWidth={1.5} />
           </button>
           <button 
             onClick={() => setAudioEnabled(!audioEnabled)}
-            className="pointer-events-auto p-2 sm:p-3 rounded-full bg-black/30 backdrop-blur-md border border-amber-500/20 text-amber-200/80 hover:text-amber-200 hover:bg-amber-500/20 transition-all duration-500"
+            className="pointer-events-auto p-2 sm:p-3 rounded-full bg-black/40 backdrop-blur-xl border border-amber-500/30 text-amber-200/90 hover:text-amber-100 hover:bg-amber-500/30 hover:border-amber-400/50 hover:shadow-[0_0_15px_rgba(245,158,11,0.3)] transition-all duration-500"
             title={audioEnabled ? "Tắt âm thanh" : "Bật âm thanh"}
           >
             {audioEnabled ? <Volume2 size={20} strokeWidth={1.5} /> : <VolumeX size={20} strokeWidth={1.5} />}
@@ -122,11 +122,11 @@ function ActionButton({
       disabled={disabled}
       className={`
         pointer-events-auto flex flex-col items-center justify-center gap-2 
-        w-[76px] h-[86px] sm:w-20 sm:h-24 md:w-28 md:h-32 rounded-2xl backdrop-blur-md transition-all duration-500
+        w-[76px] h-[86px] sm:w-20 sm:h-24 md:w-28 md:h-32 rounded-2xl backdrop-blur-xl transition-all duration-500
         ${disabled ? 'opacity-40 cursor-not-allowed' : 'hover:-translate-y-1 cursor-pointer active:scale-95'}
         ${highlight 
-          ? 'bg-gradient-to-b from-amber-900/50 to-amber-950/50 border border-amber-500/30 text-amber-200 shadow-[0_4px_20px_rgba(245,158,11,0.15)] hover:shadow-[0_4px_25px_rgba(245,158,11,0.25)]' 
-          : 'bg-black/40 border border-white/10 text-white/80 hover:text-white hover:bg-white/20 hover:border-white/20'
+          ? 'bg-gradient-to-b from-amber-900/60 to-amber-950/60 border border-amber-400/40 text-amber-200 shadow-[0_4px_20px_rgba(245,158,11,0.2)] hover:shadow-[0_4px_30px_rgba(245,158,11,0.4)] hover:border-amber-300/60' 
+          : 'bg-black/50 border border-white/10 text-white/80 hover:text-white hover:bg-white/20 hover:border-amber-200/30 hover:shadow-[0_4px_20px_rgba(255,255,255,0.1)]'
         }
       `}
     >
