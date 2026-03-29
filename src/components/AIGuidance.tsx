@@ -3,7 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Sparkles, Leaf, Heart, Wind, ChevronLeft } from 'lucide-react';
 import { GoogleGenAI } from '@google/genai';
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+const apiKey = process.env.GEMINI_API_KEY;
+const ai = apiKey ? new GoogleGenAI({ apiKey }) : null;
 
 export function AIGuidance({ onClose }: { onClose: () => void }) {
   const [intention, setIntention] = useState<'peace' | 'health' | 'clarity' | null>(null);
@@ -27,15 +28,21 @@ export function AIGuidance({ onClose }: { onClose: () => void }) {
         clarity: "I am seeking clarity, wisdom, and guidance for my path."
       };
 
-      const aiPromise = ai.models.generateContent({
-        model: "gemini-3-flash-preview",
-        contents: `You are a wise, compassionate Buddhist monk in a sacred virtual temple. 
-        The user has come to you seeking: ${promptMap[selectedIntention]}
-        
-        Provide a short, profound, and poetic blessing or piece of guidance (max 3 sentences).
-        The tone must be peaceful, wise, non-materialistic, and deeply comforting.
-        Write it in Vietnamese. Do not use markdown formatting, just plain text.`,
-      });
+      let aiPromise;
+      if (ai) {
+        aiPromise = ai.models.generateContent({
+          model: "gemini-3-flash-preview",
+          contents: `You are a wise, compassionate Buddhist monk in a sacred virtual temple. 
+          The user has come to you seeking: ${promptMap[selectedIntention]}
+          
+          Provide a short, profound, and poetic blessing or piece of guidance (max 3 sentences).
+          The tone must be peaceful, wise, non-materialistic, and deeply comforting.
+          Write it in Vietnamese. Do not use markdown formatting, just plain text.`,
+        });
+      } else {
+        // Fallback if API key is missing
+        aiPromise = Promise.resolve({ text: "Tâm tĩnh lặng, vạn sự bình an. Hãy giữ tâm trong sáng như đóa sen." });
+      }
 
       const [response] = await Promise.all([aiPromise, shakePromise]);
       
