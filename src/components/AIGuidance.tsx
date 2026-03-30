@@ -2,11 +2,13 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Sparkles, Leaf, Heart, Wind, ChevronLeft } from 'lucide-react';
 import { GoogleGenAI } from '@google/genai';
+import { useLanguage } from '../lib/i18n';
 
 const apiKey = "AIzaSyBqwWTRtCv8meMbpGqweC9Sxzm456LxsyQ";
 const ai = new GoogleGenAI({ apiKey });
 
 export function AIGuidance({ onClose }: { onClose: () => void }) {
+  const { t, language } = useLanguage();
   const [intention, setIntention] = useState<'peace' | 'health' | 'clarity' | null>(null);
   const [blessing, setBlessing] = useState<string | null>(null);
   const [isShaking, setIsShaking] = useState(false);
@@ -37,11 +39,11 @@ export function AIGuidance({ onClose }: { onClose: () => void }) {
           
           Provide a short, profound, and poetic blessing or piece of guidance (max 3 sentences).
           The tone must be peaceful, wise, non-materialistic, and deeply comforting.
-          Write it in Vietnamese. Do not use markdown formatting, just plain text.`,
+          Write it in ${language === 'vi' ? 'Vietnamese' : 'English'}. Do not use markdown formatting, just plain text.`,
         });
       } else {
         // Fallback if API key is missing
-        aiPromise = Promise.resolve({ text: "Tâm tĩnh lặng, vạn sự bình an. Hãy giữ tâm trong sáng như đóa sen." });
+        aiPromise = Promise.resolve({ text: t('ai.fallback') });
       }
 
       const [response] = await Promise.all([aiPromise, shakePromise]);
@@ -51,7 +53,7 @@ export function AIGuidance({ onClose }: { onClose: () => void }) {
       
       // Wait a moment for the stick to fly out before showing the text
       setTimeout(() => {
-        setBlessing(response.text || "Tâm tĩnh lặng, vạn sự bình an. Hãy giữ tâm trong sáng như đóa sen.");
+        setBlessing(response.text || t('ai.fallback'));
       }, 800);
 
     } catch (error) {
@@ -60,7 +62,7 @@ export function AIGuidance({ onClose }: { onClose: () => void }) {
       setIsShaking(false);
       setIsDrawn(true);
       setTimeout(() => {
-        setBlessing("Tâm tĩnh lặng, vạn sự bình an. Hãy giữ tâm trong sáng như đóa sen.");
+        setBlessing(t('ai.fallback'));
       }, 800);
     }
   };
@@ -80,7 +82,7 @@ export function AIGuidance({ onClose }: { onClose: () => void }) {
             className="flex items-center gap-1 text-amber-500/80 hover:text-amber-400 transition-colors text-sm font-light tracking-wider"
           >
             <ChevronLeft size={18} />
-            Trở lại
+            {t('ai.back')}
           </button>
           <button 
             onClick={onClose}
@@ -96,7 +98,7 @@ export function AIGuidance({ onClose }: { onClose: () => void }) {
           </div>
           
           <h2 className="text-xl md:text-2xl text-amber-100 font-light tracking-widest uppercase mb-4 text-center">
-            Xin Xăm & Lời Khuyên
+            {t('ai.title')}
           </h2>
           
           <AnimatePresence mode="wait">
@@ -109,23 +111,23 @@ export function AIGuidance({ onClose }: { onClose: () => void }) {
                 className="w-full flex flex-col items-center"
               >
                 <p className="text-white/60 text-sm text-center mb-8 font-light leading-relaxed">
-                  Hãy chọn tâm nguyện của bạn để nhận một lời khuyên từ chư Phật.
+                  {t('ai.prompt')}
                 </p>
 
                 <div className="w-full space-y-3">
                   <IntentionButton 
                     icon={<Wind size={20} className="text-blue-300/70" />}
-                    label="Bình An"
+                    label={t('ai.peace')}
                     onClick={() => handleXinXam('peace')}
                   />
                   <IntentionButton 
                     icon={<Heart size={20} className="text-rose-300/70" />}
-                    label="Sức Khỏe"
+                    label={t('ai.health')}
                     onClick={() => handleXinXam('health')}
                   />
                   <IntentionButton 
                     icon={<Leaf size={20} className="text-emerald-300/70" />}
-                    label="Trí Tuệ"
+                    label={t('ai.clarity')}
                     onClick={() => handleXinXam('clarity')}
                   />
                 </div>
@@ -146,7 +148,7 @@ export function AIGuidance({ onClose }: { onClose: () => void }) {
                     animate={{ opacity: 1 }}
                     className="text-amber-200/50 tracking-widest font-light text-sm uppercase animate-pulse text-center mt-6"
                   >
-                    Đang thỉnh xăm...
+                    {t('ai.shaking')}
                   </motion.p>
                 )}
 
@@ -159,7 +161,7 @@ export function AIGuidance({ onClose }: { onClose: () => void }) {
                   >
                     <div className="relative w-full p-6 sm:p-8 bg-black/40 border border-amber-500/20 rounded-2xl mb-8">
                       <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#110e0c] px-4 text-amber-500/50 text-xs tracking-widest uppercase">
-                        Quẻ Xăm
+                        {t('ai.result')}
                       </div>
                       <p className="text-amber-100/90 text-base sm:text-lg font-light leading-relaxed text-center italic">
                         "{blessing}"
@@ -175,7 +177,7 @@ export function AIGuidance({ onClose }: { onClose: () => void }) {
                       }}
                       className="px-8 py-3 rounded-full bg-transparent border border-white/20 text-white/70 hover:text-white hover:border-white/50 tracking-widest uppercase text-xs font-light transition-all duration-300 shrink-0"
                     >
-                      Xin xăm lại
+                      {t('ai.redraw')}
                     </button>
                   </motion.div>
                 )}
@@ -205,6 +207,7 @@ function IntentionButton({ icon, label, onClick }: { icon: React.ReactNode, labe
 }
 
 function FortuneTube({ isShaking, isDrawn }: { isShaking: boolean, isDrawn: boolean }) {
+  const { t } = useLanguage();
   return (
     <div className="relative w-40 h-56 mx-auto flex items-end justify-center">
       {/* Background Glow */}
@@ -318,7 +321,9 @@ function FortuneTube({ isShaking, isDrawn }: { isShaking: boolean, isDrawn: bool
           {/* Red paper decoration */}
           <div className="absolute top-10 w-20 h-20 bg-gradient-to-br from-red-600 to-red-800 rotate-45 border-2 border-amber-500/60 flex items-center justify-center shadow-[0_0_20px_rgba(220,38,38,0.5)]">
             <div className="w-16 h-16 border border-amber-400/80 rotate-0 flex items-center justify-center">
-               <span className="text-amber-400 text-base -rotate-45 font-bold tracking-widest drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">XĂM</span>
+               <span className="text-amber-400 text-base -rotate-45 font-bold tracking-widest drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+                {t('ai.stick')}
+               </span>
             </div>
           </div>
         </div>

@@ -804,7 +804,7 @@ export function TempleScene({ isIncenseLit, isBowing, hasDonated }: { isIncenseL
         
         {/* Premium Post-Processing Effects */}
         <Environment preset="city" environmentIntensity={0.15} />
-        <EffectComposer disableNormalPass>
+        <EffectComposer>
           <Bloom luminanceThreshold={0.8} mipmapBlur intensity={1.2} />
           <Vignette eskil={false} offset={0.1} darkness={1.2} />
         </EffectComposer>

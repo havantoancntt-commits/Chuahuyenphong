@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Heart, QrCode, Copy, CheckCircle2, ChevronLeft } from 'lucide-react';
+import { useLanguage } from '../lib/i18n';
 
 export function DonationPanel({ onClose, onConfirm }: { onClose: () => void, onConfirm: () => void }) {
+  const { t } = useLanguage();
   const [copied, setCopied] = useState<string | null>(null);
 
   const handleCopy = (text: string, type: string) => {
@@ -27,9 +29,9 @@ export function DonationPanel({ onClose, onConfirm }: { onClose: () => void, onC
             className="flex items-center gap-1 text-amber-500/80 hover:text-amber-400 transition-colors text-sm font-light tracking-wider"
           >
             <ChevronLeft size={18} />
-            Trở lại
+            {t('donation.back')}
           </button>
-          <span className="text-amber-100/50 text-xs tracking-widest uppercase">Gieo Duyên</span>
+          <span className="text-amber-100/50 text-xs tracking-widest uppercase">{t('donation.subtitle')}</span>
           <div className="w-16"></div> {/* Spacer for centering */}
         </div>
 
@@ -40,10 +42,10 @@ export function DonationPanel({ onClose, onConfirm }: { onClose: () => void, onC
             </div>
             
             <h2 className="text-xl sm:text-2xl text-amber-100 font-light tracking-widest uppercase mb-2 text-center">
-              Cúng Dường Tam Bảo
+              {t('donation.title')}
             </h2>
             <p className="text-white/60 text-xs sm:text-sm text-center mb-6 sm:mb-8 font-light leading-relaxed px-2">
-              Phước báu phát sinh từ tâm thành kính. Mọi sự gieo duyên đều góp phần duy trì không gian thanh tịnh này.
+              {t('donation.desc')}
             </p>
 
             <div className="w-full space-y-4 mb-6 sm:mb-8">
@@ -64,7 +66,7 @@ export function DonationPanel({ onClose, onConfirm }: { onClose: () => void, onC
                     className="flex items-center gap-1.5 px-3 py-1.5 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 rounded-lg text-amber-300 transition-all active:scale-95"
                   >
                     {copied === 'vcb' ? <CheckCircle2 size={16} /> : <Copy size={16} />}
-                    <span className="text-xs">{copied === 'vcb' ? 'Đã chép' : 'Sao chép'}</span>
+                    <span className="text-xs">{copied === 'vcb' ? t('donation.copied') : t('donation.copy')}</span>
                   </button>
                 </div>
               </div>
@@ -86,7 +88,7 @@ export function DonationPanel({ onClose, onConfirm }: { onClose: () => void, onC
                     className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/30 rounded-lg text-blue-300 transition-all active:scale-95"
                   >
                     {copied === 'zalo' ? <CheckCircle2 size={16} /> : <Copy size={16} />}
-                    <span className="text-xs">{copied === 'zalo' ? 'Đã chép' : 'Sao chép'}</span>
+                    <span className="text-xs">{copied === 'zalo' ? t('donation.copied') : t('donation.copy')}</span>
                   </button>
                 </div>
               </div>
@@ -96,7 +98,7 @@ export function DonationPanel({ onClose, onConfirm }: { onClose: () => void, onC
               onClick={onConfirm}
               className="w-full py-3.5 sm:py-4 rounded-xl bg-gradient-to-r from-amber-700 to-amber-600 hover:from-amber-600 hover:to-amber-500 text-white tracking-widest uppercase text-sm font-medium transition-all duration-300 shadow-[0_4px_20px_rgba(217,119,6,0.3)] hover:shadow-[0_4px_25px_rgba(217,119,6,0.5)] active:scale-[0.98] shrink-0"
             >
-              Tôi đã thành tâm cúng dường
+              {t('donation.confirm')}
             </button>
           </div>
         </div>

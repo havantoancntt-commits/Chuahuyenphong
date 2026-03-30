@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
-import { Flame, ArrowDownToLine, HeartHandshake, Sparkles, Volume2, VolumeX, BookOpen, Feather } from 'lucide-react';
+import { Flame, ArrowDownToLine, HeartHandshake, Sparkles, Volume2, VolumeX, BookOpen, Feather, Globe } from 'lucide-react';
+import { useLanguage } from '../lib/i18n';
 
 interface UIOverlayProps {
   onLightIncense: () => void;
@@ -26,6 +27,12 @@ export function UIOverlay({
   audioEnabled,
   setAudioEnabled
 }: UIOverlayProps) {
+  const { t, language, setLanguage } = useLanguage();
+
+  const toggleLanguage = () => {
+    setLanguage(language === 'vi' ? 'en' : 'vi');
+  };
+
   return (
     <div className="absolute inset-0 pointer-events-none flex flex-col justify-between p-4 sm:p-6 z-10">
       {/* Top Bar */}
@@ -36,21 +43,29 @@ export function UIOverlay({
           transition={{ duration: 1.5, delay: 0.5 }}
           className="text-amber-100/80 tracking-[0.15em] sm:tracking-[0.2em] uppercase text-xs sm:text-sm font-light drop-shadow-md"
         >
-          Huyền Phong Phật Đạo
+          {t('app.title')}
         </motion.div>
         
         <div className="flex gap-2">
           <button 
+            onClick={toggleLanguage}
+            className="pointer-events-auto flex items-center gap-1.5 px-3 py-2 sm:p-3 rounded-full bg-black/40 backdrop-blur-xl border border-amber-500/30 text-amber-200/90 hover:text-amber-100 hover:bg-amber-500/30 hover:border-amber-400/50 hover:shadow-[0_0_15px_rgba(245,158,11,0.3)] transition-all duration-500"
+            title="Ngôn ngữ / Language"
+          >
+            <Globe size={18} strokeWidth={1.5} />
+            <span className="text-[10px] sm:text-xs font-medium tracking-widest uppercase">{language}</span>
+          </button>
+          <button 
             onClick={onOpenGuide}
             className="pointer-events-auto p-2 sm:p-3 rounded-full bg-black/40 backdrop-blur-xl border border-amber-500/30 text-amber-200/90 hover:text-amber-100 hover:bg-amber-500/30 hover:border-amber-400/50 hover:shadow-[0_0_15px_rgba(245,158,11,0.3)] transition-all duration-500"
-            title="Hướng dẫn lễ bái"
+            title={t('ui.guide_tooltip')}
           >
             <BookOpen size={20} strokeWidth={1.5} />
           </button>
           <button 
             onClick={() => setAudioEnabled(!audioEnabled)}
             className="pointer-events-auto p-2 sm:p-3 rounded-full bg-black/40 backdrop-blur-xl border border-amber-500/30 text-amber-200/90 hover:text-amber-100 hover:bg-amber-500/30 hover:border-amber-400/50 hover:shadow-[0_0_15px_rgba(245,158,11,0.3)] transition-all duration-500"
-            title={audioEnabled ? "Tắt âm thanh" : "Bật âm thanh"}
+            title={audioEnabled ? t('ui.audio_off') : t('ui.audio_on')}
           >
             {audioEnabled ? <Volume2 size={20} strokeWidth={1.5} /> : <VolumeX size={20} strokeWidth={1.5} />}
           </button>
@@ -67,31 +82,31 @@ export function UIOverlay({
         >
           <ActionButton 
             icon={<Flame size={22} strokeWidth={1.5} />} 
-            label="Dâng Hương" 
+            label={t('ui.incense')} 
             onClick={onLightIncense} 
             disabled={isIncenseLit || isBowing}
           />
           <ActionButton 
             icon={<ArrowDownToLine size={22} strokeWidth={1.5} />} 
-            label="Lễ Bái" 
+            label={t('ui.bow')} 
             onClick={onBow} 
             disabled={isBowing}
           />
           <ActionButton 
             icon={<Feather size={22} strokeWidth={1.5} />} 
-            label="Sám Hối" 
+            label={t('ui.repent')} 
             onClick={onOpenRepentance} 
             disabled={isBowing}
           />
           <ActionButton 
             icon={<Sparkles size={22} strokeWidth={1.5} />} 
-            label="Xin Xăm" 
+            label={t('ui.fortune')} 
             onClick={onAIGuidance} 
             disabled={isBowing}
           />
           <ActionButton 
             icon={<HeartHandshake size={22} strokeWidth={1.5} />} 
-            label="Cúng Dường" 
+            label={t('ui.donate')} 
             onClick={onDonate} 
             disabled={isBowing}
             highlight
@@ -104,7 +119,7 @@ export function UIOverlay({
           transition={{ duration: 2, delay: 2 }}
           className="text-center text-white/30 text-[9px] sm:text-[10px] font-light px-4 tracking-wider uppercase"
         >
-          Trải nghiệm tĩnh tâm • Không thay thế nghi thức thực tế
+          {t('ui.disclaimer')}
         </motion.div>
       </div>
     </div>

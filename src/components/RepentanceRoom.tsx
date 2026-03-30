@@ -2,11 +2,13 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Feather, Sparkles } from 'lucide-react';
 import { GoogleGenAI } from '@google/genai';
+import { useLanguage } from '../lib/i18n';
 
 const apiKey = "AIzaSyBqwWTRtCv8meMbpGqweC9Sxzm456LxsyQ";
 const ai = new GoogleGenAI({ apiKey });
 
 export function RepentanceRoom({ onClose }: { onClose: () => void }) {
+  const { t, language } = useLanguage();
   const [text, setText] = useState('');
   const [isReleasing, setIsReleasing] = useState(false);
   const [isReleased, setIsReleased] = useState(false);
@@ -25,7 +27,7 @@ export function RepentanceRoom({ onClose }: { onClose: () => void }) {
         
         Provide a short, profound, and deeply comforting Buddhist advice (max 3 sentences) about forgiveness, letting go of the past, and finding peace.
         The tone must be forgiving, non-judgmental, and enlightening.
-        Write it in Vietnamese. Do not use markdown formatting, just plain text.`,
+        Write it in ${language === 'vi' ? 'Vietnamese' : 'English'}. Do not use markdown formatting, just plain text.`,
       });
 
       // Minimum animation time for the "burning/fading" effect
@@ -33,13 +35,13 @@ export function RepentanceRoom({ onClose }: { onClose: () => void }) {
 
       const [response] = await Promise.all([aiPromise, animationPromise]);
       
-      setAdvice(response.text || "Nghiệp chướng đã được xoa dịu. Hãy buông bỏ quá khứ, sống trọn vẹn với hiện tại. Tâm sáng như gương, vạn sự bình an.");
+      setAdvice(response.text || t('repentance.fallback'));
       setIsReleasing(false);
       setIsReleased(true);
     } catch (error) {
       console.error("Error generating advice:", error);
       setTimeout(() => {
-        setAdvice("Nghiệp chướng đã được xoa dịu. Hãy buông bỏ quá khứ, sống trọn vẹn với hiện tại. Tâm sáng như gương, vạn sự bình an.");
+        setAdvice(t('repentance.fallback'));
         setIsReleasing(false);
         setIsReleased(true);
       }, 3000);
@@ -61,7 +63,7 @@ export function RepentanceRoom({ onClose }: { onClose: () => void }) {
               <Feather className="text-amber-500/80" size={18} strokeWidth={1.5} />
             </div>
             <h2 className="text-lg md:text-xl text-amber-100 font-light tracking-widest uppercase">
-              Phòng Sám Hối
+              {t('repentance.title')}
             </h2>
           </div>
           <button 
@@ -84,14 +86,13 @@ export function RepentanceRoom({ onClose }: { onClose: () => void }) {
                 className="w-full flex flex-col items-center"
               >
                 <p className="text-amber-200/60 text-sm md:text-base text-center mb-8 font-light leading-relaxed tracking-wide">
-                  Viết ra những muộn phiền, lỗi lầm hay chấp niệm trong lòng.<br/>
-                  Thành tâm sám hối để cõi lòng nhẹ nhõm, thanh tịnh.
+                  {t('repentance.prompt')}
                 </p>
 
                 <textarea
                   value={text}
                   onChange={(e) => setText(e.target.value)}
-                  placeholder="Con xin sám hối..."
+                  placeholder={t('repentance.placeholder')}
                   className="w-full h-48 bg-white/5 border border-white/10 rounded-2xl p-6 text-white/90 placeholder:text-white/20 focus:outline-none focus:border-amber-500/50 focus:bg-white/10 transition-all duration-500 resize-none font-light text-lg leading-relaxed"
                 />
 
@@ -100,7 +101,7 @@ export function RepentanceRoom({ onClose }: { onClose: () => void }) {
                   disabled={!text.trim()}
                   className="mt-8 px-10 py-4 rounded-full bg-gradient-to-r from-amber-900/80 to-amber-800/80 border border-amber-500/30 text-amber-100 tracking-[0.2em] uppercase text-sm font-medium hover:shadow-[0_0_30px_rgba(245,158,11,0.3)] hover:border-amber-400/50 transition-all duration-500 disabled:opacity-30 disabled:cursor-not-allowed"
                 >
-                  Thành Tâm Buông Bỏ
+                  {t('repentance.button')}
                 </button>
               </motion.div>
             )}
@@ -125,7 +126,7 @@ export function RepentanceRoom({ onClose }: { onClose: () => void }) {
                   <Sparkles className="text-amber-400 w-12 h-12" />
                 </motion.div>
                 <p className="text-amber-200/50 tracking-[0.3em] font-light text-sm uppercase animate-pulse text-center">
-                  Nghiệp chướng đang tan biến...
+                  {t('repentance.releasing')}
                 </p>
               </motion.div>
             )}
@@ -156,7 +157,7 @@ export function RepentanceRoom({ onClose }: { onClose: () => void }) {
                   }}
                   className="mt-12 px-8 py-3 rounded-full bg-transparent border border-white/20 text-white/70 hover:text-white hover:border-white/50 tracking-widest uppercase text-xs font-light transition-all duration-300"
                 >
-                  Trở về
+                  {t('repentance.back')}
                 </button>
               </motion.div>
             )}

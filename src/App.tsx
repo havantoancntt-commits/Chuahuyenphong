@@ -12,6 +12,7 @@ import { DonationPanel } from './components/DonationPanel';
 import { AIGuidance } from './components/AIGuidance';
 import { RepentanceRoom } from './components/RepentanceRoom';
 import { GuideModal } from './components/GuideModal';
+import { useLanguage } from './lib/i18n';
 
 export default function App() {
   const [isIncenseLit, setIsIncenseLit] = useState(false);
@@ -24,12 +25,13 @@ export default function App() {
   const [blessingMessage, setBlessingMessage] = useState<string | null>(null);
   const [bowMessage, setBowMessage] = useState<string | null>(null);
   const [audioEnabled, setAudioEnabled] = useState(false);
+  const { t } = useLanguage();
 
   // Handle the bow animation trigger
   const handleBow = () => {
     if (isBowing) return;
     setIsBowing(true);
-    setBowMessage("Nam Mô Bổn Sư Thích Ca Mâu Ni Phật");
+    setBowMessage(t('app.bow_message'));
     setTimeout(() => {
       setIsBowing(false);
       setTimeout(() => setBowMessage(null), 1000); // Fade out text slightly after bow ends
@@ -39,7 +41,7 @@ export default function App() {
   const handleDonateConfirm = () => {
     setHasDonated(true);
     setShowDonation(false);
-    setBlessingMessage("Tâm an vạn sự an");
+    setBlessingMessage(t('app.donate_blessing'));
     setTimeout(() => setBlessingMessage(null), 6000);
   };
 
@@ -157,17 +159,19 @@ export default function App() {
             className="flex flex-col items-center"
           >
             <h1 className="text-5xl md:text-7xl mb-6 tracking-[0.2em] text-transparent bg-clip-text bg-gradient-to-b from-amber-200 to-amber-600 font-medium drop-shadow-[0_0_30px_rgba(245,158,11,0.6)] text-center px-4 uppercase">
-              Huyền Phong<br/>Phật Đạo
+              {t('app.title').split(' ').map((word, i) => (
+                <span key={i}>{word}{i === 1 ? <br/> : ' '}</span>
+              ))}
             </h1>
             <p className="mb-12 text-sm md:text-base font-light tracking-[0.15em] text-center px-4 text-amber-200/60 uppercase">
-              Vui lòng đeo tai nghe để có trải nghiệm tâm linh trọn vẹn nhất
+              {t('app.headphone_prompt')}
             </p>
             <button 
               onClick={() => setAudioEnabled(true)}
               className="group relative px-10 py-4 border border-amber-500/30 rounded-full hover:border-amber-400/60 transition-all duration-700 tracking-[0.2em] uppercase text-sm overflow-hidden"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-amber-900/0 via-amber-600/20 to-amber-900/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
-              <span className="relative text-amber-200 group-hover:text-amber-100 transition-colors duration-500">Bước Vào Chánh Điện</span>
+              <span className="relative text-amber-200 group-hover:text-amber-100 transition-colors duration-500">{t('app.enter_temple')}</span>
             </button>
           </motion.div>
         </div>
