@@ -14,6 +14,8 @@ import { RepentanceRoom } from './components/RepentanceRoom';
 import { GuideModal } from './components/GuideModal';
 import { useLanguage } from './lib/i18n';
 
+import { WelcomeScreen } from './components/WelcomeScreen';
+
 export default function App() {
   const [isIncenseLit, setIsIncenseLit] = useState(false);
   const [isBowing, setIsBowing] = useState(false);
@@ -151,30 +153,7 @@ export default function App() {
 
       {/* Initial Audio Prompt */}
       {!audioEnabled && (
-        <div className="absolute inset-0 bg-black/90 z-50 flex flex-col items-center justify-center text-amber-100/80 backdrop-blur-md">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 2, ease: "easeOut" }}
-            className="flex flex-col items-center"
-          >
-            <h1 className="text-5xl md:text-7xl mb-6 tracking-[0.2em] text-transparent bg-clip-text bg-gradient-to-b from-amber-200 to-amber-600 font-medium drop-shadow-[0_0_30px_rgba(245,158,11,0.6)] text-center px-4 uppercase">
-              {t('app.title').split(' ').map((word, i) => (
-                <span key={i}>{word}{i === 1 ? <br/> : ' '}</span>
-              ))}
-            </h1>
-            <p className="mb-12 text-sm md:text-base font-light tracking-[0.15em] text-center px-4 text-amber-200/60 uppercase">
-              {t('app.headphone_prompt')}
-            </p>
-            <button 
-              onClick={() => setAudioEnabled(true)}
-              className="group relative px-10 py-4 border border-amber-500/30 rounded-full hover:border-amber-400/60 transition-all duration-700 tracking-[0.2em] uppercase text-sm overflow-hidden"
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-amber-900/0 via-amber-600/20 to-amber-900/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
-              <span className="relative text-amber-200 group-hover:text-amber-100 transition-colors duration-500">{t('app.enter_temple')}</span>
-            </button>
-          </motion.div>
-        </div>
+        <WelcomeScreen onEnter={() => setAudioEnabled(true)} />
       )}
     </div>
   );
