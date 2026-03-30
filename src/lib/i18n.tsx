@@ -16,6 +16,8 @@ const translations: Translations = {
     'app.enter_temple': 'Bước Vào Chánh Điện',
     'app.bow_message': 'Nam Mô Bổn Sư Thích Ca Mâu Ni Phật',
     'app.donate_blessing': 'Tâm an vạn sự an',
+    'app.online_users': 'Đang trực tuyến',
+    'app.total_visits': 'Tổng lượt viếng thăm',
 
     // UIOverlay.tsx
     'ui.incense': 'Dâng Hương',
@@ -91,6 +93,8 @@ const translations: Translations = {
     'app.enter_temple': 'Enter the Main Hall',
     'app.bow_message': 'Namo Shakyamuni Buddha',
     'app.donate_blessing': 'Peaceful mind, peaceful life',
+    'app.online_users': 'Online now',
+    'app.total_visits': 'Total visits',
 
     // UIOverlay.tsx
     'ui.incense': 'Offer Incense',

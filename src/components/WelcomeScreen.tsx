@@ -1,5 +1,7 @@
 import { motion } from 'framer-motion';
 import { useLanguage } from '../lib/i18n';
+import { useStats } from '../lib/useStats';
+import { Users, Eye, ArrowRight } from 'lucide-react';
 
 interface WelcomeScreenProps {
   onEnter: () => void;
@@ -7,6 +9,7 @@ interface WelcomeScreenProps {
 
 export function WelcomeScreen({ onEnter }: WelcomeScreenProps) {
   const { t } = useLanguage();
+  const { onlineUsers, totalVisits } = useStats();
 
   return (
     <div className="absolute inset-0 z-50 flex flex-col items-center justify-center overflow-hidden bg-[#050505] font-serif">
@@ -67,7 +70,7 @@ export function WelcomeScreen({ onEnter }: WelcomeScreenProps) {
           initial={{ scaleX: 0, opacity: 0 }}
           animate={{ scaleX: 1, opacity: 1 }}
           transition={{ delay: 1.5, duration: 1.5 }}
-          className="flex items-center justify-center w-full max-w-md mb-16 opacity-80"
+          className="flex items-center justify-center w-full max-w-md mb-12 opacity-80"
         >
           <div className="h-[1px] flex-1 bg-gradient-to-r from-transparent via-amber-400/80 to-transparent shadow-[0_0_10px_rgba(251,191,36,0.5)]" />
           <div className="mx-6 w-2 h-2 rotate-45 bg-amber-400 shadow-[0_0_15px_rgba(251,191,36,0.8)]" />
@@ -78,33 +81,53 @@ export function WelcomeScreen({ onEnter }: WelcomeScreenProps) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 2, duration: 1.5 }}
-          className="mb-16 text-xs md:text-sm lg:text-base font-light tracking-[0.25em] text-center text-amber-100/80 uppercase max-w-2xl leading-relaxed drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]"
+          className="mb-12 text-xs md:text-sm lg:text-base font-light tracking-[0.25em] text-center text-amber-100/80 uppercase max-w-2xl leading-relaxed drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]"
         >
           {t('app.headphone_prompt')}
         </motion.p>
 
-        {/* Premium Button */}
+        {/* Premium Button - Optimized for clicking */}
         <motion.button 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 2.5, duration: 1 }}
+          initial={{ opacity: 0, y: 20, scale: 0.9 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ delay: 2.5, duration: 1, type: "spring", stiffness: 100 }}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
           onClick={onEnter}
-          className="group relative px-10 md:px-14 py-5 md:py-6 rounded-full overflow-hidden"
+          className="group relative px-12 md:px-16 py-6 md:py-8 rounded-full overflow-hidden cursor-pointer shadow-[0_0_50px_rgba(245,158,11,0.3)] hover:shadow-[0_0_80px_rgba(245,158,11,0.6)] transition-all duration-500 mb-16"
         >
           {/* Button Background & Border */}
-          <div className="absolute inset-0 bg-black/60 backdrop-blur-xl border border-amber-500/40 rounded-full transition-all duration-700 group-hover:border-amber-300 group-hover:bg-amber-900/20 group-hover:shadow-[0_0_40px_rgba(245,158,11,0.4)]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-amber-900/40 to-black/80 backdrop-blur-xl border-2 border-amber-500/60 rounded-full transition-all duration-500 group-hover:border-amber-300 group-hover:bg-amber-800/40" />
           
-          {/* Button Glow */}
-          <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 bg-[radial-gradient(circle_at_center,rgba(251,191,36,0.3)_0%,transparent_70%)]" />
+          {/* Pulsating Glow */}
+          <div className="absolute inset-0 opacity-50 group-hover:opacity-100 transition-opacity duration-500 bg-[radial-gradient(circle_at_center,rgba(251,191,36,0.5)_0%,transparent_70%)] animate-pulse" />
           
           {/* Shine Effect */}
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-amber-100/20 to-transparent -translate-x-full group-hover:animate-[shimmer_2s_infinite]" />
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-amber-100/30 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]" />
           
           {/* Button Text */}
-          <span className="relative z-10 text-amber-100 group-hover:text-white tracking-[0.3em] md:tracking-[0.4em] uppercase text-xs md:text-sm font-medium transition-colors duration-500 drop-shadow-[0_0_8px_rgba(251,191,36,0.8)]">
+          <span className="relative z-10 flex items-center justify-center gap-3 text-amber-100 group-hover:text-white tracking-[0.3em] md:tracking-[0.4em] uppercase text-sm md:text-lg font-bold transition-colors duration-500 drop-shadow-[0_0_10px_rgba(251,191,36,1)]">
             {t('app.enter_temple')}
+            <ArrowRight className="w-5 h-5 md:w-6 md:h-6 group-hover:translate-x-2 transition-transform duration-500" />
           </span>
         </motion.button>
+        
+        {/* Statistics Section */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 3, duration: 1 }}
+          className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-12 text-amber-200/60 text-xs md:text-sm tracking-widest uppercase font-light"
+        >
+          <div className="flex items-center gap-2 bg-black/40 px-4 py-2 rounded-full border border-amber-500/20 backdrop-blur-sm">
+            <Users className="w-4 h-4 text-amber-400" />
+            <span>{t('app.online_users')}: <strong className="text-amber-400 font-medium">{onlineUsers}</strong></span>
+          </div>
+          <div className="flex items-center gap-2 bg-black/40 px-4 py-2 rounded-full border border-amber-500/20 backdrop-blur-sm">
+            <Eye className="w-4 h-4 text-amber-400" />
+            <span>{t('app.total_visits')}: <strong className="text-amber-400 font-medium">{totalVisits}</strong></span>
+          </div>
+        </motion.div>
       </motion.div>
 
       {/* Floating Particles (CSS) */}
