@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Flame, ArrowDownToLine, HeartHandshake, Sparkles, Volume2, VolumeX, BookOpen, Feather, Globe } from 'lucide-react';
+import { Flame, ArrowDownToLine, HeartHandshake, Sparkles, Volume2, VolumeX, BookOpen, Feather, Globe, Users, Eye } from 'lucide-react';
 import { useLanguage } from '../lib/i18n';
 
 interface UIOverlayProps {
@@ -13,6 +13,7 @@ interface UIOverlayProps {
   isBowing: boolean;
   audioEnabled: boolean;
   setAudioEnabled: (enabled: boolean) => void;
+  stats: { onlineUsers: number; totalVisits: number };
 }
 
 export function UIOverlay({ 
@@ -25,7 +26,8 @@ export function UIOverlay({
   isIncenseLit,
   isBowing,
   audioEnabled,
-  setAudioEnabled
+  setAudioEnabled,
+  stats
 }: UIOverlayProps) {
   const { t, language, setLanguage } = useLanguage();
 
@@ -37,14 +39,31 @@ export function UIOverlay({
     <div className="absolute inset-0 pointer-events-none flex flex-col justify-between p-4 sm:p-6 z-10">
       {/* Top Bar */}
       <div className="flex justify-between items-start pt-safe">
-        <motion.div 
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.5, delay: 0.5 }}
-          className="text-amber-100/80 tracking-[0.15em] sm:tracking-[0.2em] uppercase text-xs sm:text-sm font-light drop-shadow-md"
-        >
-          {t('app.title')}
-        </motion.div>
+        <div className="flex flex-col gap-2">
+          <motion.div 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.5, delay: 0.5 }}
+            className="text-amber-100/80 tracking-[0.15em] sm:tracking-[0.2em] uppercase text-xs sm:text-sm font-light drop-shadow-md"
+          >
+            {t('app.title')}
+          </motion.div>
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1.5, delay: 1 }}
+            className="flex flex-col gap-1 text-[10px] sm:text-xs text-amber-200/50 font-light tracking-wider"
+          >
+            <div className="flex items-center gap-1.5">
+              <Users size={12} className="text-amber-500/70" />
+              <span>{t('app.online_users')}: {stats.onlineUsers}</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <Eye size={12} className="text-amber-500/70" />
+              <span>{t('app.total_visits')}: {stats.totalVisits}</span>
+            </div>
+          </motion.div>
+        </div>
         
         <div className="flex gap-2">
           <button 

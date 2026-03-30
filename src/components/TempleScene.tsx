@@ -765,7 +765,7 @@ export function TempleScene({ isIncenseLit, isBowing, hasDonated }: { isIncenseL
 
   return (
     <div className="w-full h-full absolute inset-0">
-      <Canvas shadows camera={{ position: [0, 2.0, 3.5], fov: 60 }}>
+      <Canvas shadows dpr={[1, 2]} camera={{ position: [0, 2.0, 3.5], fov: 60 }}>
         <color attach="background" args={['#050301']} />
         <fog attach="fog" args={['#050301', 2, 15]} />
         
@@ -821,11 +821,6 @@ export function TempleScene({ isIncenseLit, isBowing, hasDonated }: { isIncenseL
           rotateSpeed={0.2}
           dampingFactor={0.05}
         />
-
-        <EffectComposer>
-          <Bloom luminanceThreshold={0.5} mipmapBlur intensity={hasDonated ? 1.5 : 0.8} />
-          <Vignette eskil={false} offset={0.1} darkness={1.1} />
-        </EffectComposer>
       </Canvas>
     </div>
   );

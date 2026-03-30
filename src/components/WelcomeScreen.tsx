@@ -1,15 +1,15 @@
 import { motion } from 'framer-motion';
 import { useLanguage } from '../lib/i18n';
-import { useStats } from '../lib/useStats';
 import { Users, Eye, ArrowRight } from 'lucide-react';
 
 interface WelcomeScreenProps {
   onEnter: () => void;
+  stats: { onlineUsers: number; totalVisits: number };
 }
 
-export function WelcomeScreen({ onEnter }: WelcomeScreenProps) {
+export function WelcomeScreen({ onEnter, stats }: WelcomeScreenProps) {
   const { t } = useLanguage();
-  const { onlineUsers, totalVisits } = useStats();
+  const { onlineUsers, totalVisits } = stats;
 
   return (
     <div className="absolute inset-0 z-50 flex flex-col items-center justify-center overflow-hidden bg-[#050505] font-serif">
