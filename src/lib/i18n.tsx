@@ -81,14 +81,19 @@ const translations: Translations = {
     'guide.understood': 'ĐÃ HIỂU',
 
     // DonationPanel.tsx
-    'donate.title': 'Gieo Duyên',
-    'donate.subtitle': 'Cúng Dường Tam Bảo',
-    'donate.desc': 'Phước báu phát sinh từ tâm thành kính. Mọi sự gieo duyên đều góp phần duy trì không gian thanh tịnh này.',
-    'donate.bank': 'Ngân hàng Vietcombank',
-    'donate.wallet': 'Ví ZaloPay',
-    'donate.copy': 'Sao chép',
-    'donate.copied': 'Đã chép',
-    'donate.confirm': 'Tôi đã thành tâm cúng dường',
+    'donation.title': 'Gieo Duyên',
+    'donation.subtitle': 'Cúng Dường Tam Bảo',
+    'donation.desc': 'Phước báu phát sinh từ tâm thành kính. Mọi sự gieo duyên đều góp phần duy trì không gian thanh tịnh này.',
+    'donation.back': 'Trở lại',
+    'donation.bank': 'Ngân hàng',
+    'donation.wallet': 'Ví ZaloPay',
+    'donation.copy': 'Sao chép',
+    'donation.copied': 'Đã chép',
+    'donation.confirm': 'Tôi đã thành tâm cúng dường',
+    'donation.amount.custom': 'Tùy tâm',
+    'donation.scan_qr': 'Quét mã QR để gieo duyên',
+    'donation.account_name': 'Chủ tài khoản',
+    'donation.account_number': 'Số tài khoản',
   },
   en: {
     // App.tsx
@@ -162,14 +167,19 @@ const translations: Translations = {
     'guide.understood': 'I UNDERSTAND',
 
     // DonationPanel.tsx
-    'donate.title': 'Sow Good Karma',
-    'donate.subtitle': 'Offerings to the Triple Gem',
-    'donate.desc': 'Merit arises from a sincere heart. Every offering helps maintain this pure space.',
-    'donate.bank': 'Vietcombank',
-    'donate.wallet': 'ZaloPay Wallet',
-    'donate.copy': 'Copy',
-    'donate.copied': 'Copied',
-    'donate.confirm': 'I have sincerely offered',
+    'donation.title': 'Sow Good Karma',
+    'donation.subtitle': 'Offerings to the Triple Gem',
+    'donation.desc': 'Merit arises from a sincere heart. Every offering helps maintain this pure space.',
+    'donation.back': 'Back',
+    'donation.bank': 'Bank',
+    'donation.wallet': 'ZaloPay Wallet',
+    'donation.copy': 'Copy',
+    'donation.copied': 'Copied',
+    'donation.confirm': 'I have sincerely offered',
+    'donation.amount.custom': 'Custom',
+    'donation.scan_qr': 'Scan QR code to donate',
+    'donation.account_name': 'Account Name',
+    'donation.account_number': 'Account Number',
   }
 };
 
