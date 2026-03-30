@@ -1,11 +1,12 @@
 import { motion } from 'framer-motion';
-import { Flame, ArrowDownToLine, HeartHandshake, Sparkles, Volume2, VolumeX, BookOpen } from 'lucide-react';
+import { Flame, ArrowDownToLine, HeartHandshake, Sparkles, Volume2, VolumeX, BookOpen, Feather } from 'lucide-react';
 
 interface UIOverlayProps {
   onLightIncense: () => void;
   onBow: () => void;
   onDonate: () => void;
   onAIGuidance: () => void;
+  onOpenRepentance: () => void;
   onOpenGuide: () => void;
   isIncenseLit: boolean;
   isBowing: boolean;
@@ -18,6 +19,7 @@ export function UIOverlay({
   onBow, 
   onDonate, 
   onAIGuidance, 
+  onOpenRepentance,
   onOpenGuide,
   isIncenseLit,
   isBowing,
@@ -61,7 +63,7 @@ export function UIOverlay({
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.5, delay: 1 }}
-          className="flex justify-center gap-3 sm:gap-4 md:gap-8 mb-4 sm:mb-6 w-full px-2"
+          className="flex flex-wrap justify-center gap-2 sm:gap-4 md:gap-6 mb-4 sm:mb-6 w-full px-2"
         >
           <ActionButton 
             icon={<Flame size={22} strokeWidth={1.5} />} 
@@ -73,6 +75,12 @@ export function UIOverlay({
             icon={<ArrowDownToLine size={22} strokeWidth={1.5} />} 
             label="Lễ Bái" 
             onClick={onBow} 
+            disabled={isBowing}
+          />
+          <ActionButton 
+            icon={<Feather size={22} strokeWidth={1.5} />} 
+            label="Sám Hối" 
+            onClick={onOpenRepentance} 
             disabled={isBowing}
           />
           <ActionButton 

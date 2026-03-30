@@ -10,6 +10,7 @@ import { UIOverlay } from './components/UIOverlay';
 import { AudioController } from './components/AudioController';
 import { DonationPanel } from './components/DonationPanel';
 import { AIGuidance } from './components/AIGuidance';
+import { RepentanceRoom } from './components/RepentanceRoom';
 import { GuideModal } from './components/GuideModal';
 
 export default function App() {
@@ -18,6 +19,7 @@ export default function App() {
   const [showDonation, setShowDonation] = useState(false);
   const [hasDonated, setHasDonated] = useState(false);
   const [showAIGuidance, setShowAIGuidance] = useState(false);
+  const [showRepentance, setShowRepentance] = useState(false);
   const [showGuide, setShowGuide] = useState(false);
   const [blessingMessage, setBlessingMessage] = useState<string | null>(null);
   const [bowMessage, setBowMessage] = useState<string | null>(null);
@@ -76,6 +78,10 @@ export default function App() {
           setShowAIGuidance(true);
           setAudioEnabled(true);
         }}
+        onOpenRepentance={() => {
+          setShowRepentance(true);
+          setAudioEnabled(true);
+        }}
         onOpenGuide={() => setShowGuide(true)}
         isIncenseLit={isIncenseLit}
         isBowing={isBowing}
@@ -95,6 +101,12 @@ export default function App() {
         {showAIGuidance && (
           <AIGuidance 
             onClose={() => setShowAIGuidance(false)} 
+          />
+        )}
+
+        {showRepentance && (
+          <RepentanceRoom 
+            onClose={() => setShowRepentance(false)} 
           />
         )}
 
