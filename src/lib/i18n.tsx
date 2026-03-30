@@ -44,14 +44,15 @@ const translations: Translations = {
     'ai.fallback': 'Tâm tĩnh lặng, vạn sự bình an. Hãy giữ tâm trong sáng như đóa sen.',
 
     // RepentanceRoom.tsx
-    'repent.title': 'Phòng Sám Hối',
-    'repent.desc1': 'Viết ra những muộn phiền, lỗi lầm hay chấp niệm trong lòng.',
-    'repent.desc2': 'Thành tâm sám hối để cõi lòng nhẹ nhõm, thanh tịnh.',
-    'repent.placeholder': 'Con xin sám hối...',
-    'repent.btn': 'Thành Tâm Buông Bỏ',
-    'repent.releasing': 'Nghiệp chướng đang tan biến...',
-    'repent.return': 'Trở về',
-    'repent.fallback': 'Nghiệp chướng đã được xoa dịu. Hãy buông bỏ quá khứ, sống trọn vẹn với hiện tại. Tâm sáng như gương, vạn sự bình an.',
+    'repentance.title': 'Phòng Sám Hối',
+    'repentance.desc1': 'Viết ra những muộn phiền, lỗi lầm hay chấp niệm trong lòng.',
+    'repentance.desc2': 'Thành tâm sám hối để cõi lòng nhẹ nhõm, thanh tịnh.',
+    'repentance.prompt': 'Viết ra những muộn phiền, lỗi lầm hay chấp niệm trong lòng. Thành tâm sám hối để cõi lòng nhẹ nhõm, thanh tịnh.',
+    'repentance.placeholder': 'Con xin sám hối...',
+    'repentance.button': 'Thành Tâm Buông Bỏ',
+    'repentance.releasing': 'Nghiệp chướng đang tan biến...',
+    'repentance.back': 'Trở về',
+    'repentance.fallback': 'Nghiệp chướng đã được xoa dịu. Hãy buông bỏ quá khứ, sống trọn vẹn với hiện tại. Tâm sáng như gương, vạn sự bình an.',
 
     // GuideModal.tsx
     'guide.title': 'Hướng Dẫn Lễ Bái',
@@ -121,14 +122,15 @@ const translations: Translations = {
     'ai.fallback': 'A quiet mind brings universal peace. Keep your heart as pure as a lotus.',
 
     // RepentanceRoom.tsx
-    'repent.title': 'Repentance Room',
-    'repent.desc1': 'Write down your sorrows, mistakes, or attachments.',
-    'repent.desc2': 'Sincerely repent to find peace and clarity in your heart.',
-    'repent.placeholder': 'I sincerely repent...',
-    'repent.btn': 'Sincerely Let Go',
-    'repent.releasing': 'Karma is dissolving...',
-    'repent.return': 'Return',
-    'repent.fallback': 'Your karma has been eased. Let go of the past and live fully in the present. May your mind be clear as a mirror, and your life be peaceful.',
+    'repentance.title': 'Repentance Room',
+    'repentance.desc1': 'Write down your sorrows, mistakes, or attachments.',
+    'repentance.desc2': 'Sincerely repent to find peace and clarity in your heart.',
+    'repentance.prompt': 'Write down your sorrows, mistakes, or attachments. Sincerely repent to find peace and clarity in your heart.',
+    'repentance.placeholder': 'I sincerely repent...',
+    'repentance.button': 'Sincerely Let Go',
+    'repentance.releasing': 'Karma is dissolving...',
+    'repentance.back': 'Return',
+    'repentance.fallback': 'Your karma has been eased. Let go of the past and live fully in the present. May your mind be clear as a mirror, and your life be peaceful.',
 
     // GuideModal.tsx
     'guide.title': 'Worship Guide',
