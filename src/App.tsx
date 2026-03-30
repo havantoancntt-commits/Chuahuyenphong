@@ -12,6 +12,7 @@ import { DonationPanel } from './components/DonationPanel';
 import { AIGuidance } from './components/AIGuidance';
 import { RepentanceRoom } from './components/RepentanceRoom';
 import { GuideModal } from './components/GuideModal';
+import { LegalModal } from './components/LegalModal';
 import { useLanguage } from './lib/i18n';
 
 import { WelcomeScreen } from './components/WelcomeScreen';
@@ -26,6 +27,7 @@ export default function App() {
   const [showAIGuidance, setShowAIGuidance] = useState(false);
   const [showRepentance, setShowRepentance] = useState(false);
   const [showGuide, setShowGuide] = useState(false);
+  const [legalModalType, setLegalModalType] = useState<'privacy' | 'terms' | 'contact' | null>(null);
   const [blessingMessage, setBlessingMessage] = useState<string | null>(null);
   const [bowMessage, setBowMessage] = useState<string | null>(null);
   const [audioEnabled, setAudioEnabled] = useState(false);
@@ -90,6 +92,7 @@ export default function App() {
           setAudioEnabled(true);
         }}
         onOpenGuide={() => setShowGuide(true)}
+        onOpenLegal={(type) => setLegalModalType(type)}
         isIncenseLit={isIncenseLit}
         isBowing={isBowing}
         audioEnabled={audioEnabled}
@@ -121,6 +124,13 @@ export default function App() {
         {showGuide && (
           <GuideModal 
             onClose={() => setShowGuide(false)} 
+          />
+        )}
+
+        {legalModalType && (
+          <LegalModal 
+            type={legalModalType}
+            onClose={() => setLegalModalType(null)} 
           />
         )}
       </AnimatePresence>

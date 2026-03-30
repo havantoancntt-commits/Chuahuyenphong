@@ -9,6 +9,7 @@ interface UIOverlayProps {
   onAIGuidance: () => void;
   onOpenRepentance: () => void;
   onOpenGuide: () => void;
+  onOpenLegal: (type: 'privacy' | 'terms' | 'contact') => void;
   isIncenseLit: boolean;
   isBowing: boolean;
   audioEnabled: boolean;
@@ -23,6 +24,7 @@ export function UIOverlay({
   onAIGuidance, 
   onOpenRepentance,
   onOpenGuide,
+  onOpenLegal,
   isIncenseLit,
   isBowing,
   audioEnabled,
@@ -136,9 +138,18 @@ export function UIOverlay({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 2, delay: 2 }}
-          className="text-center text-white/30 text-[9px] sm:text-[10px] font-light px-4 tracking-wider uppercase"
+          className="flex flex-col items-center gap-3 mt-4"
         >
-          {t('ui.disclaimer')}
+          <div className="text-center text-white/30 text-[9px] sm:text-[10px] font-light px-4 tracking-wider uppercase">
+            {t('ui.disclaimer')}
+          </div>
+          <div className="flex flex-wrap justify-center items-center gap-x-4 gap-y-2 text-white/20 text-[8px] sm:text-[9px] font-light tracking-widest uppercase">
+            <button onClick={() => onOpenLegal('privacy')} className="hover:text-amber-500/50 transition-colors pointer-events-auto">{t('legal.privacy.title')}</button>
+            <span className="hidden sm:inline">•</span>
+            <button onClick={() => onOpenLegal('terms')} className="hover:text-amber-500/50 transition-colors pointer-events-auto">{t('legal.terms.title')}</button>
+            <span className="hidden sm:inline">•</span>
+            <button onClick={() => onOpenLegal('contact')} className="hover:text-amber-500/50 transition-colors pointer-events-auto">{t('legal.contact.title')}: havantoancntt@gmail.com</button>
+          </div>
         </motion.div>
       </div>
     </div>

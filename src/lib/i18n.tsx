@@ -94,6 +94,17 @@ const translations: Translations = {
     'donation.scan_qr': 'Quét mã QR để gieo duyên',
     'donation.account_name': 'Chủ tài khoản',
     'donation.account_number': 'Số tài khoản',
+
+    // LegalModal.tsx
+    'legal.privacy.title': 'Chính Sách Bảo Mật',
+    'legal.privacy.text': 'Chúng tôi tôn trọng quyền riêng tư của bạn và cam kết bảo vệ dữ liệu cá nhân. Không gian tâm linh này không thu thập bất kỳ thông tin nhận dạng cá nhân nào mà không có sự đồng ý rõ ràng của bạn. Mọi dữ liệu được xử lý trong quá trình bạn viếng thăm, chẳng hạn như thống kê sử dụng ẩn danh hoặc tương tác AI, chỉ được sử dụng để nâng cao trải nghiệm và duy trì sự thanh tịnh của ứng dụng. Chúng tôi không bán, trao đổi hoặc chuyển giao thông tin của bạn cho bên ngoài.',
+    'legal.terms.title': 'Điều Khoản Dịch Vụ',
+    'legal.terms.text': 'Khi bước vào không gian linh thiêng ảo này, bạn đồng ý duy trì thái độ tôn trọng và trang nghiêm. Ứng dụng này được cung cấp cho mục đích tĩnh tâm, thiền định và tôn vinh văn hóa. Đây không phải là sự thay thế cho các nghi thức tôn giáo thực tế hoặc lời khuyên tâm lý chuyên nghiệp. Chúng tôi có quyền sửa đổi hoặc chấm dứt dịch vụ bất cứ lúc nào để bảo vệ tính toàn vẹn của trải nghiệm. Việc bạn tiếp tục sử dụng đồng nghĩa với việc chấp nhận các điều khoản này.',
+    'legal.contact.title': 'Liên Hệ',
+    'legal.contact.text': 'Đối với bất kỳ thắc mắc, phản hồi hoặc hỗ trợ nào liên quan đến trải nghiệm của bạn trong ngôi chùa ảo của chúng tôi, vui lòng liên hệ với chúng tôi. Chúng tôi hoan nghênh những chia sẻ của bạn và luôn sẵn sàng hỗ trợ bạn trên hành trình tâm linh.',
+    'legal.contact.email_label': 'Email Trực Tiếp',
+    'legal.back': 'Trở lại',
+    'legal.header': 'Pháp Lý & Thông Tin',
   },
   en: {
     // App.tsx
@@ -180,6 +191,17 @@ const translations: Translations = {
     'donation.scan_qr': 'Scan QR code to donate',
     'donation.account_name': 'Account Name',
     'donation.account_number': 'Account Number',
+
+    // LegalModal.tsx
+    'legal.privacy.title': 'Privacy Policy',
+    'legal.privacy.text': 'We respect your privacy and are committed to protecting your personal data. This spiritual space does not collect any personally identifiable information without your explicit consent. Any data processed during your visit, such as anonymous usage statistics or AI interactions, is used solely to enhance your experience and maintain the tranquility of the application. We do not sell, trade, or otherwise transfer your information to outside parties.',
+    'legal.terms.title': 'Terms of Service',
+    'legal.terms.text': 'By entering this virtual sacred space, you agree to maintain a respectful and peaceful demeanor. This application is provided for spiritual reflection, meditation, and cultural appreciation. It is not a replacement for actual religious practices or professional mental health advice. We reserve the right to modify or terminate the service at any time to preserve the integrity of the experience. Your continued use signifies your acceptance of these terms.',
+    'legal.contact.title': 'Contact Us',
+    'legal.contact.text': 'For any inquiries, feedback, or support regarding your experience in our virtual temple, please reach out to us. We welcome your thoughts and are here to assist you on your spiritual journey.',
+    'legal.contact.email_label': 'Direct Email',
+    'legal.back': 'Back',
+    'legal.header': 'Legal & Info',
   }
 };
 
