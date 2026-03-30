@@ -1,0 +1,31 @@
+{
+  "build": {
+    "env": {
+      "EXAMPLE_ENV_VAR": "your_value_here"
+    },
+    "commands": ["npm install", "npm run build"],
+    "framework": "nextjs",
+    "outputDirectory": "out"
+  },
+  "routes": [
+    {
+      "src": "/service-worker.js",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "src": "/manifest.json",
+      "headers": {
+        "Content-Security-Policy": "default-src 'self'" 
+      }
+    }
+  ],
+  "security": {
+    "headers": {
+      "X-Content-Type-Options": "nosniff",
+      "X-Frame-Options": "DENY",
+      "X-XSS-Protection": "1; mode=block"
+    }
+  }
+}
