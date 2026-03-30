@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ais-pre-6o4lmkp7356no5vkg4zsti-466654021835.asia-east1.run.app/sitemap.xml
