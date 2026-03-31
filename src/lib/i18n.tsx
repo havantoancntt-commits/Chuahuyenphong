@@ -55,8 +55,8 @@ const translations: Translations = {
     'repentance.fallback': 'Nghiệp chướng đã được xoa dịu. Hãy buông bỏ quá khứ, sống trọn vẹn với hiện tại. Tâm sáng như gương, vạn sự bình an.',
 
     // MeditationRoom.tsx
-    'meditation.title': 'Phòng Thiền',
-    'meditation.desc': 'Tìm lại sự bình yên trong từng hơi thở.',
+    'meditation.title': 'Phòng Thiền & Chánh Niệm',
+    'meditation.desc': 'Tìm lại sự bình yên trong từng hơi thở và âm thanh tỉnh thức.',
     'meditation.timer.5min': '5 Phút',
     'meditation.timer.10min': '10 Phút',
     'meditation.timer.15min': '15 Phút',
@@ -68,6 +68,13 @@ const translations: Translations = {
     'meditation.hold': 'Giữ hơi...',
     'meditation.completed': 'Buổi thiền kết thúc. Chúc bạn một ngày an lành.',
     'meditation.back': 'Trở về',
+    'meditation.sound.none': 'Không nhạc nền',
+    'meditation.sound.rain': 'Mưa rơi',
+    'meditation.sound.stream': 'Suối chảy',
+    'meditation.sound.birds': 'Chim hót',
+    'meditation.sound.chanting': 'Tụng kinh',
+    'meditation.wooden_fish': 'Gõ Mõ',
+    'meditation.bell': 'Thỉnh Chuông',
 
     // PrayerBook.tsx
     'prayer.title': 'Văn Khấn',
@@ -209,8 +216,8 @@ const translations: Translations = {
     'repentance.fallback': 'Your karma has been eased. Let go of the past and live fully in the present. May your mind be clear as a mirror, and your life be peaceful.',
 
     // MeditationRoom.tsx
-    'meditation.title': 'Meditation Room',
-    'meditation.desc': 'Find peace in every breath.',
+    'meditation.title': 'Mindfulness & Meditation',
+    'meditation.desc': 'Find peace in every breath and awakening sound.',
     'meditation.timer.5min': '5 Min',
     'meditation.timer.10min': '10 Min',
     'meditation.timer.15min': '15 Min',
@@ -222,6 +229,13 @@ const translations: Translations = {
     'meditation.hold': 'Hold...',
     'meditation.completed': 'Meditation completed. Have a peaceful day.',
     'meditation.back': 'Return',
+    'meditation.sound.none': 'No Background',
+    'meditation.sound.rain': 'Rainfall',
+    'meditation.sound.stream': 'Flowing Stream',
+    'meditation.sound.birds': 'Birdsong',
+    'meditation.sound.chanting': 'Chanting',
+    'meditation.wooden_fish': 'Wooden Fish',
+    'meditation.bell': 'Ring Bell',
 
     // PrayerBook.tsx
     'prayer.title': 'Prayer Book',
