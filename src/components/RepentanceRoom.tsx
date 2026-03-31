@@ -112,8 +112,19 @@ export function RepentanceRoom({ onClose }: { onClose: () => void }) {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="w-full flex flex-col items-center justify-center"
+                className="w-full flex flex-col items-center justify-center relative"
               >
+                {/* Burning Effect Background */}
+                <motion.div
+                  animate={{ 
+                    scale: [1, 1.5, 2],
+                    opacity: [0.8, 0.4, 0],
+                    rotate: [0, 45, 90]
+                  }}
+                  transition={{ duration: 3, ease: "easeOut" }}
+                  className="absolute w-64 h-64 bg-gradient-to-t from-orange-600/40 via-amber-500/20 to-transparent rounded-full blur-3xl pointer-events-none"
+                />
+
                 <motion.div
                   animate={{ 
                     scale: [1, 1.2, 1],
@@ -121,11 +132,11 @@ export function RepentanceRoom({ onClose }: { onClose: () => void }) {
                     filter: ["blur(4px)", "blur(8px)", "blur(4px)"]
                   }}
                   transition={{ duration: 2, repeat: Infinity }}
-                  className="w-32 h-32 rounded-full bg-amber-500/20 mb-8 flex items-center justify-center"
+                  className="w-32 h-32 rounded-full bg-amber-500/20 mb-8 flex items-center justify-center relative z-10"
                 >
-                  <Sparkles className="text-amber-400 w-12 h-12" />
+                  <Sparkles className="text-amber-400 w-12 h-12 drop-shadow-[0_0_15px_rgba(251,191,36,0.8)]" />
                 </motion.div>
-                <p className="text-amber-200/50 tracking-[0.3em] font-light text-sm uppercase animate-pulse text-center">
+                <p className="text-amber-200/60 tracking-[0.3em] font-light text-sm uppercase animate-pulse text-center relative z-10 drop-shadow-md">
                   {t('repentance.releasing')}
                 </p>
               </motion.div>
@@ -134,31 +145,47 @@ export function RepentanceRoom({ onClose }: { onClose: () => void }) {
             {isReleased && advice && (
               <motion.div 
                 key="released"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1.5, ease: "easeOut" }}
-                className="w-full flex flex-col items-center"
+                initial={{ opacity: 0, y: 30, scale: 0.9 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ duration: 1.2, type: "spring", stiffness: 100, damping: 20 }}
+                className="w-full flex flex-col items-center relative"
               >
-                <div className="w-16 h-16 rounded-full bg-amber-500/10 flex items-center justify-center mb-8 border border-amber-500/30 shadow-[0_0_30px_rgba(245,158,11,0.2)]">
-                  <Feather className="text-amber-400" size={28} strokeWidth={1} />
-                </div>
+                {/* Divine Light Background */}
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[150%] h-64 bg-gradient-to-b from-amber-500/10 via-amber-500/5 to-transparent rounded-full blur-3xl pointer-events-none" />
+
+                <motion.div 
+                  initial={{ rotate: -180, scale: 0 }}
+                  animate={{ rotate: 0, scale: 1 }}
+                  transition={{ duration: 1, type: "spring", stiffness: 200, damping: 20, delay: 0.3 }}
+                  className="w-20 h-20 rounded-full bg-gradient-to-br from-amber-500/20 to-amber-900/40 flex items-center justify-center mb-10 border border-amber-400/40 shadow-[0_0_40px_rgba(245,158,11,0.3),inset_0_0_20px_rgba(245,158,11,0.2)] backdrop-blur-md relative z-10"
+                >
+                  <Feather className="text-amber-300 drop-shadow-lg" size={36} strokeWidth={1.5} />
+                </motion.div>
                 
-                <div className="relative w-full p-8 bg-gradient-to-b from-amber-900/10 to-transparent border-t border-amber-500/20 rounded-3xl">
-                  <p className="text-amber-100/90 text-lg md:text-xl font-light leading-relaxed text-center italic">
+                <div className="relative w-full p-10 bg-black/40 border border-amber-500/20 rounded-3xl shadow-[0_0_30px_rgba(0,0,0,0.5),inset_0_0_20px_rgba(245,158,11,0.05)] backdrop-blur-sm">
+                  <div className="absolute -top-4 -left-4 text-amber-500/10 rotate-180">
+                    <Feather size={60} strokeWidth={0.5} />
+                  </div>
+                  <div className="absolute -bottom-4 -right-4 text-amber-500/10">
+                    <Feather size={60} strokeWidth={0.5} />
+                  </div>
+                  <p className="text-amber-100/90 text-lg md:text-xl font-light leading-relaxed text-center italic relative z-10 drop-shadow-sm">
                     "{advice}"
                   </p>
                 </div>
 
-                <button 
+                <motion.button 
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                   onClick={() => {
                     setText('');
                     setIsReleased(false);
                     setAdvice(null);
                   }}
-                  className="mt-12 px-8 py-3 rounded-full bg-transparent border border-white/20 text-white/70 hover:text-white hover:border-white/50 tracking-widest uppercase text-xs font-light transition-all duration-300"
+                  className="mt-12 px-10 py-3.5 rounded-full bg-amber-900/30 border border-amber-500/40 text-amber-200 hover:text-amber-100 hover:bg-amber-800/40 hover:border-amber-400/60 tracking-[0.2em] uppercase text-xs font-medium transition-all duration-300 shadow-[0_0_20px_rgba(245,158,11,0.15)] relative z-10"
                 >
                   {t('repentance.back')}
-                </button>
+                </motion.button>
               </motion.div>
             )}
           </AnimatePresence>

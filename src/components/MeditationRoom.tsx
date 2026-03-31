@@ -152,6 +152,30 @@ export function MeditationRoom({ onClose }: MeditationRoomProps) {
               >
                 {/* Breathing Circle */}
                 <div className="relative w-64 h-64 flex items-center justify-center mb-16">
+                  {/* Outer Glow Rings */}
+                  <motion.div
+                    animate={{
+                      scale: breathState === 'in' ? 2 : breathState === 'out' ? 1 : 2,
+                      opacity: breathState === 'hold' ? 0.4 : 0.1,
+                    }}
+                    transition={{
+                      duration: breathState === 'in' ? 4 : breathState === 'out' ? 8 : 7,
+                      ease: "easeInOut"
+                    }}
+                    className="absolute w-48 h-48 rounded-full border border-amber-500/20"
+                  />
+                  <motion.div
+                    animate={{
+                      scale: breathState === 'in' ? 1.8 : breathState === 'out' ? 1 : 1.8,
+                      opacity: breathState === 'hold' ? 0.6 : 0.2,
+                    }}
+                    transition={{
+                      duration: breathState === 'in' ? 4 : breathState === 'out' ? 8 : 7,
+                      ease: "easeInOut"
+                    }}
+                    className="absolute w-40 h-40 rounded-full border border-amber-400/30"
+                  />
+
                   <motion.div
                     animate={{
                       scale: breathState === 'in' ? 1.5 : breathState === 'out' ? 1 : 1.5,
@@ -161,7 +185,7 @@ export function MeditationRoom({ onClose }: MeditationRoomProps) {
                       duration: breathState === 'in' ? 4 : breathState === 'out' ? 8 : 7,
                       ease: "easeInOut"
                     }}
-                    className="absolute w-40 h-40 rounded-full bg-gradient-to-tr from-amber-500/20 to-yellow-300/20 blur-xl"
+                    className="absolute w-40 h-40 rounded-full bg-gradient-to-tr from-amber-500/30 to-yellow-300/30 blur-2xl"
                   />
                   <motion.div
                     animate={{
@@ -171,9 +195,9 @@ export function MeditationRoom({ onClose }: MeditationRoomProps) {
                       duration: breathState === 'in' ? 4 : breathState === 'out' ? 8 : 7,
                       ease: "easeInOut"
                     }}
-                    className="absolute w-32 h-32 rounded-full border border-amber-400/30 flex items-center justify-center bg-black/40 backdrop-blur-sm shadow-[0_0_30px_rgba(245,158,11,0.1)]"
+                    className="absolute w-32 h-32 rounded-full border border-amber-400/50 flex items-center justify-center bg-black/60 backdrop-blur-md shadow-[0_0_40px_rgba(245,158,11,0.2),inset_0_0_20px_rgba(245,158,11,0.1)]"
                   >
-                    <span className="text-amber-200/80 tracking-widest uppercase text-sm font-medium">
+                    <span className="text-amber-200/90 tracking-widest uppercase text-sm font-medium drop-shadow-md">
                       {breathState === 'in' ? t('meditation.breathe_in') : 
                        breathState === 'hold' ? t('meditation.hold') : 
                        t('meditation.breathe_out')}
@@ -196,22 +220,36 @@ export function MeditationRoom({ onClose }: MeditationRoomProps) {
             ) : (
               <motion.div 
                 key="completion"
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="flex flex-col items-center text-center"
+                initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
+                className="flex flex-col items-center text-center relative"
               >
-                <div className="w-24 h-24 rounded-full bg-amber-500/10 flex items-center justify-center mb-8 border border-amber-400/30 shadow-[0_0_40px_rgba(245,158,11,0.2)]">
-                  <Wind className="text-amber-400" size={40} strokeWidth={1} />
-                </div>
-                <h3 className="text-2xl text-amber-100 font-light tracking-widest uppercase mb-6">
+                {/* Completion Glow */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
+
+                <motion.div 
+                  initial={{ scale: 0, rotate: -180 }}
+                  animate={{ scale: 1, rotate: 0 }}
+                  transition={{ type: "spring", stiffness: 200, damping: 20, delay: 0.2 }}
+                  className="w-28 h-28 rounded-full bg-gradient-to-br from-amber-500/20 to-amber-900/40 flex items-center justify-center mb-8 border border-amber-400/40 shadow-[0_0_50px_rgba(245,158,11,0.3),inset_0_0_20px_rgba(245,158,11,0.2)] backdrop-blur-md relative z-10"
+                >
+                  <Wind className="text-amber-300 drop-shadow-lg" size={48} strokeWidth={1.5} />
+                </motion.div>
+                <h3 className="text-3xl text-amber-100 font-light tracking-widest uppercase mb-4 drop-shadow-md relative z-10">
                   {t('meditation.completed')}
                 </h3>
-                <button
+                <p className="text-amber-200/60 font-light tracking-wider mb-10 max-w-sm relative z-10">
+                  {language === 'vi' ? 'Tâm tĩnh lặng, vạn sự bình an.' : 'A quiet mind brings universal peace.'}
+                </p>
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                   onClick={() => setShowCompletion(false)}
-                  className="px-8 py-3 bg-amber-600/20 hover:bg-amber-500/30 text-amber-200 border border-amber-500/50 rounded-full transition-all duration-300 tracking-widest uppercase text-sm"
+                  className="px-10 py-3.5 bg-amber-900/30 hover:bg-amber-800/40 text-amber-200 border border-amber-500/40 hover:border-amber-400/60 rounded-full transition-all duration-300 tracking-[0.2em] uppercase text-sm font-medium shadow-[0_0_20px_rgba(245,158,11,0.15)] relative z-10"
                 >
                   {t('meditation.back')}
-                </button>
+                </motion.button>
               </motion.div>
             )}
           </AnimatePresence>

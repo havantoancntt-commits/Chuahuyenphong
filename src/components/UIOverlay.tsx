@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Flame, ArrowDownToLine, HeartHandshake, Sparkles, Volume2, VolumeX, BookOpen, Feather, Globe, Users, Eye, Wind } from 'lucide-react';
+import { Flame, ArrowDownToLine, HeartHandshake, Sparkles, Volume2, VolumeX, BookOpen, Feather, Globe, Users, Eye, Wind, BookText, Droplets } from 'lucide-react';
 import { useLanguage } from '../lib/i18n';
 
 interface UIOverlayProps {
@@ -9,6 +9,8 @@ interface UIOverlayProps {
   onAIGuidance: () => void;
   onOpenRepentance: () => void;
   onOpenMeditation: () => void;
+  onOpenPrayerBook: () => void;
+  onOpenLifeRelease: () => void;
   onOpenGuide: () => void;
   onOpenLegal: (type: 'privacy' | 'terms' | 'contact') => void;
   isIncenseLit: boolean;
@@ -25,6 +27,8 @@ export function UIOverlay({
   onAIGuidance, 
   onOpenRepentance,
   onOpenMeditation,
+  onOpenPrayerBook,
+  onOpenLifeRelease,
   onOpenGuide,
   onOpenLegal,
   isIncenseLit,
@@ -126,12 +130,28 @@ export function UIOverlay({
             label={t('meditation.title')} 
             onClick={onOpenMeditation} 
             disabled={isBowing}
+            highlight
+          />
+          <ActionButton 
+            icon={<BookText size={22} strokeWidth={1.5} />} 
+            label={t('prayer.title')} 
+            onClick={onOpenPrayerBook} 
+            disabled={isBowing}
+            highlight
+          />
+          <ActionButton 
+            icon={<Droplets size={22} strokeWidth={1.5} />} 
+            label={t('release.title')} 
+            onClick={onOpenLifeRelease} 
+            disabled={isBowing}
+            highlight
           />
           <ActionButton 
             icon={<Sparkles size={22} strokeWidth={1.5} />} 
             label={t('ui.fortune')} 
             onClick={onAIGuidance} 
             disabled={isBowing}
+            highlight
           />
           <ActionButton 
             icon={<HeartHandshake size={22} strokeWidth={1.5} />} 

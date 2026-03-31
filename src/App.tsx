@@ -12,6 +12,8 @@ import { DonationPanel } from './components/DonationPanel';
 import { AIGuidance } from './components/AIGuidance';
 import { RepentanceRoom } from './components/RepentanceRoom';
 import { MeditationRoom } from './components/MeditationRoom';
+import { PrayerBook } from './components/PrayerBook';
+import { LifeRelease } from './components/LifeRelease';
 import { GuideModal } from './components/GuideModal';
 import { LegalModal } from './components/LegalModal';
 import { useLanguage } from './lib/i18n';
@@ -28,6 +30,8 @@ export default function App() {
   const [showAIGuidance, setShowAIGuidance] = useState(false);
   const [showRepentance, setShowRepentance] = useState(false);
   const [showMeditation, setShowMeditation] = useState(false);
+  const [showPrayerBook, setShowPrayerBook] = useState(false);
+  const [showLifeRelease, setShowLifeRelease] = useState(false);
   const [showGuide, setShowGuide] = useState(false);
   const [legalModalType, setLegalModalType] = useState<'privacy' | 'terms' | 'contact' | null>(null);
   const [blessingMessage, setBlessingMessage] = useState<string | null>(null);
@@ -97,6 +101,14 @@ export default function App() {
           setShowMeditation(true);
           setAudioEnabled(true);
         }}
+        onOpenPrayerBook={() => {
+          setShowPrayerBook(true);
+          setAudioEnabled(true);
+        }}
+        onOpenLifeRelease={() => {
+          setShowLifeRelease(true);
+          setAudioEnabled(true);
+        }}
         onOpenGuide={() => setShowGuide(true)}
         onOpenLegal={(type) => setLegalModalType(type)}
         isIncenseLit={isIncenseLit}
@@ -130,6 +142,18 @@ export default function App() {
         {showMeditation && (
           <MeditationRoom 
             onClose={() => setShowMeditation(false)} 
+          />
+        )}
+
+        {showPrayerBook && (
+          <PrayerBook 
+            onClose={() => setShowPrayerBook(false)} 
+          />
+        )}
+
+        {showLifeRelease && (
+          <LifeRelease 
+            onClose={() => setShowLifeRelease(false)} 
           />
         )}
 
