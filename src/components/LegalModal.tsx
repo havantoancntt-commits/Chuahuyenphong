@@ -10,7 +10,7 @@ interface LegalModalProps {
 export function LegalModal({ type, onClose }: LegalModalProps) {
   const { t } = useLanguage();
 
-  const content = {
+  const content: Record<'privacy' | 'terms' | 'contact', { icon: React.ReactNode; title: string; text: string; email?: string }> = {
     privacy: {
       icon: <Shield className="text-amber-500" size={24} strokeWidth={1.5} />,
       title: t('legal.privacy.title'),
