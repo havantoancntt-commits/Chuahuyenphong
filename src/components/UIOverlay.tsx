@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Flame, ArrowDownToLine, HeartHandshake, Sparkles, Volume2, VolumeX, BookOpen, Feather, Globe, Users, Eye } from 'lucide-react';
+import { Flame, ArrowDownToLine, HeartHandshake, Sparkles, Volume2, VolumeX, BookOpen, Feather, Globe, Users, Eye, Wind } from 'lucide-react';
 import { useLanguage } from '../lib/i18n';
 
 interface UIOverlayProps {
@@ -8,6 +8,7 @@ interface UIOverlayProps {
   onDonate: () => void;
   onAIGuidance: () => void;
   onOpenRepentance: () => void;
+  onOpenMeditation: () => void;
   onOpenGuide: () => void;
   onOpenLegal: (type: 'privacy' | 'terms' | 'contact') => void;
   isIncenseLit: boolean;
@@ -23,6 +24,7 @@ export function UIOverlay({
   onDonate, 
   onAIGuidance, 
   onOpenRepentance,
+  onOpenMeditation,
   onOpenGuide,
   onOpenLegal,
   isIncenseLit,
@@ -117,6 +119,12 @@ export function UIOverlay({
             icon={<Feather size={22} strokeWidth={1.5} />} 
             label={t('ui.repent')} 
             onClick={onOpenRepentance} 
+            disabled={isBowing}
+          />
+          <ActionButton 
+            icon={<Wind size={22} strokeWidth={1.5} />} 
+            label={t('meditation.title')} 
+            onClick={onOpenMeditation} 
             disabled={isBowing}
           />
           <ActionButton 

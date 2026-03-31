@@ -54,6 +54,21 @@ const translations: Translations = {
     'repentance.back': 'Trở về',
     'repentance.fallback': 'Nghiệp chướng đã được xoa dịu. Hãy buông bỏ quá khứ, sống trọn vẹn với hiện tại. Tâm sáng như gương, vạn sự bình an.',
 
+    // MeditationRoom.tsx
+    'meditation.title': 'Phòng Thiền',
+    'meditation.desc': 'Tìm lại sự bình yên trong từng hơi thở.',
+    'meditation.timer.5min': '5 Phút',
+    'meditation.timer.10min': '10 Phút',
+    'meditation.timer.15min': '15 Phút',
+    'meditation.timer.30min': '30 Phút',
+    'meditation.start': 'Bắt Đầu Thiền',
+    'meditation.stop': 'Kết Thúc',
+    'meditation.breathe_in': 'Hít vào...',
+    'meditation.breathe_out': 'Thở ra...',
+    'meditation.hold': 'Giữ hơi...',
+    'meditation.completed': 'Buổi thiền kết thúc. Chúc bạn một ngày an lành.',
+    'meditation.back': 'Trở về',
+
     // GuideModal.tsx
     'guide.title': 'Hướng Dẫn Lễ Bái',
     'guide.mindset.title': '1. Chuẩn Bị Tâm Thế',
@@ -150,6 +165,21 @@ const translations: Translations = {
     'repentance.releasing': 'Karma is dissolving...',
     'repentance.back': 'Return',
     'repentance.fallback': 'Your karma has been eased. Let go of the past and live fully in the present. May your mind be clear as a mirror, and your life be peaceful.',
+
+    // MeditationRoom.tsx
+    'meditation.title': 'Meditation Room',
+    'meditation.desc': 'Find peace in every breath.',
+    'meditation.timer.5min': '5 Min',
+    'meditation.timer.10min': '10 Min',
+    'meditation.timer.15min': '15 Min',
+    'meditation.timer.30min': '30 Min',
+    'meditation.start': 'Start Meditation',
+    'meditation.stop': 'End Session',
+    'meditation.breathe_in': 'Breathe in...',
+    'meditation.breathe_out': 'Breathe out...',
+    'meditation.hold': 'Hold...',
+    'meditation.completed': 'Meditation completed. Have a peaceful day.',
+    'meditation.back': 'Return',
 
     // GuideModal.tsx
     'guide.title': 'Worship Guide',

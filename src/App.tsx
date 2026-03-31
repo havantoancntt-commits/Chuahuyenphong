@@ -11,6 +11,7 @@ import { AudioController } from './components/AudioController';
 import { DonationPanel } from './components/DonationPanel';
 import { AIGuidance } from './components/AIGuidance';
 import { RepentanceRoom } from './components/RepentanceRoom';
+import { MeditationRoom } from './components/MeditationRoom';
 import { GuideModal } from './components/GuideModal';
 import { LegalModal } from './components/LegalModal';
 import { useLanguage } from './lib/i18n';
@@ -26,6 +27,7 @@ export default function App() {
   const [hasDonated, setHasDonated] = useState(false);
   const [showAIGuidance, setShowAIGuidance] = useState(false);
   const [showRepentance, setShowRepentance] = useState(false);
+  const [showMeditation, setShowMeditation] = useState(false);
   const [showGuide, setShowGuide] = useState(false);
   const [legalModalType, setLegalModalType] = useState<'privacy' | 'terms' | 'contact' | null>(null);
   const [blessingMessage, setBlessingMessage] = useState<string | null>(null);
@@ -91,6 +93,10 @@ export default function App() {
           setShowRepentance(true);
           setAudioEnabled(true);
         }}
+        onOpenMeditation={() => {
+          setShowMeditation(true);
+          setAudioEnabled(true);
+        }}
         onOpenGuide={() => setShowGuide(true)}
         onOpenLegal={(type) => setLegalModalType(type)}
         isIncenseLit={isIncenseLit}
@@ -118,6 +124,12 @@ export default function App() {
         {showRepentance && (
           <RepentanceRoom 
             onClose={() => setShowRepentance(false)} 
+          />
+        )}
+
+        {showMeditation && (
+          <MeditationRoom 
+            onClose={() => setShowMeditation(false)} 
           />
         )}
 
