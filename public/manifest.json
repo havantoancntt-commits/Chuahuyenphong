@@ -1,0 +1,22 @@
+{
+  "name": "Huyền Phong Phật Đạo",
+  "short_name": "Huyền Phong",
+  "description": "Không Gian Tâm Linh Ảo & Lễ Phật Online",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#050505",
+  "theme_color": "#110e0c",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "https://images.unsplash.com/photo-1604881988758-f76ad2f7aac1?q=80&w=192&h=192&auto=format&fit=crop",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://images.unsplash.com/photo-1604881988758-f76ad2f7aac1?q=80&w=512&h=512&auto=format&fit=crop",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
