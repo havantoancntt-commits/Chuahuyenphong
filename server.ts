@@ -69,7 +69,8 @@ async function startServer() {
     ws.isAlive = true;
     ws.on('pong', () => { ws.isAlive = true; });
 
-    const url = new URL(request.url || '', `http://${request.headers.host}`);
+    const host = request.headers.host || 'localhost';
+    const url = new URL(request.url || '', `http://${host}`);
     const clientId = url.searchParams.get('clientId') || 'unknown';
     const isNewSession = url.searchParams.get('newSession') === 'true';
 
@@ -134,9 +135,10 @@ async function startServer() {
     res.json({ onlineUsers: activeClients.size, totalVisits });
   });
 
-  // Determine if we are in production by checking if the built index.html exists
+  // Determine if we are in production by checking if we are running the built server.cjs
+  // or if NODE_ENV is production.
+  const isProduction = process.argv[1] && process.argv[1].endsWith('server.cjs') || process.env.NODE_ENV === 'production';
   const distPath = path.join(process.cwd(), 'dist');
-  const isProduction = fs.existsSync(path.join(distPath, 'index.html'));
 
   // Vite middleware for development
   if (!isProduction) {
@@ -149,7 +151,12 @@ async function startServer() {
   } else {
     app.use(express.static(distPath));
     app.get('*', (req, res) => {
-      res.sendFile(path.join(distPath, 'index.html'));
+      const indexPath = path.join(distPath, 'index.html');
+      if (fs.existsSync(indexPath)) {
+        res.sendFile(indexPath);
+      } else {
+        res.status(404).send('index.html not found in dist folder. Please run `npm run build` first.');
+      }
     });
   }
 }
