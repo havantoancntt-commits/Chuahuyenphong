@@ -1,1 +1,0 @@
-{\n  "builds": [\n    { "src": "package.json", "use": "@vercel/static-build", "config": { "distDir": "dist" } }\n  ],\n  "routes": [\n    { "src": "/sw.js", "headers": { "cache-control": "no-store" } },\n    { "src": "/(.*)", "dest": "/index.html" }\n  ]\n}
