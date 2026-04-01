@@ -338,10 +338,10 @@ function FortuneTube({ isShaking, isDrawn }: { isShaking: boolean, isDrawn: bool
           className="absolute bottom-6 left-1/2 -translate-x-1/2 w-4 h-52 bg-gradient-to-b from-[#fef3c7] via-[#fcd34d] to-[#b45309] rounded-t-sm origin-bottom z-10 shadow-[0_0_30px_rgba(251,191,36,1)]"
           initial={{ y: 30, opacity: 0 }}
           animate={isDrawn ? { 
-            y: [-10, -200, -160], 
+            y: -160, 
             opacity: 1,
-            rotate: [0, 12, -4, 0],
-            scale: [1, 1.6, 1.5],
+            rotate: 0,
+            scale: 1.5,
             zIndex: 50
           } : isShaking ? { 
             y: [-10, -70, -10], 
