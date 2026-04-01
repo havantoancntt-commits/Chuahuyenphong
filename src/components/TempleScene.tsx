@@ -1,4 +1,4 @@
-import { useRef, useState, useMemo } from 'react';
+import { useRef, useState, useMemo, Suspense } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { OrbitControls, Sparkles, Environment, Float, useTexture, MeshReflectorMaterial, PointMaterial, SpotLight } from '@react-three/drei';
 import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing';
@@ -766,61 +766,63 @@ export function TempleScene({ isIncenseLit, isBowing, hasDonated }: { isIncenseL
   return (
     <div className="w-full h-full absolute inset-0">
       <Canvas shadows dpr={[1, 2]} camera={{ position: [0, 2.0, 3.5], fov: 60 }}>
-        <color attach="background" args={['#050301']} />
-        <fog attach="fog" args={['#050301', 2, 15]} />
-        
-        {/* Lighting */}
-        <ambientLight intensity={hasDonated ? 0.3 : 0.1} />
-        
-        {/* Golden sunlight ray from window - Volumetric God Rays */}
-        <SpotLight
-          position={[5, 8, 2]}
-          angle={0.4}
-          penumbra={1}
-          intensity={hasDonated ? 150 : 80}
-          color="#ffb347"
-          castShadow
-          distance={25}
-          attenuation={5}
-          anglePower={4}
-          volumetric
-          opacity={hasDonated ? 0.4 : 0.2}
-          radiusTop={0.1}
-          radiusBottom={4}
-        />
-        
-        {/* Fill light */}
-        <pointLight position={[-5, 5, 5]} intensity={5} color="#4a6fa5" />
+        <Suspense fallback={null}>
+          <color attach="background" args={['#050301']} />
+          <fog attach="fog" args={['#050301', 2, 15]} />
+          
+          {/* Lighting */}
+          <ambientLight intensity={hasDonated ? 0.3 : 0.1} />
+          
+          {/* Golden sunlight ray from window - Volumetric God Rays */}
+          <SpotLight
+            position={[5, 8, 2]}
+            angle={0.4}
+            penumbra={1}
+            intensity={hasDonated ? 150 : 80}
+            color="#ffb347"
+            castShadow
+            distance={25}
+            attenuation={5}
+            anglePower={4}
+            volumetric
+            opacity={hasDonated ? 0.4 : 0.2}
+            radiusTop={0.1}
+            radiusBottom={4}
+          />
+          
+          {/* Fill light */}
+          <pointLight position={[-5, 5, 5]} intensity={5} color="#4a6fa5" />
 
-        <TempleArchitecture />
-        <Statue hasDonated={hasDonated} isBowing={isBowing} />
-        <Altar isIncenseLit={isIncenseLit} />
-        <BowingAura isBowing={isBowing} />
+          <TempleArchitecture />
+          <Statue hasDonated={hasDonated} isBowing={isBowing} />
+          <Altar isIncenseLit={isIncenseLit} />
+          <BowingAura isBowing={isBowing} />
 
-        {/* Dust Particles */}
-        <DustParticles />
+          {/* Dust Particles */}
+          <DustParticles />
 
-        <CameraController isBowing={isBowing} controlsRef={controlsRef} />
-        
-        {/* Premium Post-Processing Effects */}
-        <Environment preset="city" environmentIntensity={0.15} />
-        <EffectComposer>
-          <Bloom luminanceThreshold={0.8} mipmapBlur intensity={1.2} />
-          <Vignette eskil={false} offset={0.1} darkness={1.2} />
-        </EffectComposer>
+          <CameraController isBowing={isBowing} controlsRef={controlsRef} />
+          
+          {/* Premium Post-Processing Effects */}
+          <Environment preset="city" environmentIntensity={0.15} />
+          <EffectComposer>
+            <Bloom luminanceThreshold={0.8} mipmapBlur intensity={1.2} />
+            <Vignette eskil={false} offset={0.1} darkness={1.2} />
+          </EffectComposer>
 
-        <OrbitControls 
-          ref={controlsRef}
-          target={[0, 2.5, -4]}
-          enableZoom={false} 
-          enablePan={false}
-          maxPolarAngle={Math.PI / 2 + 0.1}
-          minPolarAngle={Math.PI / 2 - 0.3}
-          maxAzimuthAngle={Math.PI / 8}
-          minAzimuthAngle={-Math.PI / 8}
-          rotateSpeed={0.2}
-          dampingFactor={0.05}
-        />
+          <OrbitControls 
+            ref={controlsRef}
+            target={[0, 2.5, -4]}
+            enableZoom={false} 
+            enablePan={false}
+            maxPolarAngle={Math.PI / 2 + 0.1}
+            minPolarAngle={Math.PI / 2 - 0.3}
+            maxAzimuthAngle={Math.PI / 8}
+            minAzimuthAngle={-Math.PI / 8}
+            rotateSpeed={0.2}
+            dampingFactor={0.05}
+          />
+        </Suspense>
       </Canvas>
     </div>
   );

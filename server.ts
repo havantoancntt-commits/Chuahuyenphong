@@ -134,8 +134,12 @@ async function startServer() {
     res.json({ onlineUsers: activeClients.size, totalVisits });
   });
 
+  // Determine if we are in production by checking if the built index.html exists
+  const distPath = path.join(process.cwd(), 'dist');
+  const isProduction = fs.existsSync(path.join(distPath, 'index.html'));
+
   // Vite middleware for development
-  if (process.env.NODE_ENV !== "production") {
+  if (!isProduction) {
     const { createServer: createViteServer } = await import('vite');
     const vite = await createViteServer({
       server: { middlewareMode: true },
@@ -143,7 +147,6 @@ async function startServer() {
     });
     app.use(vite.middlewares);
   } else {
-    const distPath = path.join(process.cwd(), 'dist');
     app.use(express.static(distPath));
     app.get('*', (req, res) => {
       res.sendFile(path.join(distPath, 'index.html'));
