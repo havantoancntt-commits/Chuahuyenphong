@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '../lib/i18n';
-import { ChevronLeft, Play, Square, Wind, Music, Volume2, VolumeX } from 'lucide-react';
+import { ChevronLeft, Play, Square, Wind, Music, Volume2, VolumeX, Sparkles, Heart } from 'lucide-react';
 
 interface MeditationRoomProps {
   onClose: () => void;
@@ -217,9 +217,19 @@ export function MeditationRoom({ onClose }: MeditationRoomProps) {
               <h2 className="text-3xl md:text-5xl text-amber-50 font-light tracking-[0.2em] uppercase mb-6 text-center drop-shadow-[0_0_15px_rgba(251,191,36,0.3)]">
                 {t('meditation.title')}
               </h2>
-              <p className="text-amber-200/60 text-center mb-16 font-light tracking-[0.1em] text-sm md:text-base max-w-lg leading-relaxed">
-                {t('meditation.desc')}
-              </p>
+              
+              <div className="flex flex-col items-center gap-6 mb-16">
+                <p className="text-amber-200/80 text-center font-light tracking-[0.15em] text-sm md:text-base max-w-xl leading-relaxed italic">
+                  "{language === 'vi' ? 'Hãy tìm một tư thế thoải mái, nhắm mắt lại và để hơi thở dẫn lối bạn về với hiện tại.' : 'Find a comfortable posture, close your eyes, and let your breath guide you back to the present.'}"
+                </p>
+                <div className="flex items-center gap-8 text-amber-500/40 text-xs tracking-[0.2em] uppercase">
+                  <div className="flex items-center gap-2"><Wind size={14} /> <span>{language === 'vi' ? 'Hít thở' : 'Breathe'}</span></div>
+                  <span className="w-1 h-1 rounded-full bg-amber-500/30" />
+                  <div className="flex items-center gap-2"><Sparkles size={14} /> <span>{language === 'vi' ? 'Thư giãn' : 'Relax'}</span></div>
+                  <span className="w-1 h-1 rounded-full bg-amber-500/30" />
+                  <div className="flex items-center gap-2"><Heart size={14} /> <span>{language === 'vi' ? 'Buông xả' : 'Let go'}</span></div>
+                </div>
+              </div>
 
               {/* Duration Selection */}
               <div className="w-full max-w-2xl mb-12">
@@ -270,15 +280,28 @@ export function MeditationRoom({ onClose }: MeditationRoomProps) {
               </div>
 
               <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
                 onClick={handleStart}
-                className="group relative flex items-center gap-4 px-12 py-5 rounded-full overflow-hidden"
+                className="group relative flex items-center justify-center gap-4 px-16 py-5 rounded-full overflow-hidden mt-4"
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-amber-900/40 via-amber-600/40 to-amber-900/40 border border-amber-500/50 rounded-full transition-all duration-500 group-hover:bg-amber-500/30" />
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-[radial-gradient(circle_at_center,rgba(251,191,36,0.4)_0%,transparent_70%)]" />
-                <Play size={20} fill="currentColor" className="text-amber-200 relative z-10" />
-                <span className="text-amber-100 tracking-[0.25em] uppercase font-medium relative z-10">{t('meditation.start')}</span>
+                {/* Animated background gradient */}
+                <div className="absolute inset-0 bg-gradient-to-r from-amber-900/60 via-amber-600/50 to-amber-900/60 border border-amber-500/50 rounded-full transition-all duration-700 group-hover:bg-amber-500/40" />
+                
+                {/* Sweeping light effect */}
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 overflow-hidden rounded-full">
+                  <motion.div 
+                    className="absolute inset-0 bg-gradient-to-r from-transparent via-amber-200/20 to-transparent skew-x-12"
+                    animate={{ x: ['-150%', '150%'] }}
+                    transition={{ duration: 2.5, repeat: Infinity, ease: "linear" }}
+                  />
+                </div>
+                
+                {/* Glowing aura */}
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 bg-[radial-gradient(circle_at_center,rgba(251,191,36,0.5)_0%,transparent_70%)] blur-md" />
+                
+                <Play size={18} fill="currentColor" className="text-amber-100 relative z-10 transition-transform duration-500 group-hover:scale-110" />
+                <span className="text-amber-50 tracking-[0.3em] uppercase text-sm font-medium relative z-10">{t('meditation.start')}</span>
               </motion.button>
             </motion.div>
           ) : isActive ? (

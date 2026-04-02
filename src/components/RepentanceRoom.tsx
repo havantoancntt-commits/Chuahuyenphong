@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, Feather, Sparkles, Flame } from 'lucide-react';
+import { ChevronLeft, Feather, Sparkles, Flame, Wind } from 'lucide-react';
 import { GoogleGenAI } from '@google/genai';
 import { useLanguage } from '../lib/i18n';
 
@@ -114,9 +114,19 @@ export function RepentanceRoom({ onClose }: { onClose: () => void }) {
               <h2 className="text-3xl md:text-4xl text-red-50 font-light tracking-[0.2em] uppercase mb-6 text-center drop-shadow-[0_0_15px_rgba(220,38,38,0.3)]">
                 {t('repentance.title')}
               </h2>
-              <p className="text-red-200/60 text-center mb-12 font-light tracking-[0.1em] text-sm md:text-base max-w-lg leading-relaxed">
-                {t('repentance.prompt')}
-              </p>
+              
+              <div className="flex flex-col items-center gap-6 mb-12">
+                <p className="text-red-200/80 text-center font-light tracking-[0.15em] text-sm md:text-base max-w-xl leading-relaxed italic">
+                  "{language === 'vi' ? 'Viết ra những muộn phiền, hối tiếc hay gánh nặng trong lòng. Khi ngọn lửa bùng lên, hãy để mọi thứ tan biến thành tro bụi.' : 'Write down your sorrows, regrets, or burdens. As the flame ignites, let everything turn to ashes.'}"
+                </p>
+                <div className="flex items-center gap-8 text-red-500/40 text-xs tracking-[0.2em] uppercase">
+                  <div className="flex items-center gap-2"><Feather size={14} /> <span>{language === 'vi' ? 'Chân thật' : 'Honest'}</span></div>
+                  <span className="w-1 h-1 rounded-full bg-red-500/30" />
+                  <div className="flex items-center gap-2"><Flame size={14} /> <span>{language === 'vi' ? 'Đối diện' : 'Face it'}</span></div>
+                  <span className="w-1 h-1 rounded-full bg-red-500/30" />
+                  <div className="flex items-center gap-2"><Wind size={14} /> <span>{language === 'vi' ? 'Buông bỏ' : 'Release'}</span></div>
+                </div>
+              </div>
 
               <div className="w-full relative group mb-12">
                 <div className="absolute -inset-1 bg-gradient-to-r from-red-900/20 via-red-600/20 to-red-900/20 rounded-2xl blur opacity-50 group-hover:opacity-100 transition duration-1000 group-hover:duration-200" />
@@ -134,16 +144,30 @@ export function RepentanceRoom({ onClose }: { onClose: () => void }) {
                 whileTap={{ scale: 0.98 }}
                 onClick={handleRelease}
                 disabled={!text.trim()}
-                className={`group relative flex items-center gap-4 px-12 py-5 rounded-full overflow-hidden transition-all duration-500 ${
+                className={`group relative flex items-center justify-center gap-4 px-16 py-5 rounded-full overflow-hidden transition-all duration-700 mt-4 ${
                   text.trim() 
-                    ? 'opacity-100 cursor-pointer' 
-                    : 'opacity-50 cursor-not-allowed grayscale'
+                    ? 'opacity-100 cursor-pointer shadow-[0_0_30px_rgba(220,38,38,0.2)]' 
+                    : 'opacity-40 cursor-not-allowed grayscale'
                 }`}
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-red-900/40 via-red-600/40 to-red-900/40 border border-red-500/50 rounded-full transition-all duration-500 group-hover:bg-red-500/30" />
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-[radial-gradient(circle_at_center,rgba(220,38,38,0.4)_0%,transparent_70%)]" />
-                <Flame size={20} className="text-red-300 relative z-10" strokeWidth={1.5} />
-                <span className="text-red-100 tracking-[0.25em] uppercase font-medium relative z-10">{t('repentance.release')}</span>
+                <div className="absolute inset-0 bg-gradient-to-r from-red-900/60 via-red-600/50 to-red-900/60 border border-red-500/50 rounded-full transition-all duration-700 group-hover:bg-red-500/40" />
+                
+                {text.trim() && (
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 overflow-hidden rounded-full">
+                    <motion.div 
+                      className="absolute inset-0 bg-gradient-to-r from-transparent via-red-300/20 to-transparent skew-x-12"
+                      animate={{ x: ['-150%', '150%'] }}
+                      transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                    />
+                  </div>
+                )}
+                
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 bg-[radial-gradient(circle_at_center,rgba(220,38,38,0.6)_0%,transparent_70%)] blur-md" />
+                
+                <Flame size={18} className={`relative z-10 transition-all duration-500 ${text.trim() ? 'text-red-200 group-hover:scale-110 group-hover:text-white' : 'text-red-400'}`} strokeWidth={1.5} />
+                <span className={`tracking-[0.3em] uppercase text-sm font-medium relative z-10 transition-colors duration-500 ${text.trim() ? 'text-red-50' : 'text-red-300'}`}>
+                  {t('repentance.release')}
+                </span>
               </motion.button>
             </motion.div>
           )}
