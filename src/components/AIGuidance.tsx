@@ -4,7 +4,7 @@ import { X, Sparkles, Leaf, Heart, Wind, ChevronLeft } from 'lucide-react';
 import { GoogleGenAI } from '@google/genai';
 import { useLanguage } from '../lib/i18n';
 
-const apiKey = process.env.GEMINI_API_KEY || "AIzaSyBqwWTRtCv8meMbpGqweC9Sxzm456LxsyQ";
+const apiKey = (import.meta as any).env.VITE_GEMINI_API_KEY || "AIzaSyBqwWTRtCv8meMbpGqweC9Sxzm456LxsyQ";
 const ai = apiKey ? new GoogleGenAI({ apiKey }) : null;
 
 export function AIGuidance({ onClose }: { onClose: () => void }) {

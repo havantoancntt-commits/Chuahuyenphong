@@ -19,7 +19,6 @@ import { LegalModal } from './components/LegalModal';
 import { useLanguage } from './lib/i18n';
 
 import { WelcomeScreen } from './components/WelcomeScreen';
-import { useStats } from './lib/useStats';
 
 export default function App() {
   const [hasEntered, setHasEntered] = useState(false);
@@ -38,7 +37,6 @@ export default function App() {
   const [bowMessage, setBowMessage] = useState<string | null>(null);
   const [audioEnabled, setAudioEnabled] = useState(false);
   const { t } = useLanguage();
-  const stats = useStats();
 
   // Handle the bow animation trigger
   const handleBow = () => {
@@ -115,7 +113,6 @@ export default function App() {
         isBowing={isBowing}
         audioEnabled={audioEnabled}
         setAudioEnabled={setAudioEnabled}
-        stats={stats}
       />
 
       {/* Modals & Overlays */}
@@ -208,7 +205,6 @@ export default function App() {
             setHasEntered(true);
             setAudioEnabled(true);
           }} 
-          stats={stats}
         />
       )}
     </div>

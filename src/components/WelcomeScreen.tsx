@@ -1,16 +1,14 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '../lib/i18n';
-import { Users, Eye, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 interface WelcomeScreenProps {
   onEnter: () => void;
-  stats: { onlineUsers: number; totalVisits: number };
 }
 
-export function WelcomeScreen({ onEnter, stats }: WelcomeScreenProps) {
+export function WelcomeScreen({ onEnter }: WelcomeScreenProps) {
   const { t } = useLanguage();
-  const { onlineUsers, totalVisits } = stats;
   const [isOpening, setIsOpening] = useState(false);
 
   const handleEnter = () => {
@@ -197,23 +195,6 @@ export function WelcomeScreen({ onEnter, stats }: WelcomeScreenProps) {
                 <ArrowRight className="w-5 h-5 md:w-6 md:h-6 group-hover:translate-x-2 transition-transform duration-500" />
               </span>
             </motion.button>
-            
-            {/* Statistics Section */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 3, duration: 1 }}
-              className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-12 text-amber-200/60 text-xs md:text-sm tracking-widest uppercase font-light"
-            >
-              <div className="flex items-center gap-2 bg-black/40 px-4 py-2 rounded-full border border-amber-500/20 backdrop-blur-sm">
-                <Users className="w-4 h-4 text-amber-400" />
-                <span>{t('app.online_users')}: <strong className="text-amber-400 font-medium">{onlineUsers}</strong></span>
-              </div>
-              <div className="flex items-center gap-2 bg-black/40 px-4 py-2 rounded-full border border-amber-500/20 backdrop-blur-sm">
-                <Eye className="w-4 h-4 text-amber-400" />
-                <span>{t('app.total_visits')}: <strong className="text-amber-400 font-medium">{totalVisits}</strong></span>
-              </div>
-            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>

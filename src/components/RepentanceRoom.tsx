@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Feather, Sparkles } from 'lucide-react';
+import { ChevronLeft, Feather, Sparkles, Flame } from 'lucide-react';
 import { GoogleGenAI } from '@google/genai';
 import { useLanguage } from '../lib/i18n';
 
-const apiKey = "AIzaSyBqwWTRtCv8meMbpGqweC9Sxzm456LxsyQ";
-const ai = new GoogleGenAI({ apiKey });
+const apiKey = (import.meta as any).env.VITE_GEMINI_API_KEY || "AIzaSyBqwWTRtCv8meMbpGqweC9Sxzm456LxsyQ";
+const ai = apiKey ? new GoogleGenAI({ apiKey }) : null;
 
 export function RepentanceRoom({ onClose }: { onClose: () => void }) {
   const { t, language } = useLanguage();
@@ -13,6 +13,7 @@ export function RepentanceRoom({ onClose }: { onClose: () => void }) {
   const [isReleasing, setIsReleasing] = useState(false);
   const [isReleased, setIsReleased] = useState(false);
   const [advice, setAdvice] = useState<string | null>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleRelease = async () => {
     if (!text.trim()) return;
@@ -20,6 +21,7 @@ export function RepentanceRoom({ onClose }: { onClose: () => void }) {
     setIsReleasing(true);
     
     try {
+      if (!ai) throw new Error("AI not initialized");
       const aiPromise = ai.models.generateContent({
         model: "gemini-3-flash-preview",
         contents: `You are a wise, compassionate Buddhist monk. 
@@ -31,7 +33,7 @@ export function RepentanceRoom({ onClose }: { onClose: () => void }) {
       });
 
       // Minimum animation time for the "burning/fading" effect
-      const animationPromise = new Promise(resolve => setTimeout(resolve, 3000));
+      const animationPromise = new Promise(resolve => setTimeout(resolve, 4000));
 
       const [response] = await Promise.all([aiPromise, animationPromise]);
       
@@ -44,153 +46,194 @@ export function RepentanceRoom({ onClose }: { onClose: () => void }) {
         setAdvice(t('repentance.fallback'));
         setIsReleasing(false);
         setIsReleased(true);
-      }, 3000);
+      }, 4000);
     }
   };
 
   return (
-    <div className="absolute inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-xl">
-      <motion.div 
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.95 }}
-        className="relative w-full max-w-2xl max-h-[90vh] flex flex-col bg-[#0a0a0a] border border-amber-900/40 rounded-3xl shadow-[0_0_50px_rgba(0,0,0,1)] overflow-hidden"
-      >
-        {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-white/5">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-amber-900/20 flex items-center justify-center border border-amber-500/20">
-              <Feather className="text-amber-500/80" size={18} strokeWidth={1.5} />
-            </div>
-            <h2 className="text-lg md:text-xl text-amber-100 font-light tracking-widest uppercase">
-              {t('repentance.title')}
-            </h2>
+    <motion.div 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 1 }}
+      className="absolute inset-0 z-50 flex items-center justify-center bg-[#030303] overflow-hidden font-serif"
+    >
+      {/* Immersive Background */}
+      <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1519834785169-98be25ec3f84?q=80&w=2000&auto=format&fit=crop')] bg-cover bg-center opacity-10 mix-blend-screen" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent" />
+        <motion.div 
+          animate={{ 
+            opacity: isReleasing ? [0.1, 0.5, 0.1] : 0.1,
+            scale: isReleasing ? [1, 1.2, 1] : 1
+          }}
+          transition={{ duration: 4, ease: "easeInOut" }}
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[80vw] max-w-[800px] max-h-[800px] bg-[radial-gradient(circle_at_center,rgba(220,38,38,0.15)_0%,transparent_70%)] rounded-full blur-3xl" 
+        />
+      </div>
+
+      {/* Header */}
+      <div className="absolute top-0 left-0 right-0 flex items-center justify-between p-6 md:p-8 z-20">
+        <button 
+          onClick={onClose}
+          className="flex items-center gap-3 text-red-200/60 hover:text-red-100 transition-colors group"
+        >
+          <div className="w-10 h-10 rounded-full border border-red-500/20 flex items-center justify-center group-hover:border-red-400/50 group-hover:bg-red-500/10 transition-all">
+            <ChevronLeft size={20} strokeWidth={1.5} />
           </div>
-          <button 
-            onClick={onClose}
-            className="text-white/40 hover:text-white/80 transition-colors p-2"
-          >
-            <X size={24} strokeWidth={1.5} />
-          </button>
-        </div>
+          <span className="text-sm tracking-[0.2em] uppercase font-light hidden sm:block">{t('meditation.back')}</span>
+        </button>
+        <span className="text-red-500/40 text-xs tracking-[0.3em] uppercase font-medium">
+          {t('repentance.title')}
+        </span>
+        <div className="w-10 h-10" /> {/* Spacer for centering */}
+      </div>
 
-        <div className="p-6 md:p-10 overflow-y-auto flex-1 custom-scrollbar flex flex-col items-center justify-center min-h-[400px]">
-          <AnimatePresence mode="wait">
-            {!isReleasing && !isReleased && (
+      {/* Main Content */}
+      <div className="relative z-10 flex flex-col items-center justify-center w-full h-full max-w-3xl px-6">
+        <AnimatePresence mode="wait">
+          {!isReleasing && !isReleased && (
+            <motion.div 
+              key="input"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, filter: "blur(10px)", scale: 1.05 }}
+              transition={{ duration: 1.5, ease: "easeOut" }}
+              className="w-full flex flex-col items-center"
+            >
               <motion.div 
-                key="input"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0, filter: "blur(10px)", scale: 1.1 }}
-                transition={{ duration: 1.5 }}
-                className="w-full flex flex-col items-center"
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ duration: 1.5, ease: "easeOut" }}
+                className="mb-10 relative"
               >
-                <p className="text-amber-200/60 text-sm md:text-base text-center mb-8 font-light leading-relaxed tracking-wide">
-                  {t('repentance.prompt')}
-                </p>
+                <div className="absolute inset-0 bg-red-500/20 blur-2xl rounded-full" />
+                <Feather className="text-red-400/80 relative z-10" size={40} strokeWidth={1} />
+              </motion.div>
 
+              <h2 className="text-3xl md:text-4xl text-red-50 font-light tracking-[0.2em] uppercase mb-6 text-center drop-shadow-[0_0_15px_rgba(220,38,38,0.3)]">
+                {t('repentance.title')}
+              </h2>
+              <p className="text-red-200/60 text-center mb-12 font-light tracking-[0.1em] text-sm md:text-base max-w-lg leading-relaxed">
+                {t('repentance.prompt')}
+              </p>
+
+              <div className="w-full relative group mb-12">
+                <div className="absolute -inset-1 bg-gradient-to-r from-red-900/20 via-red-600/20 to-red-900/20 rounded-2xl blur opacity-50 group-hover:opacity-100 transition duration-1000 group-hover:duration-200" />
                 <textarea
+                  ref={textareaRef}
                   value={text}
                   onChange={(e) => setText(e.target.value)}
                   placeholder={t('repentance.placeholder')}
-                  className="w-full h-48 bg-white/5 border border-white/10 rounded-2xl p-6 text-white/90 placeholder:text-white/20 focus:outline-none focus:border-amber-500/50 focus:bg-white/10 transition-all duration-500 resize-none font-light text-lg leading-relaxed"
+                  className="relative w-full h-64 bg-black/60 backdrop-blur-xl border border-red-900/30 rounded-2xl p-8 text-red-100/90 placeholder:text-red-900/50 focus:outline-none focus:border-red-500/50 transition-all duration-500 resize-none font-light text-lg leading-relaxed shadow-[inset_0_0_30px_rgba(0,0,0,0.8)]"
                 />
+              </div>
 
-                <button
-                  onClick={handleRelease}
-                  disabled={!text.trim()}
-                  className="mt-8 px-10 py-4 rounded-full bg-gradient-to-r from-amber-900/80 to-amber-800/80 border border-amber-500/30 text-amber-100 tracking-[0.2em] uppercase text-sm font-medium hover:shadow-[0_0_30px_rgba(245,158,11,0.3)] hover:border-amber-400/50 transition-all duration-500 disabled:opacity-30 disabled:cursor-not-allowed"
-                >
-                  {t('repentance.button')}
-                </button>
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={handleRelease}
+                disabled={!text.trim()}
+                className={`group relative flex items-center gap-4 px-12 py-5 rounded-full overflow-hidden transition-all duration-500 ${
+                  text.trim() 
+                    ? 'opacity-100 cursor-pointer' 
+                    : 'opacity-50 cursor-not-allowed grayscale'
+                }`}
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-red-900/40 via-red-600/40 to-red-900/40 border border-red-500/50 rounded-full transition-all duration-500 group-hover:bg-red-500/30" />
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-[radial-gradient(circle_at_center,rgba(220,38,38,0.4)_0%,transparent_70%)]" />
+                <Flame size={20} className="text-red-300 relative z-10" strokeWidth={1.5} />
+                <span className="text-red-100 tracking-[0.25em] uppercase font-medium relative z-10">{t('repentance.release')}</span>
+              </motion.button>
+            </motion.div>
+          )}
+
+          {isReleasing && (
+            <motion.div 
+              key="releasing"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="flex flex-col items-center justify-center text-center"
+            >
+              <motion.div
+                animate={{ 
+                  scale: [1, 1.5, 2, 2.5, 3],
+                  opacity: [1, 0.8, 0.5, 0.2, 0],
+                  filter: ["blur(0px)", "blur(4px)", "blur(8px)", "blur(12px)", "blur(20px)"]
+                }}
+                transition={{ duration: 4, ease: "easeIn" }}
+                className="text-red-500/80 mb-8"
+              >
+                <Flame size={80} strokeWidth={1} />
               </motion.div>
-            )}
+              <motion.p 
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5 }}
+                className="text-red-200/60 font-light tracking-[0.2em] uppercase text-sm"
+              >
+                {language === 'vi' ? 'Đang hóa giải...' : 'Releasing...'}
+              </motion.p>
+            </motion.div>
+          )}
 
-            {isReleasing && (
+          {isReleased && (
+            <motion.div 
+              key="released"
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{ duration: 2, ease: "easeOut" }}
+              className="flex flex-col items-center text-center relative w-full"
+            >
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-amber-500/10 rounded-full blur-[120px] pointer-events-none" />
+
               <motion.div 
-                key="releasing"
+                initial={{ scale: 0, rotate: -180 }}
+                animate={{ scale: 1, rotate: 0 }}
+                transition={{ duration: 2, ease: "easeOut", delay: 0.5 }}
+                className="w-24 h-24 rounded-full border border-amber-500/30 flex items-center justify-center mb-10 relative z-10"
+              >
+                <div className="absolute inset-0 bg-amber-500/10 rounded-full blur-md" />
+                <Sparkles className="text-amber-300 drop-shadow-[0_0_15px_rgba(251,191,36,0.5)]" size={32} strokeWidth={1} />
+              </motion.div>
+              
+              <h3 className="text-2xl md:text-3xl text-amber-100 font-light tracking-[0.3em] uppercase mb-10 drop-shadow-md relative z-10">
+                {language === 'vi' ? 'Tâm Đã Buông Xả' : 'Burden Released'}
+              </h3>
+              
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 1.5, delay: 1.5 }}
+                className="relative z-10 mb-16 w-full"
+              >
+                <div className="absolute -left-4 top-0 text-6xl text-amber-500/10 font-serif">"</div>
+                <p className="text-amber-100/80 font-light tracking-[0.05em] text-lg md:text-xl leading-relaxed italic px-8">
+                  {advice}
+                </p>
+                <div className="absolute -right-4 bottom-0 text-6xl text-amber-500/10 font-serif">"</div>
+              </motion.div>
+              
+              <motion.button
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="w-full flex flex-col items-center justify-center relative"
+                transition={{ duration: 1, delay: 3 }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => {
+                  setText('');
+                  setIsReleased(false);
+                  setAdvice(null);
+                }}
+                className="px-12 py-4 bg-transparent hover:bg-amber-900/20 text-amber-200/80 hover:text-amber-100 border border-amber-500/30 hover:border-amber-400/60 rounded-full transition-all duration-500 tracking-[0.25em] uppercase text-xs font-medium relative z-10"
               >
-                {/* Burning Effect Background */}
-                <motion.div
-                  animate={{ 
-                    scale: [1, 1.5, 2],
-                    opacity: [0.8, 0.4, 0],
-                    rotate: [0, 45, 90]
-                  }}
-                  transition={{ duration: 3, ease: "easeOut" }}
-                  className="absolute w-64 h-64 bg-gradient-to-t from-orange-600/40 via-amber-500/20 to-transparent rounded-full blur-3xl pointer-events-none"
-                />
-
-                <motion.div
-                  animate={{ 
-                    scale: [1, 1.2, 1],
-                    opacity: [0.5, 1, 0.5],
-                    filter: ["blur(4px)", "blur(8px)", "blur(4px)"]
-                  }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                  className="w-32 h-32 rounded-full bg-amber-500/20 mb-8 flex items-center justify-center relative z-10"
-                >
-                  <Sparkles className="text-amber-400 w-12 h-12 drop-shadow-[0_0_15px_rgba(251,191,36,0.8)]" />
-                </motion.div>
-                <p className="text-amber-200/60 tracking-[0.3em] font-light text-sm uppercase animate-pulse text-center relative z-10 drop-shadow-md">
-                  {t('repentance.releasing')}
-                </p>
-              </motion.div>
-            )}
-
-            {isReleased && advice && (
-              <motion.div 
-                key="released"
-                initial={{ opacity: 0, y: 30, scale: 0.9 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ duration: 1.2, type: "spring", stiffness: 100, damping: 20 }}
-                className="w-full flex flex-col items-center relative"
-              >
-                {/* Divine Light Background */}
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[150%] h-64 bg-gradient-to-b from-amber-500/10 via-amber-500/5 to-transparent rounded-full blur-3xl pointer-events-none" />
-
-                <motion.div 
-                  initial={{ rotate: -180, scale: 0 }}
-                  animate={{ rotate: 0, scale: 1 }}
-                  transition={{ duration: 1, type: "spring", stiffness: 200, damping: 20, delay: 0.3 }}
-                  className="w-20 h-20 rounded-full bg-gradient-to-br from-amber-500/20 to-amber-900/40 flex items-center justify-center mb-10 border border-amber-400/40 shadow-[0_0_40px_rgba(245,158,11,0.3),inset_0_0_20px_rgba(245,158,11,0.2)] backdrop-blur-md relative z-10"
-                >
-                  <Feather className="text-amber-300 drop-shadow-lg" size={36} strokeWidth={1.5} />
-                </motion.div>
-                
-                <div className="relative w-full p-10 bg-black/40 border border-amber-500/20 rounded-3xl shadow-[0_0_30px_rgba(0,0,0,0.5),inset_0_0_20px_rgba(245,158,11,0.05)] backdrop-blur-sm">
-                  <div className="absolute -top-4 -left-4 text-amber-500/10 rotate-180">
-                    <Feather size={60} strokeWidth={0.5} />
-                  </div>
-                  <div className="absolute -bottom-4 -right-4 text-amber-500/10">
-                    <Feather size={60} strokeWidth={0.5} />
-                  </div>
-                  <p className="text-amber-100/90 text-lg md:text-xl font-light leading-relaxed text-center italic relative z-10 drop-shadow-sm">
-                    "{advice}"
-                  </p>
-                </div>
-
-                <motion.button 
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => {
-                    setText('');
-                    setIsReleased(false);
-                    setAdvice(null);
-                  }}
-                  className="mt-12 px-10 py-3.5 rounded-full bg-amber-900/30 border border-amber-500/40 text-amber-200 hover:text-amber-100 hover:bg-amber-800/40 hover:border-amber-400/60 tracking-[0.2em] uppercase text-xs font-medium transition-all duration-300 shadow-[0_0_20px_rgba(245,158,11,0.15)] relative z-10"
-                >
-                  {t('repentance.back')}
-                </motion.button>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-      </motion.div>
-    </div>
+                {language === 'vi' ? 'Tiếp tục' : 'Continue'}
+              </motion.button>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </motion.div>
   );
 }

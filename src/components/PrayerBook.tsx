@@ -4,8 +4,8 @@ import { useLanguage } from '../lib/i18n';
 import { ChevronLeft, BookText, Sparkles, Heart, Briefcase, GraduationCap, Home, Plane, Cross, Wind } from 'lucide-react';
 import { GoogleGenAI } from '@google/genai';
 
-const apiKey = "AIzaSyBqwWTRtCv8meMbpGqweC9Sxzm456LxsyQ";
-const ai = new GoogleGenAI({ apiKey });
+const apiKey = (import.meta as any).env.VITE_GEMINI_API_KEY || "AIzaSyBqwWTRtCv8meMbpGqweC9Sxzm456LxsyQ";
+const ai = apiKey ? new GoogleGenAI({ apiKey }) : null;
 
 interface PrayerBookProps {
   onClose: () => void;
