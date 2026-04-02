@@ -42,7 +42,7 @@ const activeClients = new Map<string, Set<WebSocket>>();
 
 async function startServer() {
   const app = express();
-  const PORT = 3000;
+  const PORT = process.env.PORT || 3000;
 
   // Create HTTP server
   const server = app.listen(PORT, "0.0.0.0", () => {
@@ -139,6 +139,14 @@ async function startServer() {
   // or if NODE_ENV is production.
   const isProduction = process.argv[1] && process.argv[1].endsWith('server.cjs') || process.env.NODE_ENV === 'production';
   const distPath = path.join(process.cwd(), 'dist');
+
+  // API Routes
+  app.get('/api/stats', (req, res) => {
+    res.json({
+      onlineUsers: stats.onlineUsers,
+      totalVisits: stats.totalVisits
+    });
+  });
 
   // Vite middleware for development
   if (!isProduction) {

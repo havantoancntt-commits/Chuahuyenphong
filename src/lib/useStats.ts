@@ -40,31 +40,74 @@ export function useStats() {
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
     const wsUrl = `${protocol}//${window.location.host}/ws-stats?clientId=${clientId}&newSession=${isNewSession}`;
     
-    let ws: WebSocket;
+    let ws: WebSocket | null = null;
     let reconnectTimer: NodeJS.Timeout;
     let activityInterval: NodeJS.Timeout;
+    let pollInterval: NodeJS.Timeout;
+    let isPolling = false;
+
+    const fetchStats = async () => {
+      try {
+        const res = await fetch('/api/stats');
+        if (res.ok) {
+          const data = await res.json();
+          setStats({
+            onlineUsers: data.onlineUsers,
+            totalVisits: data.totalVisits,
+          });
+        }
+      } catch (e) {
+        // Ignore fetch errors
+      }
+    };
 
     const connect = () => {
-      ws = new WebSocket(wsUrl);
+      try {
+        ws = new WebSocket(wsUrl);
 
-      ws.onmessage = (event) => {
-        try {
-          const data = JSON.parse(event.data);
-          if (data.type === 'stats') {
-            setStats({
-              onlineUsers: data.onlineUsers,
-              totalVisits: data.totalVisits,
-            });
+        ws.onopen = () => {
+          if (isPolling) {
+            clearInterval(pollInterval);
+            isPolling = false;
           }
-        } catch (error) {
-          console.error('Failed to parse WebSocket message:', error);
-        }
-      };
+        };
 
-      ws.onclose = () => {
-        // Attempt to reconnect after 3 seconds
-        reconnectTimer = setTimeout(connect, 3000);
-      };
+        ws.onmessage = (event) => {
+          try {
+            const data = JSON.parse(event.data);
+            if (data.type === 'stats') {
+              setStats({
+                onlineUsers: data.onlineUsers,
+                totalVisits: data.totalVisits,
+              });
+            }
+          } catch (error) {
+            console.error('Failed to parse WebSocket message:', error);
+          }
+        };
+
+        ws.onclose = () => {
+          // Fallback to polling if WebSocket closes or fails
+          if (!isPolling) {
+            isPolling = true;
+            fetchStats();
+            pollInterval = setInterval(fetchStats, 10000); // Poll every 10s
+          }
+          // Attempt to reconnect after 15 seconds
+          reconnectTimer = setTimeout(connect, 15000);
+        };
+        
+        ws.onerror = () => {
+          // Error will trigger onclose
+        };
+      } catch (e) {
+        // Fallback to polling if WebSocket creation fails
+        if (!isPolling) {
+          isPolling = true;
+          fetchStats();
+          pollInterval = setInterval(fetchStats, 10000);
+        }
+      }
     };
 
     connect();
@@ -77,7 +120,9 @@ export function useStats() {
     return () => {
       clearTimeout(reconnectTimer);
       clearInterval(activityInterval);
+      clearInterval(pollInterval);
       if (ws) {
+        ws.onclose = null; // Prevent reconnect logic
         ws.close();
       }
     };

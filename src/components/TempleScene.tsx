@@ -20,6 +20,8 @@ const createSoftParticleTexture = () => {
   return new THREE.CanvasTexture(canvas);
 };
 
+const sharedParticleTexture = createSoftParticleTexture();
+
 // A stylized sitting Buddha statue representation
 function Statue({ hasDonated, isBowing }: { hasDonated: boolean, isBowing: boolean }) {
   const haloRef = useRef<THREE.MeshBasicMaterial>(null);
@@ -234,7 +236,7 @@ function IncenseSmoke() {
     return { positions, life, offsets, speeds };
   }, [count]);
 
-  const texture = useMemo(() => createSoftParticleTexture(), []);
+  const texture = sharedParticleTexture;
 
   useFrame((state, delta) => {
     if (!mesh.current || !materialRef.current) return;
@@ -687,7 +689,7 @@ function BowingAura({ isBowing }: { isBowing: boolean }) {
     return { positions, phases, speeds };
   }, [count]);
 
-  const texture = useMemo(() => createSoftParticleTexture(), []);
+  const texture = sharedParticleTexture;
 
   useFrame((state, delta) => {
     const t = state.clock.elapsedTime;
