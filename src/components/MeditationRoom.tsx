@@ -42,21 +42,25 @@ export function MeditationRoom({ onClose }: MeditationRoomProps) {
   }, []);
 
   useEffect(() => {
-    if (bgAudioRef.current) {
-      if (selectedSound === 'none') {
-        bgAudioRef.current.pause();
-      } else {
-        const sound = BACKGROUND_SOUNDS.find(s => s.id === selectedSound);
-        if (sound && sound.url) {
+    if (!bgAudioRef.current) return;
+
+    if (selectedSound === 'none') {
+      bgAudioRef.current.pause();
+    } else {
+      const sound = BACKGROUND_SOUNDS.find(s => s.id === selectedSound);
+      if (sound && sound.url) {
+        if (bgAudioRef.current.src !== sound.url) {
           bgAudioRef.current.src = sound.url;
-          bgAudioRef.current.loop = true;
-          if (isActive && !isMuted) {
-            bgAudioRef.current.play().catch(e => console.log('Audio play failed:', e));
-          }
+        }
+        bgAudioRef.current.loop = true;
+        if (!isMuted) {
+          bgAudioRef.current.play().catch(e => console.log('Audio play failed:', e));
+        } else {
+          bgAudioRef.current.pause();
         }
       }
     }
-  }, [selectedSound, isActive, isMuted]);
+  }, [selectedSound, isMuted]);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -67,7 +71,6 @@ export function MeditationRoom({ onClose }: MeditationRoomProps) {
     } else if (isActive && timeLeft === 0) {
       setIsActive(false);
       setShowCompletion(true);
-      if (bgAudioRef.current) bgAudioRef.current.pause();
       if (bellAudioRef.current && !isMuted) {
         bellAudioRef.current.currentTime = 0;
         bellAudioRef.current.play().catch(e => console.log(e));
@@ -99,17 +102,11 @@ export function MeditationRoom({ onClose }: MeditationRoomProps) {
     setTimeLeft(duration);
     setIsActive(true);
     setShowCompletion(false);
-    if (bgAudioRef.current && selectedSound !== 'none' && !isMuted) {
-      bgAudioRef.current.play().catch(e => console.log(e));
-    }
   };
 
   const handleStop = () => {
     setIsActive(false);
     setTimeLeft(duration);
-    if (bgAudioRef.current) {
-      bgAudioRef.current.pause();
-    }
   };
 
   const playWoodenFish = () => {

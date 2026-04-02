@@ -14,6 +14,34 @@ export function RepentanceRoom({ onClose }: { onClose: () => void }) {
   const [isReleased, setIsReleased] = useState(false);
   const [advice, setAdvice] = useState<string | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const fireAudioRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    fireAudioRef.current = new Audio('https://cdn.pixabay.com/download/audio/2022/02/22/audio_d1718ab41b.mp3?filename=crackling-fire-14488.mp3');
+    return () => {
+      if (fireAudioRef.current) {
+        fireAudioRef.current.pause();
+        fireAudioRef.current = null;
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    if (isReleasing && fireAudioRef.current) {
+      fireAudioRef.current.volume = 0.5;
+      fireAudioRef.current.play().catch(e => console.log('Fire audio play failed:', e));
+    } else if (!isReleasing && fireAudioRef.current) {
+      // Fade out audio
+      const fadeOut = setInterval(() => {
+        if (fireAudioRef.current && fireAudioRef.current.volume > 0.05) {
+          fireAudioRef.current.volume -= 0.05;
+        } else {
+          clearInterval(fadeOut);
+          if (fireAudioRef.current) fireAudioRef.current.pause();
+        }
+      }, 100);
+    }
+  }, [isReleasing]);
 
   const handleRelease = async () => {
     if (!text.trim()) return;

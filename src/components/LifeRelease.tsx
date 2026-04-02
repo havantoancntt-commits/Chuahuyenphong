@@ -34,10 +34,14 @@ export function LifeRelease({ onClose }: LifeReleaseProps) {
 
   useEffect(() => {
     if (audioRef.current) {
-      if (selectedType === 'bird') {
-        audioRef.current.src = 'https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0a13f69d2.mp3?filename=birds-singing-calm-river-nature-ambient-sound-118558.mp3';
-      } else if (selectedType === 'fish') {
-        audioRef.current.src = 'https://cdn.pixabay.com/download/audio/2021/09/06/audio_4041b6c7a7.mp3?filename=water-stream-1-14465.mp3';
+      const newSrc = selectedType === 'bird' 
+        ? 'https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0a13f69d2.mp3?filename=birds-singing-calm-river-nature-ambient-sound-118558.mp3'
+        : selectedType === 'fish'
+        ? 'https://cdn.pixabay.com/download/audio/2021/09/06/audio_4041b6c7a7.mp3?filename=water-stream-1-14465.mp3'
+        : '';
+        
+      if (newSrc && audioRef.current.src !== newSrc) {
+        audioRef.current.src = newSrc;
       }
       
       if (selectedType && audioEnabled) {

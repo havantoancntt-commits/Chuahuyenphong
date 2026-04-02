@@ -67,7 +67,7 @@ export default function App() {
 
       {/* Audio Controller */}
       <AudioController 
-        enabled={audioEnabled} 
+        enabled={audioEnabled && !showMeditation && !showRepentance && !showLifeRelease} 
         hasDonated={hasDonated} 
         isIncenseLit={isIncenseLit}
         isBowing={isBowing}
