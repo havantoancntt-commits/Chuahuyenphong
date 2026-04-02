@@ -265,7 +265,7 @@ export function PrayerBook({ onClose }: PrayerBookProps) {
                           animate={{ opacity: 1 }}
                           className="text-amber-200/50 tracking-widest font-light text-sm uppercase animate-pulse text-center mt-6"
                         >
-                          {language === 'vi' ? 'Đang soạn bài khấn...' : 'Composing prayer...'}
+                          {t('prayer.composing')}
                         </motion.p>
                       )}
                     </div>

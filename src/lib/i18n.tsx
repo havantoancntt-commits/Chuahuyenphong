@@ -44,6 +44,12 @@ const translations: Translations = {
     'ai.fallback': 'Tâm tĩnh lặng, vạn sự bình an. Hãy giữ tâm trong sáng như đóa sen.',
 
     // RepentanceRoom.tsx
+    'repentance.step1': 'Chân thật',
+    'repentance.step2': 'Đối diện',
+    'repentance.step3': 'Buông bỏ',
+    'repentance.quote': '"Viết ra những muộn phiền, hối tiếc hay gánh nặng trong lòng. Khi ngọn lửa bùng lên, hãy để mọi thứ tan biến thành tro bụi."',
+    'repentance.completed_title': 'Tâm Đã Buông Xả',
+    'repentance.continue': 'Tiếp tục',
     'repentance.title': 'Phòng Sám Hối',
     'repentance.desc1': 'Viết ra những muộn phiền, lỗi lầm hay chấp niệm trong lòng.',
     'repentance.desc2': 'Thành tâm sám hối để cõi lòng nhẹ nhõm, thanh tịnh.',
@@ -55,6 +61,12 @@ const translations: Translations = {
     'repentance.fallback': 'Nghiệp chướng đã được xoa dịu. Hãy buông bỏ quá khứ, sống trọn vẹn với hiện tại. Tâm sáng như gương, vạn sự bình an.',
 
     // MeditationRoom.tsx
+    'meditation.step1': 'Hít thở',
+    'meditation.step2': 'Thư giãn',
+    'meditation.step3': 'Buông xả',
+    'meditation.quote': '"Hãy tìm một tư thế thoải mái, nhắm mắt lại và để hơi thở dẫn lối bạn về với hiện tại."',
+    'meditation.duration': 'Thời gian',
+    'meditation.completed_quote': '"Tâm tĩnh lặng, vạn sự bình an."',
     'meditation.title': 'Phòng Thiền & Chánh Niệm',
     'meditation.desc': 'Tìm lại sự bình yên trong từng hơi thở và âm thanh tỉnh thức.',
     'meditation.timer.5min': '5 Phút',
@@ -89,6 +101,7 @@ const translations: Translations = {
     'prayer.need.business': 'Kinh Doanh Buôn Bán',
     'prayer.need.health': 'Tiêu Trừ Bệnh Tật',
     'prayer.need.travel': 'Đi Xa Bình An',
+    'prayer.composing': 'Đang soạn bài khấn...',
     'prayer.cat.daily': 'Thường Nhật (Mùng 1, Rằm)',
     'prayer.cat.wealth': 'Thần Tài - Thổ Địa',
     'prayer.cat.ancestor': 'Gia Tiên',
@@ -205,6 +218,12 @@ const translations: Translations = {
     'ai.fallback': 'A quiet mind brings universal peace. Keep your heart as pure as a lotus.',
 
     // RepentanceRoom.tsx
+    'repentance.step1': 'Honest',
+    'repentance.step2': 'Face it',
+    'repentance.step3': 'Release',
+    'repentance.quote': '"Write down your sorrows, regrets, or burdens. As the flame ignites, let everything turn to ashes."',
+    'repentance.completed_title': 'Burden Released',
+    'repentance.continue': 'Continue',
     'repentance.title': 'Repentance Room',
     'repentance.desc1': 'Write down your sorrows, mistakes, or attachments.',
     'repentance.desc2': 'Sincerely repent to find peace and clarity in your heart.',
@@ -216,6 +235,12 @@ const translations: Translations = {
     'repentance.fallback': 'Your karma has been eased. Let go of the past and live fully in the present. May your mind be clear as a mirror, and your life be peaceful.',
 
     // MeditationRoom.tsx
+    'meditation.step1': 'Breathe',
+    'meditation.step2': 'Relax',
+    'meditation.step3': 'Let go',
+    'meditation.quote': '"Find a comfortable posture, close your eyes, and let your breath guide you back to the present."',
+    'meditation.duration': 'Duration',
+    'meditation.completed_quote': '"A quiet mind brings universal peace."',
     'meditation.title': 'Mindfulness & Meditation',
     'meditation.desc': 'Find peace in every breath and awakening sound.',
     'meditation.timer.5min': '5 Min',
@@ -250,6 +275,7 @@ const translations: Translations = {
     'prayer.need.business': 'Business & Trade',
     'prayer.need.health': 'Healing & Health',
     'prayer.need.travel': 'Safe Travels',
+    'prayer.composing': 'Composing prayer...',
     'prayer.cat.daily': 'Daily (1st & 15th Lunar)',
     'prayer.cat.wealth': 'God of Wealth',
     'prayer.cat.ancestor': 'Ancestors',

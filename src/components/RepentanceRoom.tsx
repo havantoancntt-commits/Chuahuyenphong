@@ -109,7 +109,7 @@ export function RepentanceRoom({ onClose }: { onClose: () => void }) {
           <div className="w-10 h-10 rounded-full border border-red-500/20 flex items-center justify-center group-hover:border-red-400/50 group-hover:bg-red-500/10 transition-all">
             <ChevronLeft size={20} strokeWidth={1.5} />
           </div>
-          <span className="text-xs md:text-sm tracking-[0.2em] uppercase font-light hidden sm:block">{t('meditation.back')}</span>
+          <span className="text-xs md:text-sm tracking-[0.2em] uppercase font-light hidden sm:block">{t('repentance.back')}</span>
         </button>
         <span className="text-red-500/40 text-[10px] md:text-xs tracking-[0.3em] uppercase font-medium">
           {t('repentance.title')}
@@ -146,14 +146,14 @@ export function RepentanceRoom({ onClose }: { onClose: () => void }) {
                 
                 <div className="flex flex-col items-center gap-4 md:gap-6 mb-8 md:mb-12">
                   <p className="text-red-200/80 text-center font-light tracking-[0.15em] text-xs md:text-base max-w-xl leading-relaxed italic px-4">
-                    "{language === 'vi' ? 'Viết ra những muộn phiền, hối tiếc hay gánh nặng trong lòng. Khi ngọn lửa bùng lên, hãy để mọi thứ tan biến thành tro bụi.' : 'Write down your sorrows, regrets, or burdens. As the flame ignites, let everything turn to ashes.'}"
+                    {t('repentance.quote')}
                   </p>
                   <div className="flex items-center gap-4 md:gap-8 text-red-500/40 text-[10px] md:text-xs tracking-[0.2em] uppercase">
-                    <div className="flex items-center gap-1 md:gap-2"><Feather size={12} className="md:w-3.5 md:h-3.5" /> <span>{language === 'vi' ? 'Chân thật' : 'Honest'}</span></div>
+                    <div className="flex items-center gap-1 md:gap-2"><Feather size={12} className="md:w-3.5 md:h-3.5" /> <span>{t('repentance.step1')}</span></div>
                     <span className="w-1 h-1 rounded-full bg-red-500/30" />
-                    <div className="flex items-center gap-1 md:gap-2"><Flame size={12} className="md:w-3.5 md:h-3.5" /> <span>{language === 'vi' ? 'Đối diện' : 'Face it'}</span></div>
+                    <div className="flex items-center gap-1 md:gap-2"><Flame size={12} className="md:w-3.5 md:h-3.5" /> <span>{t('repentance.step2')}</span></div>
                     <span className="w-1 h-1 rounded-full bg-red-500/30" />
-                    <div className="flex items-center gap-1 md:gap-2"><Wind size={12} className="md:w-3.5 md:h-3.5" /> <span>{language === 'vi' ? 'Buông bỏ' : 'Release'}</span></div>
+                    <div className="flex items-center gap-1 md:gap-2"><Wind size={12} className="md:w-3.5 md:h-3.5" /> <span>{t('repentance.step3')}</span></div>
                   </div>
                 </div>
 
@@ -195,7 +195,7 @@ export function RepentanceRoom({ onClose }: { onClose: () => void }) {
                 
                 <Flame size={16} className={`relative z-10 transition-all duration-500 md:w-4 md:h-4 ${text.trim() ? 'text-red-200 group-hover:scale-110 group-hover:text-white' : 'text-red-400'}`} strokeWidth={1.5} />
                 <span className={`tracking-[0.3em] uppercase text-xs md:text-sm font-medium relative z-10 transition-colors duration-500 ${text.trim() ? 'text-red-50' : 'text-red-300'}`}>
-                  {t('repentance.release')}
+                  {t('repentance.button')}
                 </span>
               </motion.button>
             </motion.div>
@@ -226,7 +226,7 @@ export function RepentanceRoom({ onClose }: { onClose: () => void }) {
                 transition={{ delay: 0.5 }}
                 className="text-red-200/60 font-light tracking-[0.2em] uppercase text-xs md:text-sm"
               >
-                {language === 'vi' ? 'Đang hóa giải...' : 'Releasing...'}
+                {t('repentance.releasing')}
               </motion.p>
             </motion.div>
           )}
@@ -252,7 +252,7 @@ export function RepentanceRoom({ onClose }: { onClose: () => void }) {
               </motion.div>
               
               <h3 className="text-xl md:text-3xl text-amber-100 font-light tracking-[0.3em] uppercase mb-8 md:mb-10 drop-shadow-md relative z-10 px-4">
-                {language === 'vi' ? 'Tâm Đã Buông Xả' : 'Burden Released'}
+                {t('repentance.completed_title')}
               </h3>
               
               <motion.div 
@@ -281,7 +281,7 @@ export function RepentanceRoom({ onClose }: { onClose: () => void }) {
                 }}
                 className="px-10 py-3 md:px-12 md:py-4 bg-transparent hover:bg-amber-900/20 text-amber-200/80 hover:text-amber-100 border border-amber-500/30 hover:border-amber-400/60 rounded-full transition-all duration-500 tracking-[0.25em] uppercase text-[10px] md:text-xs font-medium relative z-10"
               >
-                {language === 'vi' ? 'Tiếp tục' : 'Continue'}
+                {t('repentance.continue')}
               </motion.button>
             </motion.div>
           )}

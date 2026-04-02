@@ -217,14 +217,14 @@ export function MeditationRoom({ onClose }: MeditationRoomProps) {
                 
                 <div className="flex flex-col items-center gap-4 md:gap-6 mb-10 md:mb-16">
                   <p className="text-amber-200/80 text-center font-light tracking-[0.15em] text-xs md:text-base max-w-xl leading-relaxed italic px-4">
-                    "{language === 'vi' ? 'Hãy tìm một tư thế thoải mái, nhắm mắt lại và để hơi thở dẫn lối bạn về với hiện tại.' : 'Find a comfortable posture, close your eyes, and let your breath guide you back to the present.'}"
+                    {t('meditation.quote')}
                   </p>
                   <div className="flex items-center gap-4 md:gap-8 text-amber-500/40 text-[10px] md:text-xs tracking-[0.2em] uppercase">
-                    <div className="flex items-center gap-1 md:gap-2"><Wind size={12} className="md:w-3.5 md:h-3.5" /> <span>{language === 'vi' ? 'Hít thở' : 'Breathe'}</span></div>
+                    <div className="flex items-center gap-1 md:gap-2"><Wind size={12} className="md:w-3.5 md:h-3.5" /> <span>{t('meditation.step1')}</span></div>
                     <span className="w-1 h-1 rounded-full bg-amber-500/30" />
-                    <div className="flex items-center gap-1 md:gap-2"><Sparkles size={12} className="md:w-3.5 md:h-3.5" /> <span>{language === 'vi' ? 'Thư giãn' : 'Relax'}</span></div>
+                    <div className="flex items-center gap-1 md:gap-2"><Sparkles size={12} className="md:w-3.5 md:h-3.5" /> <span>{t('meditation.step2')}</span></div>
                     <span className="w-1 h-1 rounded-full bg-amber-500/30" />
-                    <div className="flex items-center gap-1 md:gap-2"><Heart size={12} className="md:w-3.5 md:h-3.5" /> <span>{language === 'vi' ? 'Buông xả' : 'Let go'}</span></div>
+                    <div className="flex items-center gap-1 md:gap-2"><Heart size={12} className="md:w-3.5 md:h-3.5" /> <span>{t('meditation.step3')}</span></div>
                   </div>
                 </div>
 
@@ -232,7 +232,7 @@ export function MeditationRoom({ onClose }: MeditationRoomProps) {
                 <div className="w-full max-w-2xl mb-8 md:mb-12">
                   <div className="flex items-center justify-center gap-3 mb-4 md:mb-6 text-amber-500/50 text-[10px] md:text-xs tracking-[0.2em] uppercase">
                     <span className="w-8 h-[1px] bg-amber-500/30" />
-                    Thời gian
+                    {t('meditation.duration')}
                     <span className="w-8 h-[1px] bg-amber-500/30" />
                   </div>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
@@ -448,7 +448,7 @@ export function MeditationRoom({ onClose }: MeditationRoomProps) {
                   {t('meditation.completed')}
                 </h3>
                 <p className="text-amber-200/50 font-light tracking-[0.15em] text-xs md:text-base mb-12 md:mb-16 max-w-md relative z-10 leading-relaxed italic px-6">
-                  "{language === 'vi' ? 'Tâm tĩnh lặng, vạn sự bình an.' : 'A quiet mind brings universal peace.'}"
+                  {t('meditation.completed_quote')}
                 </p>
                 
                 <motion.button
