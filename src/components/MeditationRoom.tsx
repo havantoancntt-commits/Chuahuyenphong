@@ -170,7 +170,7 @@ export function MeditationRoom({ onClose }: MeditationRoomProps) {
       <audio ref={bgAudioRef} />
       
       {/* Header */}
-      <div className="absolute top-0 left-0 right-0 flex items-center justify-between p-6 md:p-8 z-20">
+      <div className="absolute top-0 left-0 right-0 flex items-center justify-between p-4 md:p-8 z-20 bg-gradient-to-b from-black/80 via-black/40 to-transparent">
         <button 
           onClick={onClose}
           className="flex items-center gap-3 text-amber-200/60 hover:text-amber-100 transition-colors group"
@@ -178,9 +178,9 @@ export function MeditationRoom({ onClose }: MeditationRoomProps) {
           <div className="w-10 h-10 rounded-full border border-amber-500/20 flex items-center justify-center group-hover:border-amber-400/50 group-hover:bg-amber-500/10 transition-all">
             <ChevronLeft size={20} strokeWidth={1.5} />
           </div>
-          <span className="text-sm tracking-[0.2em] uppercase font-light hidden sm:block">{t('meditation.back')}</span>
+          <span className="text-xs md:text-sm tracking-[0.2em] uppercase font-light hidden sm:block">{t('meditation.back')}</span>
         </button>
-        <span className="text-amber-500/40 text-xs tracking-[0.3em] uppercase font-medium">
+        <span className="text-amber-500/40 text-[10px] md:text-xs tracking-[0.3em] uppercase font-medium">
           {t('meditation.title')}
         </span>
         <button 
@@ -192,279 +192,280 @@ export function MeditationRoom({ onClose }: MeditationRoomProps) {
       </div>
 
       {/* Main Content */}
-      <div className="relative z-10 flex flex-col items-center justify-center w-full h-full max-w-4xl px-6">
-        
-        <AnimatePresence mode="wait">
-          {!isActive && !showCompletion ? (
-            <motion.div 
-              key="setup"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.8 }}
-              className="flex flex-col items-center w-full"
-            >
+      <div className="relative z-10 flex flex-col items-center w-full h-full max-w-4xl px-4 md:px-6 overflow-y-auto scrollbar-hide">
+        <div className="flex flex-col items-center justify-center min-h-full w-full py-24 md:py-32">
+          <AnimatePresence mode="wait">
+            {!isActive && !showCompletion ? (
               <motion.div 
-                initial={{ scale: 0.8, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ duration: 1.5, ease: "easeOut" }}
-                className="mb-12 relative"
+                key="setup"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.8 }}
+                className="flex flex-col items-center w-full"
               >
-                <div className="absolute inset-0 bg-amber-500/20 blur-2xl rounded-full" />
-                <Wind className="text-amber-400/80 relative z-10" size={48} strokeWidth={1} />
+                <motion.div 
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ duration: 1.5, ease: "easeOut" }}
+                  className="mb-8 md:mb-12 relative"
+                >
+                  <div className="absolute inset-0 bg-amber-500/20 blur-2xl rounded-full" />
+                  <Wind className="text-amber-400/80 relative z-10 w-10 h-10 md:w-12 md:h-12" strokeWidth={1} />
+                </motion.div>
+                
+                <h2 className="text-2xl sm:text-3xl md:text-5xl text-amber-50 font-light tracking-[0.2em] uppercase mb-4 md:mb-6 text-center drop-shadow-[0_0_15px_rgba(251,191,36,0.3)]">
+                  {t('meditation.title')}
+                </h2>
+                
+                <div className="flex flex-col items-center gap-4 md:gap-6 mb-10 md:mb-16">
+                  <p className="text-amber-200/80 text-center font-light tracking-[0.15em] text-xs md:text-base max-w-xl leading-relaxed italic px-4">
+                    "{language === 'vi' ? 'Hãy tìm một tư thế thoải mái, nhắm mắt lại và để hơi thở dẫn lối bạn về với hiện tại.' : 'Find a comfortable posture, close your eyes, and let your breath guide you back to the present.'}"
+                  </p>
+                  <div className="flex items-center gap-4 md:gap-8 text-amber-500/40 text-[10px] md:text-xs tracking-[0.2em] uppercase">
+                    <div className="flex items-center gap-1 md:gap-2"><Wind size={12} className="md:w-3.5 md:h-3.5" /> <span>{language === 'vi' ? 'Hít thở' : 'Breathe'}</span></div>
+                    <span className="w-1 h-1 rounded-full bg-amber-500/30" />
+                    <div className="flex items-center gap-1 md:gap-2"><Sparkles size={12} className="md:w-3.5 md:h-3.5" /> <span>{language === 'vi' ? 'Thư giãn' : 'Relax'}</span></div>
+                    <span className="w-1 h-1 rounded-full bg-amber-500/30" />
+                    <div className="flex items-center gap-1 md:gap-2"><Heart size={12} className="md:w-3.5 md:h-3.5" /> <span>{language === 'vi' ? 'Buông xả' : 'Let go'}</span></div>
+                  </div>
+                </div>
+
+                {/* Duration Selection */}
+                <div className="w-full max-w-2xl mb-8 md:mb-12">
+                  <div className="flex items-center justify-center gap-3 mb-4 md:mb-6 text-amber-500/50 text-[10px] md:text-xs tracking-[0.2em] uppercase">
+                    <span className="w-8 h-[1px] bg-amber-500/30" />
+                    Thời gian
+                    <span className="w-8 h-[1px] bg-amber-500/30" />
+                  </div>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+                    {durations.map((d) => (
+                      <button
+                        key={d.value}
+                        onClick={() => setDuration(d.value)}
+                        className={`py-3 px-4 md:py-4 md:px-6 rounded-2xl border backdrop-blur-md transition-all duration-500 text-[10px] md:text-sm tracking-[0.15em] uppercase ${
+                          duration === d.value
+                            ? 'bg-amber-500/10 border-amber-400/50 text-amber-200 shadow-[0_0_30px_rgba(245,158,11,0.15)]'
+                            : 'bg-black/40 border-white/5 text-white/40 hover:bg-white/5 hover:border-amber-500/30 hover:text-amber-200/80'
+                        }`}
+                      >
+                        {d.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Background Sound Selection */}
+                <div className="w-full max-w-2xl mb-12 md:mb-16">
+                  <div className="flex items-center justify-center gap-3 mb-4 md:mb-6 text-amber-500/50 text-[10px] md:text-xs tracking-[0.2em] uppercase">
+                    <span className="w-8 h-[1px] bg-amber-500/30" />
+                    <Music size={12} className="md:w-3.5 md:h-3.5" /> Âm thanh
+                    <span className="w-8 h-[1px] bg-amber-500/30" />
+                  </div>
+                  <div className="flex flex-wrap justify-center gap-2 md:gap-3">
+                    {BACKGROUND_SOUNDS.map((sound) => (
+                      <button
+                        key={sound.id}
+                        onClick={() => setSelectedSound(sound.id)}
+                        className={`px-4 py-2 md:px-6 md:py-3 rounded-full border backdrop-blur-md transition-all duration-500 text-[10px] md:text-xs tracking-[0.15em] uppercase ${
+                          selectedSound === sound.id
+                            ? 'bg-amber-500/10 border-amber-400/50 text-amber-200 shadow-[0_0_20px_rgba(245,158,11,0.1)]'
+                            : 'bg-black/40 border-white/5 text-white/40 hover:bg-white/5 hover:border-amber-500/30 hover:text-amber-200/80'
+                        }`}
+                      >
+                        {t(sound.labelKey)}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={handleStart}
+                  className="group relative flex items-center justify-center gap-3 md:gap-4 px-12 py-4 md:px-16 md:py-5 rounded-full overflow-hidden mt-2 md:mt-4 w-full max-w-[280px] md:max-w-none md:w-auto"
+                >
+                  {/* Animated background gradient */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-amber-900/60 via-amber-600/50 to-amber-900/60 border border-amber-500/50 rounded-full transition-all duration-700 group-hover:bg-amber-500/40" />
+                  
+                  {/* Sweeping light effect */}
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 overflow-hidden rounded-full">
+                    <motion.div 
+                      className="absolute inset-0 bg-gradient-to-r from-transparent via-amber-200/20 to-transparent skew-x-12"
+                      animate={{ x: ['-150%', '150%'] }}
+                      transition={{ duration: 2.5, repeat: Infinity, ease: "linear" }}
+                    />
+                  </div>
+                  
+                  {/* Glowing aura */}
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 bg-[radial-gradient(circle_at_center,rgba(251,191,36,0.5)_0%,transparent_70%)] blur-md" />
+                  
+                  <Play size={16} fill="currentColor" className="text-amber-100 relative z-10 transition-transform duration-500 group-hover:scale-110 md:w-4 md:h-4" />
+                  <span className="text-amber-50 tracking-[0.3em] uppercase text-xs md:text-sm font-medium relative z-10">{t('meditation.start')}</span>
+                </motion.button>
               </motion.div>
-              
-              <h2 className="text-3xl md:text-5xl text-amber-50 font-light tracking-[0.2em] uppercase mb-6 text-center drop-shadow-[0_0_15px_rgba(251,191,36,0.3)]">
-                {t('meditation.title')}
-              </h2>
-              
-              <div className="flex flex-col items-center gap-6 mb-16">
-                <p className="text-amber-200/80 text-center font-light tracking-[0.15em] text-sm md:text-base max-w-xl leading-relaxed italic">
-                  "{language === 'vi' ? 'Hãy tìm một tư thế thoải mái, nhắm mắt lại và để hơi thở dẫn lối bạn về với hiện tại.' : 'Find a comfortable posture, close your eyes, and let your breath guide you back to the present.'}"
-                </p>
-                <div className="flex items-center gap-8 text-amber-500/40 text-xs tracking-[0.2em] uppercase">
-                  <div className="flex items-center gap-2"><Wind size={14} /> <span>{language === 'vi' ? 'Hít thở' : 'Breathe'}</span></div>
-                  <span className="w-1 h-1 rounded-full bg-amber-500/30" />
-                  <div className="flex items-center gap-2"><Sparkles size={14} /> <span>{language === 'vi' ? 'Thư giãn' : 'Relax'}</span></div>
-                  <span className="w-1 h-1 rounded-full bg-amber-500/30" />
-                  <div className="flex items-center gap-2"><Heart size={14} /> <span>{language === 'vi' ? 'Buông xả' : 'Let go'}</span></div>
-                </div>
-              </div>
-
-              {/* Duration Selection */}
-              <div className="w-full max-w-2xl mb-12">
-                <div className="flex items-center justify-center gap-3 mb-6 text-amber-500/50 text-xs tracking-[0.2em] uppercase">
-                  <span className="w-8 h-[1px] bg-amber-500/30" />
-                  Thời gian
-                  <span className="w-8 h-[1px] bg-amber-500/30" />
-                </div>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  {durations.map((d) => (
-                    <button
-                      key={d.value}
-                      onClick={() => setDuration(d.value)}
-                      className={`py-4 px-6 rounded-2xl border backdrop-blur-md transition-all duration-500 text-sm tracking-[0.15em] uppercase ${
-                        duration === d.value
-                          ? 'bg-amber-500/10 border-amber-400/50 text-amber-200 shadow-[0_0_30px_rgba(245,158,11,0.15)]'
-                          : 'bg-black/40 border-white/5 text-white/40 hover:bg-white/5 hover:border-amber-500/30 hover:text-amber-200/80'
-                      }`}
-                    >
-                      {d.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Background Sound Selection */}
-              <div className="w-full max-w-2xl mb-16">
-                <div className="flex items-center justify-center gap-3 mb-6 text-amber-500/50 text-xs tracking-[0.2em] uppercase">
-                  <span className="w-8 h-[1px] bg-amber-500/30" />
-                  <Music size={14} /> Âm thanh
-                  <span className="w-8 h-[1px] bg-amber-500/30" />
-                </div>
-                <div className="flex flex-wrap justify-center gap-3">
-                  {BACKGROUND_SOUNDS.map((sound) => (
-                    <button
-                      key={sound.id}
-                      onClick={() => setSelectedSound(sound.id)}
-                      className={`px-6 py-3 rounded-full border backdrop-blur-md transition-all duration-500 text-xs tracking-[0.15em] uppercase ${
-                        selectedSound === sound.id
-                          ? 'bg-amber-500/10 border-amber-400/50 text-amber-200 shadow-[0_0_20px_rgba(245,158,11,0.1)]'
-                          : 'bg-black/40 border-white/5 text-white/40 hover:bg-white/5 hover:border-amber-500/30 hover:text-amber-200/80'
-                      }`}
-                    >
-                      {t(sound.labelKey)}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={handleStart}
-                className="group relative flex items-center justify-center gap-4 px-16 py-5 rounded-full overflow-hidden mt-4"
+            ) : isActive ? (
+              <motion.div 
+                key="active"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 1 }}
+                className="flex flex-col items-center justify-center w-full h-full"
               >
-                {/* Animated background gradient */}
-                <div className="absolute inset-0 bg-gradient-to-r from-amber-900/60 via-amber-600/50 to-amber-900/60 border border-amber-500/50 rounded-full transition-all duration-700 group-hover:bg-amber-500/40" />
-                
-                {/* Sweeping light effect */}
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 overflow-hidden rounded-full">
-                  <motion.div 
-                    className="absolute inset-0 bg-gradient-to-r from-transparent via-amber-200/20 to-transparent skew-x-12"
-                    animate={{ x: ['-150%', '150%'] }}
-                    transition={{ duration: 2.5, repeat: Infinity, ease: "linear" }}
-                  />
+                {/* Timer Progress Ring */}
+                <div className="relative flex items-center justify-center mb-12 md:mb-16">
+                  <svg className="w-[260px] h-[260px] md:w-[400px] md:h-[400px] transform -rotate-90" viewBox="0 0 260 260">
+                    <circle
+                      cx="130"
+                      cy="130"
+                      r="120"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      fill="transparent"
+                      className="text-white/5"
+                    />
+                    <motion.circle
+                      cx="130"
+                      cy="130"
+                      r="120"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      fill="transparent"
+                      strokeDasharray={circumference}
+                      animate={{ strokeDashoffset }}
+                      transition={{ duration: 1, ease: "linear" }}
+                      className="text-amber-500/50 drop-shadow-[0_0_10px_rgba(245,158,11,0.5)]"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+
+                  {/* Breathing Lotus inside Ring */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <motion.div
+                      animate={{
+                        scale: breathState === 'in' ? 1.5 : breathState === 'out' ? 1 : 1.5,
+                        opacity: breathState === 'hold' ? 1 : 0.6,
+                      }}
+                      transition={{
+                        duration: breathState === 'in' ? 4 : breathState === 'out' ? 8 : 7,
+                        ease: "easeInOut"
+                      }}
+                      className="absolute w-24 h-24 md:w-40 md:h-40 flex items-center justify-center text-amber-400/80 drop-shadow-[0_0_30px_rgba(245,158,11,0.3)]"
+                    >
+                      <svg viewBox="0 0 24 24" fill="currentColor" className="w-full h-full">
+                        <path d="M12 22C12 22 15 18 15 14C15 10 12 2 12 2C12 2 9 10 9 14C9 18 12 22 12 22Z" opacity="0.9"/>
+                        <path d="M12 22C12 22 18 20 20 15C22 10 18 5 18 5C18 5 16 11 12 14" opacity="0.6"/>
+                        <path d="M12 22C12 22 6 20 4 15C2 10 6 5 6 5C6 5 8 11 12 14" opacity="0.6"/>
+                        <path d="M12 22C12 22 21 22 23 18C25 14 21 9 21 9C21 9 19 14 12 16" opacity="0.4"/>
+                        <path d="M12 22C12 22 3 22 1 18C-1 14 3 9 3 9C3 9 5 14 12 16" opacity="0.4"/>
+                      </svg>
+                    </motion.div>
+
+                    <motion.div
+                      animate={{
+                        scale: breathState === 'in' ? 1.1 : breathState === 'out' ? 1 : 1.1,
+                      }}
+                      transition={{
+                        duration: breathState === 'in' ? 4 : breathState === 'out' ? 8 : 7,
+                        ease: "easeInOut"
+                      }}
+                      className="absolute flex flex-col items-center justify-center"
+                    >
+                      <span className="text-amber-100/90 tracking-[0.3em] uppercase text-[10px] md:text-sm font-medium drop-shadow-md mb-1 md:mb-2">
+                        {breathState === 'in' ? t('meditation.breathe_in') : 
+                         breathState === 'hold' ? t('meditation.hold') : 
+                         t('meditation.breathe_out')}
+                      </span>
+                      <div className="text-xl md:text-3xl font-mono text-amber-200/50 tracking-widest font-light">
+                        {formatTime(timeLeft)}
+                      </div>
+                    </motion.div>
+                  </div>
                 </div>
-                
-                {/* Glowing aura */}
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 bg-[radial-gradient(circle_at_center,rgba(251,191,36,0.5)_0%,transparent_70%)] blur-md" />
-                
-                <Play size={18} fill="currentColor" className="text-amber-100 relative z-10 transition-transform duration-500 group-hover:scale-110" />
-                <span className="text-amber-50 tracking-[0.3em] uppercase text-sm font-medium relative z-10">{t('meditation.start')}</span>
-              </motion.button>
-            </motion.div>
-          ) : isActive ? (
-            <motion.div 
-              key="active"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 1 }}
-              className="flex flex-col items-center justify-center w-full h-full"
-            >
-              {/* Timer Progress Ring */}
-              <div className="relative flex items-center justify-center mb-16">
-                <svg className="w-[300px] h-[300px] md:w-[400px] md:h-[400px] transform -rotate-90">
-                  <circle
-                    cx="50%"
-                    cy="50%"
-                    r="120"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    fill="transparent"
-                    className="text-white/5"
-                  />
-                  <motion.circle
-                    cx="50%"
-                    cy="50%"
-                    r="120"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    fill="transparent"
-                    strokeDasharray={circumference}
-                    animate={{ strokeDashoffset }}
-                    transition={{ duration: 1, ease: "linear" }}
-                    className="text-amber-500/50 drop-shadow-[0_0_10px_rgba(245,158,11,0.5)]"
-                    strokeLinecap="round"
-                  />
-                </svg>
 
-                {/* Breathing Lotus inside Ring */}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <motion.div
-                    animate={{
-                      scale: breathState === 'in' ? 1.5 : breathState === 'out' ? 1 : 1.5,
-                      opacity: breathState === 'hold' ? 1 : 0.6,
-                    }}
-                    transition={{
-                      duration: breathState === 'in' ? 4 : breathState === 'out' ? 8 : 7,
-                      ease: "easeInOut"
-                    }}
-                    className="absolute w-32 h-32 md:w-40 md:h-40 flex items-center justify-center text-amber-400/80 drop-shadow-[0_0_30px_rgba(245,158,11,0.3)]"
+                {/* Interactive Instruments */}
+                <div className="flex items-center justify-center gap-8 md:gap-12 mb-12 md:mb-16">
+                  <motion.button
+                    whileTap={{ scale: 0.9 }}
+                    onClick={playWoodenFish}
+                    className="flex flex-col items-center gap-3 md:gap-4 group"
                   >
-                    <svg viewBox="0 0 24 24" fill="currentColor" className="w-full h-full">
-                      <path d="M12 22C12 22 15 18 15 14C15 10 12 2 12 2C12 2 9 10 9 14C9 18 12 22 12 22Z" opacity="0.9"/>
-                      <path d="M12 22C12 22 18 20 20 15C22 10 18 5 18 5C18 5 16 11 12 14" opacity="0.6"/>
-                      <path d="M12 22C12 22 6 20 4 15C2 10 6 5 6 5C6 5 8 11 12 14" opacity="0.6"/>
-                      <path d="M12 22C12 22 21 22 23 18C25 14 21 9 21 9C21 9 19 14 12 16" opacity="0.4"/>
-                      <path d="M12 22C12 22 3 22 1 18C-1 14 3 9 3 9C3 9 5 14 12 16" opacity="0.4"/>
-                    </svg>
-                  </motion.div>
-
-                  <motion.div
-                    animate={{
-                      scale: breathState === 'in' ? 1.1 : breathState === 'out' ? 1 : 1.1,
-                    }}
-                    transition={{
-                      duration: breathState === 'in' ? 4 : breathState === 'out' ? 8 : 7,
-                      ease: "easeInOut"
-                    }}
-                    className="absolute flex flex-col items-center justify-center"
-                  >
-                    <span className="text-amber-100/90 tracking-[0.3em] uppercase text-xs md:text-sm font-medium drop-shadow-md mb-2">
-                      {breathState === 'in' ? t('meditation.breathe_in') : 
-                       breathState === 'hold' ? t('meditation.hold') : 
-                       t('meditation.breathe_out')}
-                    </span>
-                    <div className="text-2xl md:text-3xl font-mono text-amber-200/50 tracking-widest font-light">
-                      {formatTime(timeLeft)}
+                    <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-black/40 border border-amber-900/50 flex items-center justify-center shadow-[0_0_20px_rgba(0,0,0,0.5)] group-hover:border-amber-500/50 group-hover:bg-amber-900/20 transition-all duration-500 backdrop-blur-md">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="w-8 h-8 md:w-10 md:h-10 text-amber-500/70 group-hover:text-amber-400 transition-colors">
+                        <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" />
+                        <path d="M7 12H17" strokeLinecap="round" />
+                        <path d="M12 7V17" strokeLinecap="round" />
+                        <circle cx="12" cy="12" r="2" fill="currentColor" />
+                      </svg>
                     </div>
-                  </motion.div>
+                    <span className="text-[9px] md:text-[10px] text-amber-500/50 uppercase tracking-[0.2em] group-hover:text-amber-400/80 transition-colors">{t('meditation.wooden_fish')}</span>
+                  </motion.button>
+
+                  <motion.button
+                    whileTap={{ scale: 0.9 }}
+                    onClick={playBell}
+                    className="flex flex-col items-center gap-3 md:gap-4 group"
+                  >
+                    <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-black/40 border border-amber-900/50 flex items-center justify-center shadow-[0_0_20px_rgba(0,0,0,0.5)] group-hover:border-amber-500/50 group-hover:bg-amber-900/20 transition-all duration-500 backdrop-blur-md">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="w-8 h-8 md:w-10 md:h-10 text-amber-500/70 group-hover:text-amber-400 transition-colors">
+                        <path d="M12 2V4" strokeLinecap="round" />
+                        <path d="M12 20V22" strokeLinecap="round" />
+                        <path d="M5 10C5 6.13401 8.13401 3 12 3C15.866 3 19 6.13401 19 10V14L21 18H3L5 14V10Z" strokeLinejoin="round" />
+                        <path d="M9 20C9 21.6569 10.3431 23 12 23C13.6569 23 15 21.6569 15 20" strokeLinecap="round" />
+                      </svg>
+                    </div>
+                    <span className="text-[9px] md:text-[10px] text-amber-500/50 uppercase tracking-[0.2em] group-hover:text-amber-400/80 transition-colors">{t('meditation.bell')}</span>
+                  </motion.button>
                 </div>
-              </div>
 
-              {/* Interactive Instruments */}
-              <div className="flex items-center justify-center gap-12 mb-16">
-                <motion.button
-                  whileTap={{ scale: 0.9 }}
-                  onClick={playWoodenFish}
-                  className="flex flex-col items-center gap-4 group"
+                <button
+                  onClick={handleStop}
+                  className="flex items-center gap-2 md:gap-3 px-6 py-2 md:px-8 md:py-3 bg-transparent hover:bg-white/5 text-white/40 hover:text-white/80 border border-white/10 hover:border-white/30 rounded-full transition-all duration-500"
                 >
-                  <div className="w-20 h-20 rounded-full bg-black/40 border border-amber-900/50 flex items-center justify-center shadow-[0_0_20px_rgba(0,0,0,0.5)] group-hover:border-amber-500/50 group-hover:bg-amber-900/20 transition-all duration-500 backdrop-blur-md">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="w-10 h-10 text-amber-500/70 group-hover:text-amber-400 transition-colors">
-                      <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" />
-                      <path d="M7 12H17" strokeLinecap="round" />
-                      <path d="M12 7V17" strokeLinecap="round" />
-                      <circle cx="12" cy="12" r="2" fill="currentColor" />
-                    </svg>
-                  </div>
-                  <span className="text-[10px] text-amber-500/50 uppercase tracking-[0.2em] group-hover:text-amber-400/80 transition-colors">{t('meditation.wooden_fish')}</span>
-                </motion.button>
-
-                <motion.button
-                  whileTap={{ scale: 0.9 }}
-                  onClick={playBell}
-                  className="flex flex-col items-center gap-4 group"
-                >
-                  <div className="w-20 h-20 rounded-full bg-black/40 border border-amber-900/50 flex items-center justify-center shadow-[0_0_20px_rgba(0,0,0,0.5)] group-hover:border-amber-500/50 group-hover:bg-amber-900/20 transition-all duration-500 backdrop-blur-md">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="w-10 h-10 text-amber-500/70 group-hover:text-amber-400 transition-colors">
-                      <path d="M12 2V4" strokeLinecap="round" />
-                      <path d="M12 20V22" strokeLinecap="round" />
-                      <path d="M5 10C5 6.13401 8.13401 3 12 3C15.866 3 19 6.13401 19 10V14L21 18H3L5 14V10Z" strokeLinejoin="round" />
-                      <path d="M9 20C9 21.6569 10.3431 23 12 23C13.6569 23 15 21.6569 15 20" strokeLinecap="round" />
-                    </svg>
-                  </div>
-                  <span className="text-[10px] text-amber-500/50 uppercase tracking-[0.2em] group-hover:text-amber-400/80 transition-colors">{t('meditation.bell')}</span>
-                </motion.button>
-              </div>
-
-              <button
-                onClick={handleStop}
-                className="flex items-center gap-3 px-8 py-3 bg-transparent hover:bg-white/5 text-white/40 hover:text-white/80 border border-white/10 hover:border-white/30 rounded-full transition-all duration-500"
-              >
-                <Square size={14} fill="currentColor" />
-                <span className="tracking-[0.2em] uppercase text-xs">{t('meditation.stop')}</span>
-              </button>
-            </motion.div>
-          ) : (
-            <motion.div 
-              key="completion"
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{ duration: 1.5, ease: "easeOut" }}
-              className="flex flex-col items-center text-center relative"
-            >
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-amber-500/10 rounded-full blur-[100px] pointer-events-none" />
-
-              <motion.div 
-                initial={{ scale: 0, rotate: -180 }}
-                animate={{ scale: 1, rotate: 0 }}
-                transition={{ duration: 2, ease: "easeOut", delay: 0.5 }}
-                className="w-32 h-32 rounded-full border border-amber-500/30 flex items-center justify-center mb-12 relative z-10"
-              >
-                <div className="absolute inset-0 bg-amber-500/10 rounded-full blur-md" />
-                <Wind className="text-amber-300 drop-shadow-[0_0_15px_rgba(251,191,36,0.5)]" size={48} strokeWidth={1} />
+                  <Square size={12} className="md:w-3.5 md:h-3.5" fill="currentColor" />
+                  <span className="tracking-[0.2em] uppercase text-[10px] md:text-xs">{t('meditation.stop')}</span>
+                </button>
               </motion.div>
-              
-              <h3 className="text-3xl md:text-4xl text-amber-100 font-light tracking-[0.3em] uppercase mb-6 drop-shadow-md relative z-10">
-                {t('meditation.completed')}
-              </h3>
-              <p className="text-amber-200/50 font-light tracking-[0.15em] text-sm md:text-base mb-16 max-w-md relative z-10 leading-relaxed italic">
-                "{language === 'vi' ? 'Tâm tĩnh lặng, vạn sự bình an.' : 'A quiet mind brings universal peace.'}"
-              </p>
-              
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setShowCompletion(false)}
-                className="px-12 py-4 bg-transparent hover:bg-amber-900/20 text-amber-200/80 hover:text-amber-100 border border-amber-500/30 hover:border-amber-400/60 rounded-full transition-all duration-500 tracking-[0.25em] uppercase text-xs font-medium relative z-10"
+            ) : (
+              <motion.div 
+                key="completion"
+                initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                transition={{ duration: 1.5, ease: "easeOut" }}
+                className="flex flex-col items-center text-center relative"
               >
-                {t('meditation.back')}
-              </motion.button>
-            </motion.div>
-          )}
-        </AnimatePresence>
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] md:w-[400px] md:h-[400px] bg-amber-500/10 rounded-full blur-[80px] md:blur-[100px] pointer-events-none" />
+
+                <motion.div 
+                  initial={{ scale: 0, rotate: -180 }}
+                  animate={{ scale: 1, rotate: 0 }}
+                  transition={{ duration: 2, ease: "easeOut", delay: 0.5 }}
+                  className="w-24 h-24 md:w-32 md:h-32 rounded-full border border-amber-500/30 flex items-center justify-center mb-8 md:mb-12 relative z-10"
+                >
+                  <div className="absolute inset-0 bg-amber-500/10 rounded-full blur-md" />
+                  <Wind className="text-amber-300 drop-shadow-[0_0_15px_rgba(251,191,36,0.5)] w-10 h-10 md:w-12 md:h-12" strokeWidth={1} />
+                </motion.div>
+                
+                <h3 className="text-2xl md:text-4xl text-amber-100 font-light tracking-[0.3em] uppercase mb-4 md:mb-6 drop-shadow-md relative z-10 px-4">
+                  {t('meditation.completed')}
+                </h3>
+                <p className="text-amber-200/50 font-light tracking-[0.15em] text-xs md:text-base mb-12 md:mb-16 max-w-md relative z-10 leading-relaxed italic px-6">
+                  "{language === 'vi' ? 'Tâm tĩnh lặng, vạn sự bình an.' : 'A quiet mind brings universal peace.'}"
+                </p>
+                
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => setShowCompletion(false)}
+                  className="px-10 py-3 md:px-12 md:py-4 bg-transparent hover:bg-amber-900/20 text-amber-200/80 hover:text-amber-100 border border-amber-500/30 hover:border-amber-400/60 rounded-full transition-all duration-500 tracking-[0.25em] uppercase text-[10px] md:text-xs font-medium relative z-10"
+                >
+                  {t('meditation.back')}
+                </motion.button>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
       </div>
     </motion.div>
   );
