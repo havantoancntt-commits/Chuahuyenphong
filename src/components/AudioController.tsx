@@ -49,7 +49,17 @@ export function AudioController({
     }
 
     if (!audioCtxRef.current) {
-      audioCtxRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
+      try {
+        const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+        if (!AudioContextClass) {
+          console.warn("AudioContext is not supported in this browser.");
+          return;
+        }
+        audioCtxRef.current = new AudioContextClass();
+      } catch (e) {
+        console.warn("Failed to initialize AudioContext:", e);
+        return;
+      }
       
       // 1. Synthesize Wind (White Noise + Lowpass Filter + LFO)
       const bufferSize = audioCtxRef.current.sampleRate * 2; // 2 seconds of noise

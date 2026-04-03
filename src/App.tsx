@@ -57,7 +57,7 @@ export default function App() {
   };
 
   return (
-    <div className="relative w-full h-screen bg-black overflow-hidden font-serif">
+    <div className="relative w-full h-[100dvh] bg-black overflow-hidden font-serif">
       {/* 3D Scene */}
       <TempleScene 
         isIncenseLit={isIncenseLit} 
