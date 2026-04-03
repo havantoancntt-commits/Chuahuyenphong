@@ -13,7 +13,7 @@ export function GuideModal({ onClose }: GuideModalProps) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="absolute inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/60 backdrop-blur-md"
+      className="absolute inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/60 "
     >
       <motion.div 
         initial={{ scale: 0.95, y: 20 }}
@@ -22,7 +22,7 @@ export function GuideModal({ onClose }: GuideModalProps) {
         className="relative w-full max-w-2xl max-h-[85vh] overflow-y-auto custom-scrollbar bg-zinc-900/90 border border-amber-500/30 rounded-3xl shadow-[0_0_50px_rgba(251,191,36,0.1)] text-amber-50"
       >
         {/* Sticky Header */}
-        <div className="sticky top-0 z-10 flex justify-between items-center p-6 border-b border-amber-500/20 bg-zinc-900/95 backdrop-blur-sm">
+        <div className="sticky top-0 z-10 flex justify-between items-center p-6 border-b border-amber-500/20 bg-zinc-900/95 ">
           <h2 className="text-xl sm:text-2xl font-medium tracking-wider text-amber-200 flex items-center gap-3">
             <BookOpen size={24} className="text-amber-400" />
             {t('guide.title')}
@@ -96,7 +96,7 @@ export function GuideModal({ onClose }: GuideModalProps) {
         </div>
         
         {/* Footer */}
-        <div className="sticky bottom-0 p-6 border-t border-amber-500/20 bg-zinc-900/95 backdrop-blur-sm flex justify-center">
+        <div className="sticky bottom-0 p-6 border-t border-amber-500/20 bg-zinc-900/95  flex justify-center">
           <button 
             onClick={onClose}
             className="px-8 py-3 rounded-2xl bg-gradient-to-r from-amber-600/20 to-orange-600/20 hover:from-amber-500/30 hover:to-orange-500/30 border border-amber-500/30 text-amber-200 font-medium tracking-widest transition-all duration-300 shadow-[0_0_15px_rgba(251,191,36,0.1)] hover:shadow-[0_0_25px_rgba(251,191,36,0.2)]"

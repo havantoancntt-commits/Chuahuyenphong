@@ -240,7 +240,7 @@ export function MeditationRoom({ onClose }: MeditationRoomProps) {
                       <button
                         key={d.value}
                         onClick={() => setDuration(d.value)}
-                        className={`py-3 px-4 md:py-4 md:px-6 rounded-2xl border backdrop-blur-md transition-all duration-500 text-[10px] md:text-sm tracking-[0.15em] uppercase ${
+                        className={`py-3 px-4 md:py-4 md:px-6 rounded-2xl border  transition-all duration-500 text-[10px] md:text-sm tracking-[0.15em] uppercase ${
                           duration === d.value
                             ? 'bg-amber-500/10 border-amber-400/50 text-amber-200 shadow-[0_0_30px_rgba(245,158,11,0.15)]'
                             : 'bg-black/40 border-white/5 text-white/40 hover:bg-white/5 hover:border-amber-500/30 hover:text-amber-200/80'
@@ -264,7 +264,7 @@ export function MeditationRoom({ onClose }: MeditationRoomProps) {
                       <button
                         key={sound.id}
                         onClick={() => setSelectedSound(sound.id)}
-                        className={`px-4 py-2 md:px-6 md:py-3 rounded-full border backdrop-blur-md transition-all duration-500 text-[10px] md:text-xs tracking-[0.15em] uppercase ${
+                        className={`px-4 py-2 md:px-6 md:py-3 rounded-full border  transition-all duration-500 text-[10px] md:text-xs tracking-[0.15em] uppercase ${
                           selectedSound === sound.id
                             ? 'bg-amber-500/10 border-amber-400/50 text-amber-200 shadow-[0_0_20px_rgba(245,158,11,0.1)]'
                             : 'bg-black/40 border-white/5 text-white/40 hover:bg-white/5 hover:border-amber-500/30 hover:text-amber-200/80'
@@ -388,7 +388,7 @@ export function MeditationRoom({ onClose }: MeditationRoomProps) {
                     onClick={playWoodenFish}
                     className="flex flex-col items-center gap-3 md:gap-4 group"
                   >
-                    <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-black/40 border border-amber-900/50 flex items-center justify-center shadow-[0_0_20px_rgba(0,0,0,0.5)] group-hover:border-amber-500/50 group-hover:bg-amber-900/20 transition-all duration-500 backdrop-blur-md">
+                    <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-black/40 border border-amber-900/50 flex items-center justify-center shadow-[0_0_20px_rgba(0,0,0,0.5)] group-hover:border-amber-500/50 group-hover:bg-amber-900/20 transition-all duration-500 ">
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="w-8 h-8 md:w-10 md:h-10 text-amber-500/70 group-hover:text-amber-400 transition-colors">
                         <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" />
                         <path d="M7 12H17" strokeLinecap="round" />
@@ -404,7 +404,7 @@ export function MeditationRoom({ onClose }: MeditationRoomProps) {
                     onClick={playBell}
                     className="flex flex-col items-center gap-3 md:gap-4 group"
                   >
-                    <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-black/40 border border-amber-900/50 flex items-center justify-center shadow-[0_0_20px_rgba(0,0,0,0.5)] group-hover:border-amber-500/50 group-hover:bg-amber-900/20 transition-all duration-500 backdrop-blur-md">
+                    <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-black/40 border border-amber-900/50 flex items-center justify-center shadow-[0_0_20px_rgba(0,0,0,0.5)] group-hover:border-amber-500/50 group-hover:bg-amber-900/20 transition-all duration-500 ">
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="w-8 h-8 md:w-10 md:h-10 text-amber-500/70 group-hover:text-amber-400 transition-colors">
                         <path d="M12 2V4" strokeLinecap="round" />
                         <path d="M12 20V22" strokeLinecap="round" />

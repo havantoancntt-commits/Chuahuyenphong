@@ -5,7 +5,12 @@ import { ChevronLeft, BookText, Sparkles, Heart, Briefcase, GraduationCap, Home,
 import { GoogleGenAI } from '@google/genai';
 
 const apiKey = process.env.GEMINI_API_KEY || "AIzaSyBqwWTRtCv8meMbpGqweC9Sxzm456LxsyQ";
-const ai = apiKey ? new GoogleGenAI({ apiKey }) : null;
+let ai: GoogleGenAI | null = null;
+try {
+  ai = apiKey ? new GoogleGenAI({ apiKey }) : null;
+} catch (e) {
+  console.warn("Failed to initialize GoogleGenAI:", e);
+}
 
 interface PrayerBookProps {
   onClose: () => void;
@@ -134,7 +139,7 @@ export function PrayerBook({ onClose }: PrayerBookProps) {
   ];
 
   return (
-    <div className="absolute inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+    <div className="absolute inset-0 z-50 flex items-center justify-center p-4 bg-black/95 ">
       <motion.div 
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -174,7 +179,7 @@ export function PrayerBook({ onClose }: PrayerBookProps) {
                 <h2 className="text-xl sm:text-2xl text-amber-100 font-medium tracking-wide mb-6 text-center drop-shadow-[0_0_10px_rgba(251,191,36,0.2)] relative z-10">
                   {language === 'vi' ? selectedPrayer.titleVi : selectedPrayer.titleEn}
                 </h2>
-                <div className="bg-black/60 border border-amber-500/20 rounded-2xl p-6 sm:p-8 relative flex-1 shadow-[0_0_30px_rgba(0,0,0,0.5),inset_0_0_20px_rgba(245,158,11,0.05)] backdrop-blur-sm">
+                <div className="bg-black/60 border border-amber-500/20 rounded-2xl p-6 sm:p-8 relative flex-1 shadow-[0_0_30px_rgba(0,0,0,0.5),inset_0_0_20px_rgba(245,158,11,0.05)] ">
                   <div className="absolute top-4 right-4 text-amber-500/10">
                     <BookText size={60} strokeWidth={0.5} />
                   </div>

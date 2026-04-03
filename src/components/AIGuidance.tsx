@@ -5,7 +5,12 @@ import { GoogleGenAI } from '@google/genai';
 import { useLanguage } from '../lib/i18n';
 
 const apiKey = process.env.GEMINI_API_KEY || "AIzaSyBqwWTRtCv8meMbpGqweC9Sxzm456LxsyQ";
-const ai = apiKey ? new GoogleGenAI({ apiKey }) : null;
+let ai: GoogleGenAI | null = null;
+try {
+  ai = apiKey ? new GoogleGenAI({ apiKey }) : null;
+} catch (e) {
+  console.warn("Failed to initialize GoogleGenAI:", e);
+}
 
 export function AIGuidance({ onClose }: { onClose: () => void }) {
   const { t, language } = useLanguage();
@@ -73,7 +78,7 @@ export function AIGuidance({ onClose }: { onClose: () => void }) {
   };
 
   return (
-    <div className="absolute inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/80 backdrop-blur-lg">
+    <div className="absolute inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/95 ">
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -217,7 +222,7 @@ export function AIGuidance({ onClose }: { onClose: () => void }) {
                       }}
                     />
 
-                    <div className="relative w-full p-8 sm:p-10 bg-gradient-to-b from-black/80 to-black/60 border border-amber-500/40 rounded-3xl mb-8 shadow-[0_0_50px_rgba(0,0,0,0.8),inset_0_0_30px_rgba(245,158,11,0.1)] backdrop-blur-xl overflow-hidden">
+                    <div className="relative w-full p-8 sm:p-10 bg-gradient-to-b from-black/80 to-black/60 border border-amber-500/40 rounded-3xl mb-8 shadow-[0_0_50px_rgba(0,0,0,0.8),inset_0_0_30px_rgba(245,158,11,0.1)]  overflow-hidden">
                       {/* Inner subtle glow */}
                       <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 to-transparent pointer-events-none" />
                       

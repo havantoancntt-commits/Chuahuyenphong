@@ -59,7 +59,7 @@ export function UIOverlay({
         <div className="flex gap-2">
           <button 
             onClick={toggleLanguage}
-            className="pointer-events-auto flex items-center gap-1.5 px-3 py-2 sm:p-3 rounded-full bg-black/40 backdrop-blur-xl border border-amber-500/30 text-amber-200/90 hover:text-amber-100 hover:bg-amber-500/30 hover:border-amber-400/50 hover:shadow-[0_0_15px_rgba(245,158,11,0.3)] transition-all duration-500"
+            className="pointer-events-auto flex items-center gap-1.5 px-3 py-2 sm:p-3 rounded-full bg-black/95  border border-amber-500/30 text-amber-200/90 hover:text-amber-100 hover:bg-amber-500/30 hover:border-amber-400/50 hover:shadow-[0_0_15px_rgba(245,158,11,0.3)] transition-all duration-500"
             title="Ngôn ngữ / Language"
           >
             <Globe size={18} strokeWidth={1.5} />
@@ -67,14 +67,14 @@ export function UIOverlay({
           </button>
           <button 
             onClick={onOpenGuide}
-            className="pointer-events-auto p-2 sm:p-3 rounded-full bg-black/40 backdrop-blur-xl border border-amber-500/30 text-amber-200/90 hover:text-amber-100 hover:bg-amber-500/30 hover:border-amber-400/50 hover:shadow-[0_0_15px_rgba(245,158,11,0.3)] transition-all duration-500"
+            className="pointer-events-auto p-2 sm:p-3 rounded-full bg-black/95  border border-amber-500/30 text-amber-200/90 hover:text-amber-100 hover:bg-amber-500/30 hover:border-amber-400/50 hover:shadow-[0_0_15px_rgba(245,158,11,0.3)] transition-all duration-500"
             title={t('ui.guide_tooltip')}
           >
             <BookOpen size={20} strokeWidth={1.5} />
           </button>
           <button 
             onClick={() => setAudioEnabled(!audioEnabled)}
-            className="pointer-events-auto p-2 sm:p-3 rounded-full bg-black/40 backdrop-blur-xl border border-amber-500/30 text-amber-200/90 hover:text-amber-100 hover:bg-amber-500/30 hover:border-amber-400/50 hover:shadow-[0_0_15px_rgba(245,158,11,0.3)] transition-all duration-500"
+            className="pointer-events-auto p-2 sm:p-3 rounded-full bg-black/95  border border-amber-500/30 text-amber-200/90 hover:text-amber-100 hover:bg-amber-500/30 hover:border-amber-400/50 hover:shadow-[0_0_15px_rgba(245,158,11,0.3)] transition-all duration-500"
             title={audioEnabled ? t('ui.audio_off') : t('ui.audio_on')}
           >
             {audioEnabled ? <Volume2 size={20} strokeWidth={1.5} /> : <VolumeX size={20} strokeWidth={1.5} />}
@@ -186,7 +186,7 @@ function ActionButton({
       disabled={disabled}
       className={`
         pointer-events-auto flex flex-col items-center justify-center gap-2 
-        w-[76px] h-[86px] sm:w-20 sm:h-24 md:w-28 md:h-32 rounded-2xl backdrop-blur-xl transition-all duration-500
+        w-[76px] h-[86px] sm:w-20 sm:h-24 md:w-28 md:h-32 rounded-2xl  transition-all duration-500
         ${disabled ? 'opacity-40 cursor-not-allowed' : 'hover:-translate-y-1 cursor-pointer active:scale-95'}
         ${highlight 
           ? 'bg-gradient-to-b from-amber-900/60 to-amber-950/60 border border-amber-400/40 text-amber-200 shadow-[0_4px_20px_rgba(245,158,11,0.2)] hover:shadow-[0_4px_30px_rgba(245,158,11,0.4)] hover:border-amber-300/60' 

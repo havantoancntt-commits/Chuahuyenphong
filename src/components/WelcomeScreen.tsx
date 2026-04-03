@@ -33,7 +33,7 @@ export function WelcomeScreen({ onEnter }: WelcomeScreenProps) {
         animate={isOpening ? { opacity: 1 } : { opacity: 0 }}
         transition={{ duration: 1.5, delay: 0.5 }}
       >
-        <div className="w-[120vw] h-[120vh] bg-[radial-gradient(circle_at_center,rgba(251,191,36,0.8)_0%,rgba(251,191,36,0.2)_30%,transparent_70%)] mix-blend-screen blur-2xl" />
+        <div className="w-[120vw] h-[120vh] bg-[radial-gradient(circle_at_center,rgba(251,191,36,0.6)_0%,rgba(251,191,36,0.1)_40%,transparent_70%)]" />
       </motion.div>
 
       {/* The Doors Container */}
@@ -187,7 +187,7 @@ export function WelcomeScreen({ onEnter }: WelcomeScreenProps) {
               onClick={handleEnter}
               className="pointer-events-auto group relative px-12 md:px-16 py-6 md:py-8 rounded-full overflow-hidden cursor-pointer shadow-[0_0_50px_rgba(245,158,11,0.3)] hover:shadow-[0_0_80px_rgba(245,158,11,0.6)] transition-all duration-500 mb-16"
             >
-              <div className="absolute inset-0 bg-gradient-to-b from-amber-900/40 to-black/80 backdrop-blur-xl border-2 border-amber-500/60 rounded-full transition-all duration-500 group-hover:border-amber-300 group-hover:bg-amber-800/40" />
+              <div className="absolute inset-0 bg-gradient-to-b from-amber-900/40 to-black/80  border-2 border-amber-500/60 rounded-full transition-all duration-500 group-hover:border-amber-300 group-hover:bg-amber-800/40" />
               <div className="absolute inset-0 opacity-50 group-hover:opacity-100 transition-opacity duration-500 bg-[radial-gradient(circle_at_center,rgba(251,191,36,0.5)_0%,transparent_70%)] animate-pulse" />
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-amber-100/30 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]" />
               <span className="relative z-10 flex items-center justify-center gap-3 text-amber-100 group-hover:text-white tracking-[0.3em] md:tracking-[0.4em] uppercase text-sm md:text-lg font-bold transition-colors duration-500 drop-shadow-[0_0_10px_rgba(251,191,36,1)]">
@@ -207,8 +207,8 @@ export function WelcomeScreen({ onEnter }: WelcomeScreenProps) {
             className="absolute w-1 h-1 bg-amber-200/60 rounded-full blur-[1px]"
             style={{ boxShadow: '0 0 10px rgba(251,191,36,0.8)' }}
             initial={{
-              x: `${Math.random() * 100}vw`,
-              y: '110vh',
+              x: Math.random() * window.innerWidth,
+              y: window.innerHeight + 10,
               opacity: Math.random() * 0.5 + 0.2,
               scale: Math.random() * 2 + 0.5,
             }}

@@ -57,7 +57,7 @@ export default function App() {
   };
 
   return (
-    <div className="relative w-full h-screen h-[100dvh] bg-black overflow-hidden font-serif">
+    <div className="relative w-full h-screen bg-black overflow-hidden font-serif">
       {/* 3D Scene */}
       <TempleScene 
         isIncenseLit={isIncenseLit} 
@@ -177,7 +177,7 @@ export default function App() {
             exit={{ opacity: 0, scale: 0.9 }}
             className="absolute inset-0 pointer-events-none flex items-center justify-center z-50"
           >
-            <div className="bg-gradient-to-b from-black/60 to-black/80 backdrop-blur-lg px-10 py-5 rounded-full border border-amber-400/40 text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-yellow-400 to-amber-200 text-2xl sm:text-3xl tracking-[0.2em] shadow-[0_0_50px_rgba(251,191,36,0.3)] font-medium uppercase">
+            <div className="bg-gradient-to-b from-black/60 to-black/80  px-10 py-5 rounded-full border border-amber-400/40 text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-yellow-400 to-amber-200 text-2xl sm:text-3xl tracking-[0.2em] shadow-[0_0_50px_rgba(251,191,36,0.3)] font-medium uppercase">
               {blessingMessage}
             </div>
           </motion.div>

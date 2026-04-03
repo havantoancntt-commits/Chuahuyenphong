@@ -5,7 +5,12 @@ import { GoogleGenAI } from '@google/genai';
 import { useLanguage } from '../lib/i18n';
 
 const apiKey = process.env.GEMINI_API_KEY || "AIzaSyBqwWTRtCv8meMbpGqweC9Sxzm456LxsyQ";
-const ai = apiKey ? new GoogleGenAI({ apiKey }) : null;
+let ai: GoogleGenAI | null = null;
+try {
+  ai = apiKey ? new GoogleGenAI({ apiKey }) : null;
+} catch (e) {
+  console.warn("Failed to initialize GoogleGenAI:", e);
+}
 
 export function RepentanceRoom({ onClose }: { onClose: () => void }) {
   const { t, language } = useLanguage();
@@ -164,7 +169,7 @@ export function RepentanceRoom({ onClose }: { onClose: () => void }) {
                     value={text}
                     onChange={(e) => setText(e.target.value)}
                     placeholder={t('repentance.placeholder')}
-                    className="relative w-full h-40 sm:h-48 md:h-64 bg-black/60 backdrop-blur-xl border border-red-900/30 rounded-2xl p-5 md:p-8 text-red-100/90 placeholder:text-red-900/50 focus:outline-none focus:border-red-500/50 transition-all duration-500 resize-none font-light text-base md:text-lg leading-relaxed shadow-[inset_0_0_30px_rgba(0,0,0,0.8)]"
+                    className="relative w-full h-40 sm:h-48 md:h-64 bg-black/60  border border-red-900/30 rounded-2xl p-5 md:p-8 text-red-100/90 placeholder:text-red-900/50 focus:outline-none focus:border-red-500/50 transition-all duration-500 resize-none font-light text-base md:text-lg leading-relaxed shadow-[inset_0_0_30px_rgba(0,0,0,0.8)]"
                   />
                 </div>
 

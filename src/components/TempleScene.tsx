@@ -6,18 +6,23 @@ import * as THREE from 'three';
 
 // Helper to create a soft particle texture
 const createSoftParticleTexture = () => {
-  const canvas = document.createElement('canvas');
-  canvas.width = 32;
-  canvas.height = 32;
-  const context = canvas.getContext('2d');
-  if (context) {
-    const gradient = context.createRadialGradient(16, 16, 0, 16, 16, 16);
-    gradient.addColorStop(0, 'rgba(255,255,255,1)');
-    gradient.addColorStop(1, 'rgba(255,255,255,0)');
-    context.fillStyle = gradient;
-    context.fillRect(0, 0, 32, 32);
+  try {
+    const canvas = document.createElement('canvas');
+    canvas.width = 32;
+    canvas.height = 32;
+    const context = canvas.getContext('2d');
+    if (context) {
+      const gradient = context.createRadialGradient(16, 16, 0, 16, 16, 16);
+      gradient.addColorStop(0, 'rgba(255,255,255,1)');
+      gradient.addColorStop(1, 'rgba(255,255,255,0)');
+      context.fillStyle = gradient;
+      context.fillRect(0, 0, 32, 32);
+    }
+    return new THREE.CanvasTexture(canvas);
+  } catch (e) {
+    console.warn("Failed to create particle texture", e);
+    return null;
   }
-  return new THREE.CanvasTexture(canvas);
 };
 
 const sharedParticleTexture = createSoftParticleTexture();
@@ -450,22 +455,10 @@ function TempleArchitecture() {
 
   return (
     <group>
-      {/* Floor with reflection */}
+      {/* Floor */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]} receiveShadow>
         <planeGeometry args={[20, 20]} />
-        <MeshReflectorMaterial
-          blur={[300, 100]}
-          resolution={1024}
-          mixBlur={1}
-          mixStrength={40}
-          roughness={0.8}
-          depthScale={1.2}
-          minDepthThreshold={0.4}
-          maxDepthThreshold={1.4}
-          color="#2a1a10"
-          metalness={0.1}
-          mirror={0.5}
-        />
+        <meshStandardMaterial color="#2a1a10" roughness={0.8} metalness={0.1} />
       </mesh>
 
       {/* Back Wall */}
@@ -805,12 +798,7 @@ export function TempleScene({ isIncenseLit, isBowing, hasDonated }: { isIncenseL
 
           <CameraController isBowing={isBowing} controlsRef={controlsRef} />
           
-          {/* Premium Post-Processing Effects */}
           <Environment preset="city" environmentIntensity={0.15} />
-          <EffectComposer>
-            <Bloom luminanceThreshold={0.8} mipmapBlur intensity={1.2} />
-            <Vignette eskil={false} offset={0.1} darkness={1.2} />
-          </EffectComposer>
 
           <OrbitControls 
             ref={controlsRef}

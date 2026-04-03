@@ -79,7 +79,7 @@ export function LifeRelease({ onClose }: LifeReleaseProps) {
   };
 
   return (
-    <div className="absolute inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+    <div className="absolute inset-0 z-50 flex items-center justify-center p-4 bg-black/95 ">
       <motion.div 
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -196,7 +196,7 @@ export function LifeRelease({ onClose }: LifeReleaseProps) {
                   initial={{ scale: 0, rotate: -180 }}
                   animate={{ scale: 1, rotate: 0 }}
                   transition={{ type: "spring", stiffness: 200, damping: 20, delay: 0.2 }}
-                  className="w-28 h-28 rounded-full bg-gradient-to-br from-cyan-500/20 to-cyan-900/40 flex items-center justify-center mb-8 border border-cyan-400/40 shadow-[0_0_50px_rgba(6,182,212,0.3),inset_0_0_20px_rgba(6,182,212,0.2)] backdrop-blur-md relative z-10"
+                  className="w-28 h-28 rounded-full bg-gradient-to-br from-cyan-500/20 to-cyan-900/40 flex items-center justify-center mb-8 border border-cyan-400/40 shadow-[0_0_50px_rgba(6,182,212,0.3),inset_0_0_20px_rgba(6,182,212,0.2)]  relative z-10"
                 >
                   <Sparkles className="text-cyan-300 drop-shadow-lg" size={48} strokeWidth={1.5} />
                 </motion.div>
