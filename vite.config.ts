@@ -16,7 +16,10 @@ export default defineConfig(({mode}) => {
       },
     },
     build: {
-      target: 'es2020',
+      target: 'es2015',
+    },
+    esbuild: {
+      target: 'es2015',
     },
     server: {
       // HMR is disabled in AI Studio via DISABLE_HMR env var.

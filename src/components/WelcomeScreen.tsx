@@ -207,8 +207,8 @@ export function WelcomeScreen({ onEnter }: WelcomeScreenProps) {
             className="absolute w-1 h-1 bg-amber-200/60 rounded-full blur-[1px]"
             style={{ boxShadow: '0 0 10px rgba(251,191,36,0.8)' }}
             initial={{
-              x: Math.random() * window.innerWidth,
-              y: window.innerHeight + 10,
+              x: `${Math.random() * 100}vw`,
+              y: '110vh',
               opacity: Math.random() * 0.5 + 0.2,
               scale: Math.random() * 2 + 0.5,
             }}
