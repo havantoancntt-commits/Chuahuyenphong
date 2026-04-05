@@ -5,34 +5,78 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta name="theme-color" content="#110e0c" />
     
+    <!-- Polyfills & Critical Fixes for Social Media In-App Browsers -->
+    <script>
+      (function() {
+        // Polyfills
+        window.global = window;
+        window.process = { 
+          env: { NODE_ENV: 'production' }, 
+          version: '', 
+          versions: {}, 
+          platform: 'browser',
+          nextTick: function(fn) { setTimeout(fn, 0); }
+        };
+        window.Buffer = window.Buffer || { isBuffer: function() { return false; } };
+        
+        // Dynamic Meta Tags to fix sharing issues on Vercel/Social Media
+        var currentUrl = window.location.href;
+        var origin = window.location.origin;
+        
+        // Update canonical and OG tags dynamically if they exist
+        function updateMeta() {
+          var canonical = document.querySelector('link[rel="canonical"]');
+          if (canonical) canonical.setAttribute('href', currentUrl);
+          
+          var ogUrl = document.querySelector('meta[property="og:url"]');
+          if (ogUrl) ogUrl.setAttribute('content', currentUrl);
+        }
+        
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', updateMeta);
+        } else {
+          updateMeta();
+        }
+
+        // Global Error Handling
+        window.addEventListener('error', function(e) {
+          console.error('Critical Error:', e);
+          var root = document.getElementById('root');
+          // Only show error if app hasn't rendered anything yet
+          if (root && !root.innerHTML.trim()) {
+            document.body.innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;background:#000;color:#f59e0b;font-family:serif;text-align:center;padding:20px;">' +
+              '<h1 style="font-size:2rem;margin-bottom:1rem;letter-spacing:0.2em;">HUYỀN PHONG PHẬT ĐẠO</h1>' +
+              '<p style="opacity:0.8;margin-bottom:2rem;font-style:italic;">Đang gặp sự cố kỹ thuật. Vui lòng tải lại trang hoặc kiểm tra kết nối mạng.</p>' +
+              '<button onclick="window.location.reload()" style="background:linear-gradient(to right, #b45309, #d97706);color:#fff;border:none;padding:12px 30px;border-radius:99px;font-weight:bold;cursor:pointer;box-shadow:0 0 20px rgba(217,119,6,0.4);text-transform:uppercase;letter-spacing:0.1em;">Tải lại trang</button>' +
+              '<div style="margin-top:3rem;font-size:0.6rem;opacity:0.2;max-width:80%;word-break:break-all;">' + e.message + '</div>' +
+              '</div>';
+          }
+        });
+      })();
+    </script>
+
     <!-- Primary Meta Tags -->
     <title>Huyền Phong Phật Đạo | Không Gian Tâm Linh Ảo & Lễ Phật Online</title>
     <meta name="title" content="Huyền Phong Phật Đạo | Không Gian Tâm Linh Ảo & Lễ Phật Online" />
     <meta name="description" content="Trải nghiệm không gian tâm linh ảo Huyền Phong Phật Đạo. Dâng hương, lễ bái, sám hối và xin xăm online 3D chân thực. Tìm về sự tĩnh lặng và bình an trong tâm hồn." />
     <meta name="keywords" content="đi chùa online, lễ phật online, không gian tâm linh ảo, dâng hương online, xin xăm online, sám hối online, Huyền Phong Phật Đạo, phật giáo, thiền định, virtual temple, online worship, 3d temple" />
     <meta name="author" content="Ha Van Toan" />
-    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
     <link rel="canonical" href="https://ais-pre-6o4lmkp7356no5vkg4zsti-466654021835.asia-east1.run.app/" />
 
-    <!-- Open Graph / Facebook / Zalo -->
-    <meta property="og:type" content="website" />
     <meta property="og:url" content="https://ais-pre-6o4lmkp7356no5vkg4zsti-466654021835.asia-east1.run.app/" />
     <meta property="og:title" content="Huyền Phong Phật Đạo | Không Gian Tâm Linh Ảo & Lễ Phật Online" />
     <meta property="og:description" content="Trải nghiệm không gian tâm linh ảo Huyền Phong Phật Đạo. Dâng hương, lễ bái, sám hối và xin xăm online 3D chân thực. Tìm về sự tĩnh lặng và bình an trong tâm hồn." />
     <meta property="og:image" content="https://images.unsplash.com/photo-1604881988758-f76ad2f7aac1?q=80&w=1200&h=630&auto=format&fit=crop" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Không gian tâm linh ảo Huyền Phong Phật Đạo" />
     <meta property="og:site_name" content="Huyền Phong Phật Đạo" />
     <meta property="og:locale" content="vi_VN" />
 
-    <!-- Twitter -->
-    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:url" content="https://ais-pre-6o4lmkp7356no5vkg4zsti-466654021835.asia-east1.run.app/" />
     <meta name="twitter:title" content="Huyền Phong Phật Đạo | Không Gian Tâm Linh Ảo & Lễ Phật Online" />
     <meta name="twitter:description" content="Trải nghiệm không gian tâm linh ảo Huyền Phong Phật Đạo. Dâng hương, lễ bái, sám hối và xin xăm online 3D chân thực. Tìm về sự tĩnh lặng và bình an trong tâm hồn." />
     <meta name="twitter:image" content="https://images.unsplash.com/photo-1604881988758-f76ad2f7aac1?q=80&w=1200&h=630&auto=format&fit=crop" />
-    <meta name="twitter:image:alt" content="Không gian tâm linh ảo Huyền Phong Phật Đạo" />
 
     <!-- App & Mobile Optimization -->
     <meta name="application-name" content="Huyền Phong" />
@@ -43,90 +87,6 @@
     <meta name="format-detection" content="telephone=no" />
     <link rel="manifest" href="/manifest.json" />
 
-    <!-- JSON-LD Structured Data for Google & AI Search (ChatGPT, Perplexity, Gemini) -->
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@graph": [
-          {
-            "@type": "WebSite",
-            "@id": "https://ais-pre-6o4lmkp7356no5vkg4zsti-466654021835.asia-east1.run.app/#website",
-            "url": "https://ais-pre-6o4lmkp7356no5vkg4zsti-466654021835.asia-east1.run.app/",
-            "name": "Huyền Phong Phật Đạo",
-            "description": "Không Gian Tâm Linh Ảo & Lễ Phật Online",
-            "inLanguage": "vi-VN"
-          },
-          {
-            "@type": "WebApplication",
-            "@id": "https://ais-pre-6o4lmkp7356no5vkg4zsti-466654021835.asia-east1.run.app/#webapp",
-            "name": "Huyền Phong Phật Đạo",
-            "alternateName": "Huyen Phong Zen Temple",
-            "url": "https://ais-pre-6o4lmkp7356no5vkg4zsti-466654021835.asia-east1.run.app/",
-            "description": "Trải nghiệm không gian tâm linh ảo Huyền Phong Phật Đạo. Dâng hương, lễ bái, sám hối và xin xăm online 3D chân thực. Tìm về sự tĩnh lặng và bình an trong tâm hồn.",
-            "applicationCategory": "LifestyleApplication",
-            "genre": "Spirituality",
-            "operatingSystem": "All",
-            "offers": {
-              "@type": "Offer",
-              "price": "0",
-              "priceCurrency": "VND"
-            },
-            "aggregateRating": {
-              "@type": "AggregateRating",
-              "ratingValue": "4.9",
-              "ratingCount": "1250",
-              "bestRating": "5",
-              "worstRating": "1"
-            },
-            "creator": {
-              "@type": "Person",
-              "name": "Ha Van Toan",
-              "email": "havantoancntt@gmail.com"
-            }
-          },
-          {
-            "@type": "PlaceOfWorship",
-            "@id": "https://ais-pre-6o4lmkp7356no5vkg4zsti-466654021835.asia-east1.run.app/#place",
-            "name": "Huyền Phong Phật Đạo (Virtual Temple)",
-            "description": "Ngôi chùa ảo 3D trên không gian mạng dành cho Phật tử khắp nơi.",
-            "url": "https://ais-pre-6o4lmkp7356no5vkg4zsti-466654021835.asia-east1.run.app/",
-            "image": "https://images.unsplash.com/photo-1604881988758-f76ad2f7aac1?q=80&w=1200&auto=format&fit=crop",
-            "isAccessibleForFree": true,
-            "publicAccess": true
-          },
-          {
-            "@type": "FAQPage",
-            "mainEntity": [
-              {
-                "@type": "Question",
-                "name": "Huyền Phong Phật Đạo là gì?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "Huyền Phong Phật Đạo là một không gian tâm linh ảo 3D, cho phép Phật tử và người dùng trải nghiệm việc đi chùa, dâng hương, lễ Phật, sám hối và xin xăm online một cách chân thực nhất ngay trên thiết bị của mình."
-                }
-              },
-              {
-                "@type": "Question",
-                "name": "Làm sao để đi chùa online và dâng hương?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "Bạn chỉ cần truy cập vào trang web Huyền Phong Phật Đạo, nhấn 'Vào Chánh Điện'. Tại đây, bạn có thể tương tác với các vật phẩm tâm linh 3D như thắp nhang, gõ mõ, tụng kinh và nghe nhạc thiền."
-                }
-              },
-              {
-                "@type": "Question",
-                "name": "Xin xăm online tại Huyền Phong Phật Đạo có ý nghĩa gì?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "Tính năng xin xăm online kết hợp giữa nghi thức truyền thống và công nghệ AI để luận giải quẻ xăm chi tiết. Quẻ xăm mang ý nghĩa tham khảo, giúp người dùng hướng thiện, tìm thấy sự bình an và lời khuyên hữu ích trong cuộc sống."
-                }
-              }
-            ]
-          }
-        ]
-      }
-    </script>
-
     <meta name="google-adsense-account" content="ca-pub-9532330929056957">
     <style>
       body {
@@ -134,39 +94,33 @@
         color: #fff;
         margin: 0;
         padding: 0;
+        overflow-x: hidden;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
       }
       #root {
         min-height: 100vh;
+      }
+      /* Custom scrollbar for a professional look */
+      ::-webkit-scrollbar {
+        width: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #000;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #333;
+        border-radius: 10px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #444;
       }
     </style>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9532330929056957" crossorigin="anonymous"></script>
   </head>
   <body>
     <div id="root"></div>
-    <script>
-      window.global = window;
-      window.process = { env: {}, version: '', versions: {}, platform: 'browser' };
-      window.Buffer = window.Buffer || { isBuffer: () => false };
-      
-      window.addEventListener('error', function(e) {
-        document.body.innerHTML = '<div style="color:red;padding:20px;background:black;min-height:100vh;font-family:monospace;"><h1>Global Error</h1><pre>' + e.message + '\n' + e.filename + ':' + e.lineno + '</pre></div>';
-      });
-      window.addEventListener('unhandledrejection', function(e) {
-        document.body.innerHTML = '<div style="color:red;padding:20px;background:black;min-height:100vh;font-family:monospace;"><h1>Unhandled Rejection</h1><pre>' + (e.reason && e.reason.stack ? e.reason.stack : e.reason) + '</pre></div>';
-      });
-    </script>
     <script type="module" src="/src/main.tsx"></script>
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js').then(registration => {
-            console.log('ServiceWorker registration successful with scope: ', registration.scope);
-          }).catch(err => {
-            console.log('ServiceWorker registration failed: ', err);
-          });
-        });
-      }
-    </script>
   </body>
 </html>
 

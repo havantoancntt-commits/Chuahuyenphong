@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Flame, ArrowDownToLine, HeartHandshake, Sparkles, Volume2, VolumeX, BookOpen, Feather, Globe, Users, Eye, Wind, BookText, Droplets } from 'lucide-react';
+import { Flame, ArrowDownToLine, HeartHandshake, Sparkles, Volume2, VolumeX, BookOpen, Feather, Globe, Share2, Wind, BookText, Droplets } from 'lucide-react';
 import { useLanguage } from '../lib/i18n';
 
 interface UIOverlayProps {
@@ -64,6 +64,24 @@ export function UIOverlay({
           >
             <Globe size={18} strokeWidth={1.5} />
             <span className="text-[10px] sm:text-xs font-medium tracking-widest uppercase">{language}</span>
+          </button>
+          <button 
+            onClick={() => {
+              if (navigator.share) {
+                navigator.share({
+                  title: t('app.title'),
+                  text: t('og.description') || 'Trải nghiệm không gian tâm linh ảo Huyền Phong Phật Đạo - Dâng hương, lễ bái, xin xăm online.',
+                  url: window.location.href,
+                }).catch(console.error);
+              } else {
+                navigator.clipboard.writeText(window.location.href);
+                alert(t('ui.copy_success'));
+              }
+            }}
+            className="pointer-events-auto p-2 sm:p-3 rounded-full bg-black/95  border border-amber-500/30 text-amber-200/90 hover:text-amber-100 hover:bg-amber-500/30 hover:border-amber-400/50 hover:shadow-[0_0_15px_rgba(245,158,11,0.3)] transition-all duration-500"
+            title={`${t('ui.share')} / Share`}
+          >
+            <Share2 size={20} strokeWidth={1.5} />
           </button>
           <button 
             onClick={onOpenGuide}

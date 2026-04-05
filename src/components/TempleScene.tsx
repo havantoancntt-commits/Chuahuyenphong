@@ -1,7 +1,6 @@
 import { useRef, useState, useMemo, Suspense } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { OrbitControls, Sparkles, Environment, Float, useTexture, MeshReflectorMaterial, PointMaterial, SpotLight } from '@react-three/drei';
-import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing';
+import { OrbitControls, Sparkles, Environment, Float, useTexture, PointMaterial, SpotLight } from '@react-three/drei';
 import * as THREE from 'three';
 
 // Helper to create a soft particle texture

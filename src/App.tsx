@@ -22,6 +22,7 @@ import { WelcomeScreen } from './components/WelcomeScreen';
 
 export default function App() {
   const [hasEntered, setHasEntered] = useState(false);
+  const [isSceneReady, setIsSceneReady] = useState(false);
   const [isIncenseLit, setIsIncenseLit] = useState(false);
   const [isBowing, setIsBowing] = useState(false);
   const [showDonation, setShowDonation] = useState(false);
@@ -37,6 +38,14 @@ export default function App() {
   const [bowMessage, setBowMessage] = useState<string | null>(null);
   const [audioEnabled, setAudioEnabled] = useState(false);
   const { t } = useLanguage();
+
+  // Simulate scene loading for a smoother experience
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsSceneReady(true);
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Handle the bow animation trigger
   const handleBow = () => {
@@ -58,6 +67,12 @@ export default function App() {
 
   return (
     <div className="relative w-full h-screen bg-black overflow-hidden font-serif">
+      <AnimatePresence>
+        {!hasEntered && (
+          <WelcomeScreen onEnter={() => setHasEntered(true)} isSceneReady={isSceneReady} />
+        )}
+      </AnimatePresence>
+
       {/* 3D Scene */}
       <TempleScene 
         isIncenseLit={isIncenseLit} 

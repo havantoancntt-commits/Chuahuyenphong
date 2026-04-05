@@ -18,6 +18,8 @@ const translations: Translations = {
     'app.donate_blessing': 'Tâm an vạn sự an',
     'app.online_users': 'Đang trực tuyến',
     'app.total_visits': 'Tổng lượt viếng thăm',
+    'app.loading_scene': 'Đang khởi tạo không gian...',
+    'og.description': 'Trải nghiệm không gian tâm linh ảo Huyền Phong Phật Đạo - Dâng hương, lễ bái, xin xăm online.',
 
     // UIOverlay.tsx
     'ui.incense': 'Dâng Hương',
@@ -29,6 +31,8 @@ const translations: Translations = {
     'ui.guide_tooltip': 'Hướng dẫn lễ bái',
     'ui.audio_on': 'Bật âm thanh',
     'ui.audio_off': 'Tắt âm thanh',
+    'ui.share': 'Chia sẻ',
+    'ui.copy_success': 'Đã sao chép liên kết!',
 
     // AIGuidance.tsx
     'ai.back': 'Trở lại',
@@ -192,6 +196,8 @@ const translations: Translations = {
     'app.donate_blessing': 'Peaceful mind, peaceful life',
     'app.online_users': 'Online now',
     'app.total_visits': 'Total visits',
+    'app.loading_scene': 'Initializing sacred space...',
+    'og.description': 'Experience the virtual spiritual space of Huyen Phong Zen Temple - Offer incense, bow, and draw fortune online.',
 
     // UIOverlay.tsx
     'ui.incense': 'Offer Incense',
@@ -203,6 +209,8 @@ const translations: Translations = {
     'ui.guide_tooltip': 'Worship Guide',
     'ui.audio_on': 'Enable Audio',
     'ui.audio_off': 'Disable Audio',
+    'ui.share': 'Share',
+    'ui.copy_success': 'Link copied!',
 
     // AIGuidance.tsx
     'ai.back': 'Back',

@@ -1,15 +1,26 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '../lib/i18n';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Sparkles } from 'lucide-react';
 
 interface WelcomeScreenProps {
   onEnter: () => void;
+  isSceneReady?: boolean;
 }
 
-export function WelcomeScreen({ onEnter }: WelcomeScreenProps) {
+export function WelcomeScreen({ onEnter, isSceneReady = true }: WelcomeScreenProps) {
   const { t } = useLanguage();
   const [isOpening, setIsOpening] = useState(false);
+  const [showLoading, setShowLoading] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (!isSceneReady) {
+        setShowLoading(true);
+      }
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, [isSceneReady]);
 
   const handleEnter = () => {
     setIsOpening(true);
@@ -177,24 +188,53 @@ export function WelcomeScreen({ onEnter }: WelcomeScreenProps) {
               {t('app.headphone_prompt')}
             </motion.p>
 
-            {/* Premium Button */}
-            <motion.button 
-              initial={{ opacity: 0, y: 20, scale: 0.9 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{ delay: 2.5, duration: 1, type: "spring", stiffness: 100 }}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={handleEnter}
-              className="pointer-events-auto group relative px-12 md:px-16 py-6 md:py-8 rounded-full overflow-hidden cursor-pointer shadow-[0_0_50px_rgba(245,158,11,0.3)] hover:shadow-[0_0_80px_rgba(245,158,11,0.6)] transition-all duration-500 mb-16"
-            >
-              <div className="absolute inset-0 bg-gradient-to-b from-amber-900/40 to-black/80  border-2 border-amber-500/60 rounded-full transition-all duration-500 group-hover:border-amber-300 group-hover:bg-amber-800/40" />
-              <div className="absolute inset-0 opacity-50 group-hover:opacity-100 transition-opacity duration-500 bg-[radial-gradient(circle_at_center,rgba(251,191,36,0.5)_0%,transparent_70%)] animate-pulse" />
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-amber-100/30 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]" />
-              <span className="relative z-10 flex items-center justify-center gap-3 text-amber-100 group-hover:text-white tracking-[0.3em] md:tracking-[0.4em] uppercase text-sm md:text-lg font-bold transition-colors duration-500 drop-shadow-[0_0_10px_rgba(251,191,36,1)]">
-                {t('app.enter_temple')}
-                <ArrowRight className="w-5 h-5 md:w-6 md:h-6 group-hover:translate-x-2 transition-transform duration-500" />
-              </span>
-            </motion.button>
+            {/* Premium Button or Loading Indicator */}
+            <div className="relative h-24 flex items-center justify-center">
+              <AnimatePresence mode="wait">
+                {!isSceneReady && showLoading ? (
+                  <motion.div 
+                    key="loading"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="flex flex-col items-center gap-3"
+                  >
+                    <div className="flex gap-1.5">
+                      {[0, 1, 2].map((i) => (
+                        <motion.div
+                          key={i}
+                          className="w-2 h-2 bg-amber-500 rounded-full"
+                          animate={{ scale: [1, 1.5, 1], opacity: [0.3, 1, 0.3] }}
+                          transition={{ duration: 1, repeat: Infinity, delay: i * 0.2 }}
+                        />
+                      ))}
+                    </div>
+                    <span className="text-amber-200/60 text-xs tracking-[0.3em] uppercase font-light">
+                      {t('app.loading_scene')}
+                    </span>
+                  </motion.div>
+                ) : (
+                  <motion.button 
+                    key="enter-button"
+                    initial={{ opacity: 0, y: 20, scale: 0.9 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    transition={{ delay: 0.5, duration: 1, type: "spring", stiffness: 100 }}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={handleEnter}
+                    className="pointer-events-auto group relative px-12 md:px-16 py-6 md:py-8 rounded-full overflow-hidden cursor-pointer shadow-[0_0_50px_rgba(245,158,11,0.3)] hover:shadow-[0_0_80px_rgba(245,158,11,0.6)] transition-all duration-500"
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-b from-amber-900/40 to-black/80  border-2 border-amber-500/60 rounded-full transition-all duration-500 group-hover:border-amber-300 group-hover:bg-amber-800/40" />
+                    <div className="absolute inset-0 opacity-50 group-hover:opacity-100 transition-opacity duration-500 bg-[radial-gradient(circle_at_center,rgba(251,191,36,0.5)_0%,transparent_70%)] animate-pulse" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-amber-100/30 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]" />
+                    <span className="relative z-10 flex items-center justify-center gap-3 text-amber-100 group-hover:text-white tracking-[0.3em] md:tracking-[0.4em] uppercase text-sm md:text-lg font-bold transition-colors duration-500 drop-shadow-[0_0_10px_rgba(251,191,36,1)]">
+                      {t('app.enter_temple')}
+                      <ArrowRight className="w-5 h-5 md:w-6 md:h-6 group-hover:translate-x-2 transition-transform duration-500" />
+                    </span>
+                  </motion.button>
+                )}
+              </AnimatePresence>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
