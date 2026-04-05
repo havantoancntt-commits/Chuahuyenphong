@@ -37,13 +37,18 @@ function Statue({ hasDonated, isBowing }: { hasDonated: boolean, isBowing: boole
   
   const statueMaterial = useMemo(() => new THREE.MeshPhysicalMaterial({
     color: "#FFD700",
-    metalness: 0.9,
-    roughness: 0.15,
+    metalness: 1.0,
+    roughness: 0.1,
     emissive: new THREE.Color("#FFD700"),
-    emissiveIntensity: 0.1,
+    emissiveIntensity: 0.15,
     clearcoat: 1.0,
-    clearcoatRoughness: 0.1,
+    clearcoatRoughness: 0.05,
     reflectivity: 1.0,
+    sheen: 1.0,
+    sheenRoughness: 0.1,
+    sheenColor: new THREE.Color("#ffffff"),
+    ior: 2.5,
+    thickness: 0.5,
   }), []);
 
   useFrame((state) => {
@@ -75,7 +80,7 @@ function Statue({ hasDonated, isBowing }: { hasDonated: boolean, isBowing: boole
 
       {/* Halo/Aura - Multiple layers for a sacred glow */}
       <mesh position={[0, 3.5, -0.7]}>
-        <circleGeometry args={[4.5, 64]} />
+        <circleGeometry args={[4.8, 64]} />
         <meshBasicMaterial 
           ref={haloRef}
           color="#ffb347" 
@@ -83,10 +88,11 @@ function Statue({ hasDonated, isBowing }: { hasDonated: boolean, isBowing: boole
           opacity={0.05} 
           side={THREE.DoubleSide}
           blending={THREE.AdditiveBlending}
+          depthWrite={false}
         />
       </mesh>
       <mesh position={[0, 3.5, -0.6]}>
-        <circleGeometry args={[3.2, 64]} />
+        <circleGeometry args={[3.5, 64]} />
         <meshBasicMaterial 
           ref={innerHaloRef}
           color="#ffcc00" 
@@ -94,18 +100,30 @@ function Statue({ hasDonated, isBowing }: { hasDonated: boolean, isBowing: boole
           opacity={0.1} 
           side={THREE.DoubleSide}
           blending={THREE.AdditiveBlending}
+          depthWrite={false}
         />
       </mesh>
       <mesh position={[0, 3.5, -0.55]}>
-        <circleGeometry args={[2.0, 64]} />
+        <circleGeometry args={[2.2, 64]} />
         <meshBasicMaterial 
           color="#ffffff" 
           transparent 
           opacity={0.05} 
           side={THREE.DoubleSide}
           blending={THREE.AdditiveBlending}
+          depthWrite={false}
         />
       </mesh>
+      
+      {/* Dynamic Halo Rings */}
+      <group position={[0, 3.5, -0.5]}>
+        {[...Array(3)].map((_, i) => (
+          <mesh key={`halo-ring-${i}`} rotation={[0, 0, (i * Math.PI) / 3]}>
+            <torusGeometry args={[3.8 + i * 0.2, 0.01, 16, 100]} />
+            <meshBasicMaterial color="#ffcc00" transparent opacity={0.1} blending={THREE.AdditiveBlending} />
+          </mesh>
+        ))}
+      </group>
       
       {/* Sitting Buddha */}
       <Float speed={1.5} rotationIntensity={0.05} floatIntensity={0.1}>
@@ -154,8 +172,14 @@ function Statue({ hasDonated, isBowing }: { hasDonated: boolean, isBowing: boole
             <group position={[0, 0, 0.58]}>
               {/* Urna (Third Eye) */}
               <mesh position={[0, 0.2, 0.04]}>
-                <sphereGeometry args={[0.025, 16, 16]} />
-                <meshStandardMaterial color="#ffffff" emissive="#ffffff" emissiveIntensity={0.8} />
+                <sphereGeometry args={[0.03, 16, 16]} />
+                <meshStandardMaterial color="#ffffff" emissive="#ffffff" emissiveIntensity={1.5} />
+              </mesh>
+
+              {/* Bindi/Dot */}
+              <mesh position={[0, 0.2, 0.05]}>
+                <circleGeometry args={[0.04, 32]} />
+                <meshBasicMaterial color="#ffffff" transparent opacity={0.5} blending={THREE.AdditiveBlending} />
               </mesh>
 
               {/* Eyebrows */}

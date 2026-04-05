@@ -269,7 +269,7 @@ export function LifeRelease({ onClose }: LifeReleaseProps) {
                     <div className="absolute inset-0 pointer-events-none">
                       {[...Array(15)].map((_, i) => (
                         <motion.div
-                          key={`entity-${i}`}
+                          key={`life-entity-${i}`}
                           initial={{ opacity: 0, scale: 0.2, x: 0, y: 0 }}
                           animate={{
                             opacity: [0, 1, 0],
@@ -302,7 +302,7 @@ export function LifeRelease({ onClose }: LifeReleaseProps) {
                     <div className="absolute inset-0 pointer-events-none">
                       {[...Array(40)].map((_, i) => (
                         <motion.div
-                          key={`particle-${i}`}
+                          key={`life-particle-${i}`}
                           initial={{ opacity: 1, scale: 0, x: 0, y: 0 }}
                           animate={{
                             opacity: [1, 0.8, 0],

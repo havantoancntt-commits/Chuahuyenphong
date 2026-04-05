@@ -62,14 +62,14 @@ export function WelcomeScreen({ onEnter, isSceneReady = true }: WelcomeScreenPro
           {/* Vertical Planks */}
           <div className="absolute inset-0 flex">
             {[...Array(5)].map((_, i) => (
-              <div key={i} className="flex-1 border-r border-black/40 shadow-[inset_2px_0_5px_rgba(255,255,255,0.05)]" />
+              <div key={`left-plank-${i}`} className="flex-1 border-r border-black/40 shadow-[inset_2px_0_5px_rgba(255,255,255,0.05)]" />
             ))}
           </div>
 
           {/* Golden Studs */}
           <div className="absolute top-1/4 right-4 bottom-1/4 flex flex-col justify-between">
             {[...Array(6)].map((_, i) => (
-              <div key={i} className="w-4 h-4 rounded-full bg-gradient-to-br from-amber-400 to-amber-700 shadow-[0_2px_4px_rgba(0,0,0,0.8),inset_0_1px_1px_rgba(255,255,255,0.5)]" />
+              <div key={`left-stud-${i}`} className="w-4 h-4 rounded-full bg-gradient-to-br from-amber-400 to-amber-700 shadow-[0_2px_4px_rgba(0,0,0,0.8),inset_0_1px_1px_rgba(255,255,255,0.5)]" />
             ))}
           </div>
 
@@ -97,14 +97,14 @@ export function WelcomeScreen({ onEnter, isSceneReady = true }: WelcomeScreenPro
           {/* Vertical Planks */}
           <div className="absolute inset-0 flex">
             {[...Array(5)].map((_, i) => (
-              <div key={i} className="flex-1 border-l border-black/40 shadow-[inset_-2px_0_5px_rgba(255,255,255,0.05)]" />
+              <div key={`right-plank-${i}`} className="flex-1 border-l border-black/40 shadow-[inset_-2px_0_5px_rgba(255,255,255,0.05)]" />
             ))}
           </div>
 
           {/* Golden Studs */}
           <div className="absolute top-1/4 left-4 bottom-1/4 flex flex-col justify-between">
             {[...Array(6)].map((_, i) => (
-              <div key={i} className="w-4 h-4 rounded-full bg-gradient-to-br from-amber-400 to-amber-700 shadow-[0_2px_4px_rgba(0,0,0,0.8),inset_0_1px_1px_rgba(255,255,255,0.5)]" />
+              <div key={`right-stud-${i}`} className="w-4 h-4 rounded-full bg-gradient-to-br from-amber-400 to-amber-700 shadow-[0_2px_4px_rgba(0,0,0,0.8),inset_0_1px_1px_rgba(255,255,255,0.5)]" />
             ))}
           </div>
 
@@ -202,7 +202,7 @@ export function WelcomeScreen({ onEnter, isSceneReady = true }: WelcomeScreenPro
                     <div className="flex gap-1.5">
                       {[0, 1, 2].map((i) => (
                         <motion.div
-                          key={i}
+                          key={`loading-dot-${i}`}
                           className="w-2 h-2 bg-amber-500 rounded-full"
                           animate={{ scale: [1, 1.5, 1], opacity: [0.3, 1, 0.3] }}
                           transition={{ duration: 1, repeat: Infinity, delay: i * 0.2 }}
@@ -243,7 +243,7 @@ export function WelcomeScreen({ onEnter, isSceneReady = true }: WelcomeScreenPro
       <div className="absolute inset-0 pointer-events-none z-20">
         {[...Array(30)].map((_, i) => (
           <motion.div
-            key={i}
+            key={`welcome-particle-${i}`}
             className="absolute w-1 h-1 bg-amber-200/60 rounded-full blur-[1px]"
             style={{ boxShadow: '0 0 10px rgba(251,191,36,0.8)' }}
             initial={{

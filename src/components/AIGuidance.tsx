@@ -21,7 +21,7 @@ export function AIGuidance({ onClose }: { onClose: () => void }) {
   const [isDrawn, setIsDrawn] = useState(false);
   
   // Chat state
-  const [messages, setMessages] = useState<{ role: 'user' | 'model', text: string }[]>([]);
+  const [messages, setMessages] = useState<{ id: string, role: 'user' | 'model', text: string }[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [chatSession, setChatSession] = useState<any>(null);
@@ -41,7 +41,7 @@ export function AIGuidance({ onClose }: { onClose: () => void }) {
         },
       });
       setChatSession(session);
-      setMessages([{ role: 'model', text: t('ai.master_welcome') }]);
+      setMessages([{ id: 'initial-msg', role: 'model', text: t('ai.master_welcome') }]);
       setMode('chat');
     }
   };
@@ -50,16 +50,18 @@ export function AIGuidance({ onClose }: { onClose: () => void }) {
     if (!inputValue.trim() || !chatSession || isTyping) return;
 
     const userMsg = inputValue.trim();
-    setMessages(prev => [...prev, { role: 'user', text: userMsg }]);
+    const userMsgId = `user-${Date.now()}`;
+    setMessages(prev => [...prev, { id: userMsgId, role: 'user', text: userMsg }]);
     setInputValue('');
     setIsTyping(true);
 
     try {
       const result = await chatSession.sendMessage({ message: userMsg });
-      setMessages(prev => [...prev, { role: 'model', text: result.text }]);
+      const modelMsgId = `model-${Date.now()}`;
+      setMessages(prev => [...prev, { id: modelMsgId, role: 'model', text: result.text }]);
     } catch (error) {
       console.error("Chat error:", error);
-      setMessages(prev => [...prev, { role: 'model', text: t('ai.fallback') }]);
+      setMessages(prev => [...prev, { id: `error-${Date.now()}`, role: 'model', text: t('ai.fallback') }]);
     } finally {
       setIsTyping(false);
     }
@@ -259,9 +261,9 @@ export function AIGuidance({ onClose }: { onClose: () => void }) {
               >
                 {/* Chat Messages */}
                 <div className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar">
-                  {messages.map((msg, i) => (
+                  {messages.map((msg) => (
                     <motion.div 
-                      key={i}
+                      key={msg.id}
                       initial={{ opacity: 0, y: 10, x: msg.role === 'user' ? 10 : -10 }}
                       animate={{ opacity: 1, y: 0, x: 0 }}
                       className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
@@ -369,7 +371,7 @@ function FortuneTube({ isShaking, isDrawn }: { isShaking: boolean, isDrawn: bool
         <div className="absolute bottom-6 left-0 right-0 flex justify-center gap-1.5 px-4 z-0">
           {[...Array(16)].map((_, i) => (
             <motion.div 
-              key={i}
+              key={`stick-bg-${i}`}
               className="w-1.5 bg-gradient-to-b from-[#fcd34d] to-[#b45309] rounded-t-sm origin-bottom shadow-[0_0_5px_rgba(0,0,0,0.5)]"
               style={{ 
                 height: `${80 + Math.random() * 60}px`,
@@ -433,7 +435,7 @@ function FortuneTube({ isShaking, isDrawn }: { isShaking: boolean, isDrawn: bool
               >
                 {[...Array(48)].map((_, i) => (
                   <motion.div
-                    key={i}
+                    key={`sparkle-drawn-${i}`}
                     className="absolute w-2 h-2 bg-amber-200 rounded-full shadow-[0_0_20px_rgba(251,191,36,1)]"
                     initial={{ x: 0, y: 0, opacity: 1, scale: 0 }}
                     animate={{ 
