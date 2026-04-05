@@ -16,7 +16,9 @@ import { PrayerBook } from './components/PrayerBook';
 import { LifeRelease } from './components/LifeRelease';
 import { GuideModal } from './components/GuideModal';
 import { LegalModal } from './components/LegalModal';
+import { UserProfile } from './components/UserProfile';
 import { useLanguage } from './lib/i18n';
+import { useUserStats } from './lib/userStats';
 
 import { WelcomeScreen } from './components/WelcomeScreen';
 
@@ -33,11 +35,13 @@ export default function App() {
   const [showPrayerBook, setShowPrayerBook] = useState(false);
   const [showLifeRelease, setShowLifeRelease] = useState(false);
   const [showGuide, setShowGuide] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
   const [legalModalType, setLegalModalType] = useState<'privacy' | 'terms' | 'contact' | null>(null);
   const [blessingMessage, setBlessingMessage] = useState<string | null>(null);
   const [bowMessage, setBowMessage] = useState<string | null>(null);
   const [audioEnabled, setAudioEnabled] = useState(false);
   const { t } = useLanguage();
+  const { incrementBow, incrementIncense } = useUserStats();
 
   // Simulate scene loading for a smoother experience
   useEffect(() => {
@@ -51,6 +55,7 @@ export default function App() {
   const handleBow = () => {
     if (isBowing) return;
     setIsBowing(true);
+    incrementBow?.(); // Use optional chaining in case I haven't added it to the hook yet
     setBowMessage(t('app.bow_message'));
     setTimeout(() => {
       setIsBowing(false);
@@ -93,6 +98,7 @@ export default function App() {
         onLightIncense={() => {
           setIsIncenseLit(true);
           setAudioEnabled(true);
+          incrementIncense?.();
         }}
         onBow={() => {
           handleBow();
@@ -123,6 +129,7 @@ export default function App() {
           setAudioEnabled(true);
         }}
         onOpenGuide={() => setShowGuide(true)}
+        onOpenProfile={() => setShowProfile(true)}
         onOpenLegal={(type) => setLegalModalType(type)}
         isIncenseLit={isIncenseLit}
         isBowing={isBowing}
@@ -172,6 +179,12 @@ export default function App() {
         {showGuide && (
           <GuideModal 
             onClose={() => setShowGuide(false)} 
+          />
+        )}
+
+        {showProfile && (
+          <UserProfile 
+            onClose={() => setShowProfile(false)} 
           />
         )}
 

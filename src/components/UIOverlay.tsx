@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Flame, ArrowDownToLine, HeartHandshake, Sparkles, Volume2, VolumeX, BookOpen, Feather, Globe, Share2, Wind, BookText, Droplets } from 'lucide-react';
+import { Flame, ArrowDownToLine, HeartHandshake, Sparkles, Volume2, VolumeX, BookOpen, Feather, Globe, Share2, Wind, BookText, Droplets, User } from 'lucide-react';
 import { useLanguage } from '../lib/i18n';
 
 interface UIOverlayProps {
@@ -12,6 +12,7 @@ interface UIOverlayProps {
   onOpenPrayerBook: () => void;
   onOpenLifeRelease: () => void;
   onOpenGuide: () => void;
+  onOpenProfile: () => void;
   onOpenLegal: (type: 'privacy' | 'terms' | 'contact') => void;
   isIncenseLit: boolean;
   isBowing: boolean;
@@ -29,6 +30,7 @@ export function UIOverlay({
   onOpenPrayerBook,
   onOpenLifeRelease,
   onOpenGuide,
+  onOpenProfile,
   onOpenLegal,
   isIncenseLit,
   isBowing,
@@ -57,6 +59,13 @@ export function UIOverlay({
         </div>
         
         <div className="flex gap-2">
+          <button 
+            onClick={onOpenProfile}
+            className="pointer-events-auto p-2 sm:p-3 rounded-full bg-black/95  border border-amber-500/30 text-amber-200/90 hover:text-amber-100 hover:bg-amber-500/30 hover:border-amber-400/50 hover:shadow-[0_0_15px_rgba(245,158,11,0.3)] transition-all duration-500"
+            title={t('profile.title')}
+          >
+            <User size={20} strokeWidth={1.5} />
+          </button>
           <button 
             onClick={toggleLanguage}
             className="pointer-events-auto flex items-center gap-1.5 px-3 py-2 sm:p-3 rounded-full bg-black/95  border border-amber-500/30 text-amber-200/90 hover:text-amber-100 hover:bg-amber-500/30 hover:border-amber-400/50 hover:shadow-[0_0_15px_rgba(245,158,11,0.3)] transition-all duration-500"

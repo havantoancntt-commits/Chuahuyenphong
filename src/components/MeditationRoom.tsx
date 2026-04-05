@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '../lib/i18n';
+import { useUserStats } from '../lib/userStats';
 import { ChevronLeft, Play, Square, Wind, Music, Volume2, VolumeX, Sparkles, Heart } from 'lucide-react';
 
 interface MeditationRoomProps {
@@ -17,6 +18,7 @@ const BACKGROUND_SOUNDS = [
 
 export function MeditationRoom({ onClose }: MeditationRoomProps) {
   const { t, language } = useLanguage();
+  const { addMerit } = useUserStats();
   const [isActive, setIsActive] = useState(false);
   const [duration, setDuration] = useState(5 * 60);
   const [timeLeft, setTimeLeft] = useState(duration);
@@ -71,6 +73,8 @@ export function MeditationRoom({ onClose }: MeditationRoomProps) {
     } else if (isActive && timeLeft === 0) {
       setIsActive(false);
       setShowCompletion(true);
+      // Add merit points: 10 points per minute of meditation
+      addMerit(Math.floor(duration / 60) * 10);
       if (bellAudioRef.current && !isMuted) {
         bellAudioRef.current.currentTime = 0;
         bellAudioRef.current.play().catch(e => console.log(e));

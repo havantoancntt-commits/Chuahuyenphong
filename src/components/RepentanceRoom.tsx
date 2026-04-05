@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, Feather, Sparkles, Flame, Wind } from 'lucide-react';
 import { GoogleGenAI } from '@google/genai';
 import { useLanguage } from '../lib/i18n';
+import { useUserStats } from '../lib/userStats';
 
 const apiKey = process.env.GEMINI_API_KEY || "AIzaSyBqwWTRtCv8meMbpGqweC9Sxzm456LxsyQ";
 let ai: GoogleGenAI | null = null;
@@ -14,6 +15,7 @@ try {
 
 export function RepentanceRoom({ onClose }: { onClose: () => void }) {
   const { t, language } = useLanguage();
+  const { incrementRepentance } = useUserStats();
   const [text, setText] = useState('');
   const [isReleasing, setIsReleasing] = useState(false);
   const [isReleased, setIsReleased] = useState(false);
@@ -71,6 +73,7 @@ export function RepentanceRoom({ onClose }: { onClose: () => void }) {
       const [response] = await Promise.all([aiPromise, animationPromise]);
       
       setAdvice(response.text || t('repentance.fallback'));
+      incrementRepentance();
       setIsReleasing(false);
       setIsReleased(true);
     } catch (error) {

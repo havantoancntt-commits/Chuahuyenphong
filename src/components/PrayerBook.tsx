@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '../lib/i18n';
+import { useUserStats } from '../lib/userStats';
 import { ChevronLeft, BookText, Sparkles, Heart, Briefcase, GraduationCap, Home, Plane, Cross, Wind } from 'lucide-react';
 import { GoogleGenAI } from '@google/genai';
 
@@ -88,6 +89,7 @@ const prayers: Prayer[] = [
 
 export function PrayerBook({ onClose }: PrayerBookProps) {
   const { t, language } = useLanguage();
+  const { incrementPrayer } = useUserStats();
   const [activeTab, setActiveTab] = useState<'suggest' | 'list'>('suggest');
   const [selectedPrayer, setSelectedPrayer] = useState<Prayer | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -115,6 +117,7 @@ export function PrayerBook({ onClose }: PrayerBookProps) {
           contentVi: response.text || 'Tâm tĩnh lặng, vạn sự bình an.',
           contentEn: response.text || 'A quiet mind brings universal peace.',
         });
+        incrementPrayer();
       } else {
         // Fallback to predefined prayers if AI is not available
         setSelectedPrayer(prayers.find(p => p.id === needs.find(n => n.id === needId)?.prayerId) || null);
@@ -279,7 +282,10 @@ export function PrayerBook({ onClose }: PrayerBookProps) {
                       {prayers.map((prayer) => (
                         <button
                           key={prayer.id}
-                          onClick={() => setSelectedPrayer(prayer)}
+                          onClick={() => {
+                            setSelectedPrayer(prayer);
+                            incrementPrayer();
+                          }}
                           className="flex items-center justify-between p-5 bg-black/40 border border-white/5 rounded-xl hover:bg-amber-900/20 hover:border-amber-500/30 transition-all duration-300 text-left group"
                         >
                           <div className="flex items-center gap-4">

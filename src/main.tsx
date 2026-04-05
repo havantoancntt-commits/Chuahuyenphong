@@ -3,6 +3,7 @@ import {StrictMode, Component, ErrorInfo, ReactNode} from 'react';
 import {createRoot} from 'react-dom/client';
 import App from './App.tsx';
 import { LanguageProvider } from './lib/i18n.tsx';
+import { UserStatsProvider } from './lib/userStats.tsx';
 import './index.css';
 
 class ErrorBoundary extends Component<{children: ReactNode}, {hasError: boolean, error: Error | null}> {
@@ -38,7 +39,9 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ErrorBoundary>
       <LanguageProvider>
-        <App />
+        <UserStatsProvider>
+          <App />
+        </UserStatsProvider>
       </LanguageProvider>
     </ErrorBoundary>
   </StrictMode>,

@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '../lib/i18n';
+import { useUserStats } from '../lib/userStats';
 import { ChevronLeft, Bird, Fish, Heart, Sparkles, Droplets, Wind, Volume2, VolumeX } from 'lucide-react';
 
 interface LifeReleaseProps {
@@ -11,6 +12,7 @@ type ReleaseType = 'bird' | 'fish';
 
 export function LifeRelease({ onClose }: LifeReleaseProps) {
   const { t, language } = useLanguage();
+  const { addMerit } = useUserStats();
   const [selectedType, setSelectedType] = useState<ReleaseType | null>(null);
   const [isReleasing, setIsReleasing] = useState(false);
   const [showCompletion, setShowCompletion] = useState(false);
@@ -70,6 +72,7 @@ export function LifeRelease({ onClose }: LifeReleaseProps) {
       setIsReleasing(false);
       setShowCompletion(true);
       setReleasedCount(prev => prev + 1);
+      addMerit(100); // 100 merit points for releasing a life
     }, 3000);
   };
 

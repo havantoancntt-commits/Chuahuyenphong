@@ -1,7 +1,9 @@
-import { useRef, useState, useMemo, Suspense } from 'react';
+import { useRef, useState, useMemo, Suspense, useCallback } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { OrbitControls, Sparkles, Environment, Float, useTexture, PointMaterial, SpotLight } from '@react-three/drei';
+import { OrbitControls, Sparkles, Environment, Float, useTexture, PointMaterial, SpotLight, Text } from '@react-three/drei';
 import * as THREE from 'three';
+import { useUserStats } from '../lib/userStats';
+import { useLanguage } from '../lib/i18n';
 
 // Helper to create a soft particle texture
 const createSoftParticleTexture = () => {
@@ -411,6 +413,78 @@ function Altar({ isIncenseLit }: { isIncenseLit: boolean }) {
           <meshStandardMaterial color="#ffb6c1" roughness={0.4} />
         </mesh>
       </group>
+    </group>
+  );
+}
+
+// Temple Bell Component
+function TempleBell() {
+  const { incrementBell } = useUserStats();
+  const { t } = useLanguage();
+  const [isRinging, setIsRinging] = useState(false);
+  const bellRef = useRef<THREE.Group>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  useFrame((state) => {
+    if (!bellRef.current) return;
+    const t = state.clock.getElapsedTime();
+    
+    if (isRinging) {
+      const swing = Math.sin(t * 10) * 0.15;
+      bellRef.current.rotation.z = swing;
+    } else {
+      bellRef.current.rotation.z = THREE.MathUtils.lerp(bellRef.current.rotation.z, 0, 0.05);
+    }
+  });
+
+  const handleRing = useCallback(() => {
+    if (isRinging) return;
+    setIsRinging(true);
+    incrementBell();
+
+    if (!audioRef.current) {
+      audioRef.current = new Audio('https://cdn.pixabay.com/download/audio/2022/03/15/audio_6a2016f466.mp3?filename=tibetan-singing-bowl-1-101348.mp3');
+    }
+    audioRef.current.currentTime = 0;
+    audioRef.current.play().catch(e => console.log(e));
+
+    setTimeout(() => setIsRinging(false), 3000);
+  }, [isRinging, incrementBell]);
+
+  return (
+    <group position={[5, 4, -3]} onClick={handleRing} onPointerDown={handleRing}>
+      <group ref={bellRef}>
+        {/* Bell String */}
+        <mesh position={[0, 1.5, 0]}>
+          <cylinderGeometry args={[0.05, 0.05, 3]} />
+          <meshStandardMaterial color="#2e1b12" />
+        </mesh>
+        
+        {/* Bell Body */}
+        <mesh position={[0, 0, 0]} castShadow>
+          <cylinderGeometry args={[0.6, 0.8, 1.2, 32]} />
+          <meshStandardMaterial color="#b8860b" metalness={0.8} roughness={0.2} />
+        </mesh>
+        <mesh position={[0, 0.6, 0]} castShadow>
+          <sphereGeometry args={[0.6, 32, 16, 0, Math.PI * 2, 0, Math.PI / 2]} />
+          <meshStandardMaterial color="#b8860b" metalness={0.8} roughness={0.2} />
+        </mesh>
+        
+        {/* Bell Label */}
+        <Text
+          position={[0, -1, 0]}
+          fontSize={0.2}
+          color="#ffcc00"
+          anchorX="center"
+          anchorY="middle"
+          font="https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKbxmc.woff"
+        >
+          {t('profile.bell_rings')}
+        </Text>
+      </group>
+      
+      {/* Interaction Glow */}
+      <pointLight position={[0, 0, 0]} color="#ffcc00" intensity={isRinging ? 2 : 0.5} distance={3} />
     </group>
   );
 }
@@ -834,6 +908,7 @@ export function TempleScene({ isIncenseLit, isBowing, hasDonated }: { isIncenseL
           <TempleArchitecture />
           <Statue hasDonated={hasDonated} isBowing={isBowing} />
           <Altar isIncenseLit={isIncenseLit} />
+          <TempleBell />
           <BowingAura isBowing={isBowing} />
 
           {/* Dust Particles */}
