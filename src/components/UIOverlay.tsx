@@ -72,7 +72,11 @@ export function UIOverlay({
                   title: t('app.title'),
                   text: t('og.description') || 'Trải nghiệm không gian tâm linh ảo Huyền Phong Phật Đạo - Dâng hương, lễ bái, xin xăm online.',
                   url: window.location.href,
-                }).catch(console.error);
+                }).catch((err) => {
+                  if (err.name !== 'AbortError') {
+                    console.error('Share failed:', err);
+                  }
+                });
               } else {
                 navigator.clipboard.writeText(window.location.href);
                 alert(t('ui.copy_success'));
