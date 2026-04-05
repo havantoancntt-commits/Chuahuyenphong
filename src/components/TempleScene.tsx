@@ -35,12 +35,15 @@ function Statue({ hasDonated, isBowing }: { hasDonated: boolean, isBowing: boole
   const innerHaloRef = useRef<THREE.MeshBasicMaterial>(null);
   const lightRef = useRef<THREE.PointLight>(null);
   
-  const statueMaterial = useMemo(() => new THREE.MeshStandardMaterial({
+  const statueMaterial = useMemo(() => new THREE.MeshPhysicalMaterial({
     color: "#FFD700",
-    metalness: 0.8,
-    roughness: 0.2,
+    metalness: 0.9,
+    roughness: 0.15,
     emissive: new THREE.Color("#FFD700"),
-    emissiveIntensity: 0.1
+    emissiveIntensity: 0.1,
+    clearcoat: 1.0,
+    clearcoatRoughness: 0.1,
+    reflectivity: 1.0,
   }), []);
 
   useFrame((state) => {
@@ -71,24 +74,36 @@ function Statue({ hasDonated, isBowing }: { hasDonated: boolean, isBowing: boole
       <pointLight ref={lightRef} position={[0, 2, 1]} color="#ffcc00" distance={10} decay={2} />
 
       {/* Halo/Aura - Multiple layers for a sacred glow */}
-      <mesh position={[0, 3.5, -0.6]}>
-        <circleGeometry args={[3.5, 64]} />
+      <mesh position={[0, 3.5, -0.7]}>
+        <circleGeometry args={[4.5, 64]} />
         <meshBasicMaterial 
           ref={haloRef}
           color="#ffb347" 
           transparent 
-          opacity={0.15} 
+          opacity={0.05} 
           side={THREE.DoubleSide}
+          blending={THREE.AdditiveBlending}
         />
       </mesh>
-      <mesh position={[0, 3.5, -0.5]}>
-        <circleGeometry args={[2.5, 64]} />
+      <mesh position={[0, 3.5, -0.6]}>
+        <circleGeometry args={[3.2, 64]} />
         <meshBasicMaterial 
           ref={innerHaloRef}
           color="#ffcc00" 
           transparent 
-          opacity={0.2} 
+          opacity={0.1} 
           side={THREE.DoubleSide}
+          blending={THREE.AdditiveBlending}
+        />
+      </mesh>
+      <mesh position={[0, 3.5, -0.55]}>
+        <circleGeometry args={[2.0, 64]} />
+        <meshBasicMaterial 
+          color="#ffffff" 
+          transparent 
+          opacity={0.05} 
+          side={THREE.DoubleSide}
+          blending={THREE.AdditiveBlending}
         />
       </mesh>
       
@@ -200,21 +215,32 @@ function Statue({ hasDonated, isBowing }: { hasDonated: boolean, isBowing: boole
       <Sparkles count={100} scale={5} size={3} speed={0.4} opacity={0.3} color="#ffcc00" position={[0, 2, 0]} />
       
       {/* Lotus Base */}
-      <group position={[0, 0, 0]}>
+      <group position={[0, -0.2, 0]}>
         {/* Base cylinder */}
         <mesh receiveShadow position={[0, 0.25, 0]}>
-          <cylinderGeometry args={[2.2, 2.5, 0.5, 64]} />
-          <meshStandardMaterial color="#8b5a2b" roughness={0.9} />
+          <cylinderGeometry args={[2.4, 2.8, 0.6, 64]} />
+          <meshStandardMaterial color="#4a3219" roughness={0.9} metalness={0.1} />
         </mesh>
-        {/* Lotus Petals */}
-        <mesh receiveShadow position={[0, 0.6, 0]} rotation={[Math.PI / 2, 0, 0]}>
-          <torusGeometry args={[1.8, 0.3, 16, 64]} />
-          <meshStandardMaterial color="#d4af37" metalness={0.5} roughness={0.4} />
-        </mesh>
-        <mesh receiveShadow position={[0, 0.7, 0]} rotation={[Math.PI / 2, 0, 0]} scale={[0.8, 0.8, 0.8]}>
-          <torusGeometry args={[1.8, 0.3, 16, 64]} />
-          <meshStandardMaterial color="#d4af37" metalness={0.5} roughness={0.4} />
-        </mesh>
+        
+        {/* Lotus Petals - Layer 1 */}
+        {Array.from({ length: 12 }).map((_, i) => (
+          <group key={`petal-1-${i}`} rotation={[0, (i / 12) * Math.PI * 2, 0]}>
+            <mesh position={[0, 0.6, 2.2]} rotation={[-0.4, 0, 0]}>
+              <sphereGeometry args={[0.6, 16, 16]} scale={[1, 0.2, 1.5]} />
+              <meshPhysicalMaterial color="#d4af37" metalness={0.7} roughness={0.3} clearcoat={0.5} />
+            </mesh>
+          </group>
+        ))}
+
+        {/* Lotus Petals - Layer 2 */}
+        {Array.from({ length: 8 }).map((_, i) => (
+          <group key={`petal-2-${i}`} rotation={[0, (i / 8) * Math.PI * 2 + 0.3, 0]}>
+            <mesh position={[0, 0.8, 1.6]} rotation={[-0.6, 0, 0]}>
+              <sphereGeometry args={[0.5, 16, 16]} scale={[1, 0.2, 1.3]} />
+              <meshPhysicalMaterial color="#ffd700" metalness={0.8} roughness={0.2} clearcoat={0.8} />
+            </mesh>
+          </group>
+        ))}
       </group>
     </group>
   );
@@ -944,17 +970,29 @@ export function TempleScene({ isIncenseLit, isBowing, hasDonated }: { isIncenseL
       </Canvas>
 
       {/* Time of Day Indicator */}
-      <div className="absolute bottom-8 left-8 flex flex-col gap-1.5 pointer-events-none select-none">
-        <div className="text-[10px] tracking-[0.4em] text-amber-500/40 uppercase font-light">Không gian hiện tại</div>
-        <div className="text-xs tracking-[0.2em] text-amber-100/80 uppercase font-medium flex items-center gap-3">
-          <div className={`w-2 h-2 rounded-full ${
-            timeState === 'morning' ? 'bg-orange-400' : 
-            timeState === 'noon' ? 'bg-yellow-400' : 
-            timeState === 'afternoon' ? 'bg-red-500' : 'bg-blue-600'
-          } shadow-[0_0_12px_currentColor] animate-pulse`} />
-          {timeState === 'morning' ? 'Bình minh thanh tịnh' : 
-           timeState === 'noon' ? 'Chánh ngọ rực rỡ' : 
-           timeState === 'afternoon' ? 'Hoàng hôn huyền ảo' : 'Đêm thiền tĩnh lặng'}
+      <div className="absolute bottom-10 left-10 flex flex-col gap-2 pointer-events-none select-none group">
+        <div className="flex items-center gap-4">
+          <div className="h-[1px] w-8 bg-gradient-to-r from-amber-500/60 to-transparent" />
+          <div className="text-[9px] tracking-[0.6em] text-amber-500/60 uppercase font-medium">Sacred Environment</div>
+        </div>
+        <div className="flex items-center gap-4 pl-12">
+          <div className="relative">
+            <div className={`w-2.5 h-2.5 rounded-full ${
+              timeState === 'morning' ? 'bg-orange-400' : 
+              timeState === 'noon' ? 'bg-yellow-400' : 
+              timeState === 'afternoon' ? 'bg-red-500' : 'bg-indigo-500'
+            } shadow-[0_0_15px_currentColor]`} />
+            <div className={`absolute inset-0 w-2.5 h-2.5 rounded-full ${
+              timeState === 'morning' ? 'bg-orange-400' : 
+              timeState === 'noon' ? 'bg-yellow-400' : 
+              timeState === 'afternoon' ? 'bg-red-500' : 'bg-indigo-500'
+            } animate-ping opacity-40`} />
+          </div>
+          <div className="text-sm tracking-[0.3em] text-amber-50/90 uppercase font-serif italic">
+            {timeState === 'morning' ? 'Bình minh thanh tịnh' : 
+             timeState === 'noon' ? 'Chánh ngọ rực rỡ' : 
+             timeState === 'afternoon' ? 'Hoàng hôn huyền ảo' : 'Đêm thiền tĩnh lặng'}
+          </div>
         </div>
       </div>
     </div>

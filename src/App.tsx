@@ -211,22 +211,43 @@ export default function App() {
             exit={{ opacity: 0, scale: 0.9, y: -20 }}
             className="absolute inset-0 pointer-events-none flex items-center justify-center z-50"
           >
-            <div className="bg-black/40 backdrop-blur-md px-10 py-5 rounded-full border border-amber-400/20 text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-yellow-400 to-amber-200 text-2xl sm:text-3xl tracking-[0.2em] shadow-[0_0_50px_rgba(251,191,36,0.2)] font-medium uppercase text-center">
-              {blessingMessage}
+            <div className="relative group">
+              {/* Glow effect background */}
+              <div className="absolute -inset-4 bg-amber-500/20 blur-2xl rounded-full opacity-50 group-hover:opacity-100 transition-opacity duration-1000" />
+              
+              <div className="relative bg-black/40 backdrop-blur-xl px-12 py-6 rounded-full border border-amber-400/30 flex flex-col items-center gap-2">
+                <div className="h-[1px] w-12 bg-gradient-to-r from-transparent via-amber-400/50 to-transparent" />
+                <div className="text-transparent bg-clip-text bg-gradient-to-b from-amber-100 via-yellow-400 to-amber-200 text-2xl sm:text-4xl tracking-[0.3em] font-serif italic drop-shadow-sm">
+                  {blessingMessage}
+                </div>
+                <div className="h-[1px] w-12 bg-gradient-to-r from-transparent via-amber-400/50 to-transparent" />
+              </div>
             </div>
           </motion.div>
         )}
 
         {bowMessage && (
           <motion.div 
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -30 }}
-            transition={{ duration: 1.5 }}
-            className="absolute top-1/4 left-0 right-0 pointer-events-none flex items-center justify-center z-40"
+            exit={{ opacity: 0, y: -40 }}
+            transition={{ duration: 1.8, ease: "easeOut" }}
+            className="absolute top-[20%] left-0 right-0 pointer-events-none flex items-center justify-center z-40"
           >
-            <div className="text-transparent bg-clip-text bg-gradient-to-r from-amber-100 via-amber-300 to-amber-100 text-lg sm:text-xl md:text-2xl tracking-[0.4em] font-medium uppercase text-center px-4 drop-shadow-[0_0_20px_rgba(251,191,36,0.5)]">
-              {bowMessage}
+            <div className="flex flex-col items-center gap-4">
+              <motion.div 
+                initial={{ width: 0 }}
+                animate={{ width: "100px" }}
+                className="h-[1px] bg-gradient-to-r from-transparent via-amber-300/50 to-transparent"
+              />
+              <div className="text-transparent bg-clip-text bg-gradient-to-r from-amber-50 via-amber-200 to-amber-50 text-xl sm:text-2xl md:text-3xl tracking-[0.5em] font-serif uppercase text-center px-4 drop-shadow-[0_0_15px_rgba(251,191,36,0.4)]">
+                {bowMessage}
+              </div>
+              <motion.div 
+                initial={{ width: 0 }}
+                animate={{ width: "100px" }}
+                className="h-[1px] bg-gradient-to-r from-transparent via-amber-300/50 to-transparent"
+              />
             </div>
           </motion.div>
         )}
