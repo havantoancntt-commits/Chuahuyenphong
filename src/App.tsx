@@ -55,12 +55,12 @@ export default function App() {
   const handleBow = () => {
     if (isBowing) return;
     setIsBowing(true);
-    incrementBow?.(); // Use optional chaining in case I haven't added it to the hook yet
+    incrementBow?.();
     setBowMessage(t('app.bow_message'));
     setTimeout(() => {
       setIsBowing(false);
-      setTimeout(() => setBowMessage(null), 1000); // Fade out text slightly after bow ends
-    }, 4500); // Bowing takes 4.5 seconds for a more deliberate, respectful pace
+      setBowMessage(null);
+    }, 4500);
   };
 
   const handleDonateConfirm = () => {
@@ -71,10 +71,14 @@ export default function App() {
   };
 
   return (
-    <div className="relative w-full h-screen bg-black overflow-hidden font-serif">
-      <AnimatePresence>
+    <div className="relative w-full h-screen bg-[#050505] overflow-hidden font-serif">
+      <AnimatePresence mode="wait">
         {!hasEntered && (
-          <WelcomeScreen onEnter={() => setHasEntered(true)} isSceneReady={isSceneReady} />
+          <WelcomeScreen 
+            key="welcome"
+            onEnter={() => setHasEntered(true)} 
+            isSceneReady={isSceneReady} 
+          />
         )}
       </AnimatePresence>
 
@@ -99,6 +103,8 @@ export default function App() {
           setIsIncenseLit(true);
           setAudioEnabled(true);
           incrementIncense?.();
+          setBlessingMessage(t('blessing.incense') !== 'blessing.incense' ? t('blessing.incense') : 'Tâm hương giải thoát');
+          setTimeout(() => setBlessingMessage(null), 5000);
         }}
         onBow={() => {
           handleBow();
@@ -200,12 +206,12 @@ export default function App() {
       <AnimatePresence>
         {blessingMessage && (
           <motion.div 
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
+            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9, y: -20 }}
             className="absolute inset-0 pointer-events-none flex items-center justify-center z-50"
           >
-            <div className="bg-gradient-to-b from-black/60 to-black/80  px-10 py-5 rounded-full border border-amber-400/40 text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-yellow-400 to-amber-200 text-2xl sm:text-3xl tracking-[0.2em] shadow-[0_0_50px_rgba(251,191,36,0.3)] font-medium uppercase">
+            <div className="bg-black/40 backdrop-blur-md px-10 py-5 rounded-full border border-amber-400/20 text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-yellow-400 to-amber-200 text-2xl sm:text-3xl tracking-[0.2em] shadow-[0_0_50px_rgba(251,191,36,0.2)] font-medium uppercase text-center">
               {blessingMessage}
             </div>
           </motion.div>
@@ -213,13 +219,13 @@ export default function App() {
 
         {bowMessage && (
           <motion.div 
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
+            exit={{ opacity: 0, y: -30 }}
             transition={{ duration: 1.5 }}
             className="absolute top-1/4 left-0 right-0 pointer-events-none flex items-center justify-center z-40"
           >
-            <div className="text-transparent bg-clip-text bg-gradient-to-r from-amber-100 via-amber-300 to-amber-100 text-base sm:text-lg md:text-xl tracking-[0.4em] font-medium uppercase text-center px-4 drop-shadow-[0_0_20px_rgba(251,191,36,0.6)]">
+            <div className="text-transparent bg-clip-text bg-gradient-to-r from-amber-100 via-amber-300 to-amber-100 text-lg sm:text-xl md:text-2xl tracking-[0.4em] font-medium uppercase text-center px-4 drop-shadow-[0_0_20px_rgba(251,191,36,0.5)]">
               {bowMessage}
             </div>
           </motion.div>

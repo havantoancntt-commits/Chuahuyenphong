@@ -14,6 +14,7 @@ export function AudioController({
   const audioCtxRef = useRef<AudioContext | null>(null);
   const windNodeRef = useRef<BiquadFilterNode | null>(null);
   const windGainRef = useRef<GainNode | null>(null);
+  const ambientAudioRef = useRef<HTMLAudioElement | null>(null);
   
   // Track previous states to trigger sounds on change
   const prevIncenseRef = useRef(isIncenseLit);
@@ -45,8 +46,19 @@ export function AudioController({
       if (audioCtxRef.current) {
         audioCtxRef.current.suspend();
       }
+      if (ambientAudioRef.current) {
+        ambientAudioRef.current.pause();
+      }
       return;
     }
+
+    // Start background ambience
+    if (!ambientAudioRef.current) {
+      ambientAudioRef.current = new Audio('https://cdn.pixabay.com/download/audio/2022/01/18/audio_6064f777c6.mp3?filename=forest-with-birds-and-river-14488.mp3');
+      ambientAudioRef.current.loop = true;
+      ambientAudioRef.current.volume = 0.2;
+    }
+    ambientAudioRef.current.play().catch(e => console.log(e));
 
     if (!audioCtxRef.current) {
       try {

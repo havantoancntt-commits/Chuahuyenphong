@@ -40,45 +40,60 @@ export function UserStatsProvider({ children }: { children: React.ReactNode }) {
 
   // Initialize stats from localStorage
   useEffect(() => {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    let currentStats: UserStats;
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      let currentStats: UserStats;
 
-    if (saved) {
-      currentStats = JSON.parse(saved);
-    } else {
-      currentStats = {
+      if (saved) {
+        currentStats = JSON.parse(saved);
+      } else {
+        currentStats = {
+          ...defaultStats,
+          dharmaId: `HP-${uuidv4().slice(0, 8).toUpperCase()}`,
+          lastVisit: new Date().toISOString(),
+          streak: 1,
+        };
+      }
+
+      // Check for daily streak
+      const today = new Date().toISOString().split('T')[0];
+      const lastVisitDate = currentStats.lastVisit.split('T')[0];
+
+      if (today !== lastVisitDate) {
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        const yesterdayStr = yesterday.toISOString().split('T')[0];
+
+        if (lastVisitDate === yesterdayStr) {
+          currentStats.streak += 1;
+        } else {
+          currentStats.streak = 1;
+        }
+        currentStats.lastVisit = new Date().toISOString();
+      }
+
+      setStats(currentStats);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(currentStats));
+    } catch (e) {
+      console.error("Failed to load user stats from localStorage:", e);
+      // Fallback to default stats with a random ID
+      setStats({
         ...defaultStats,
         dharmaId: `HP-${uuidv4().slice(0, 8).toUpperCase()}`,
         lastVisit: new Date().toISOString(),
         streak: 1,
-      };
+      });
     }
-
-    // Check for daily streak
-    const today = new Date().toISOString().split('T')[0];
-    const lastVisitDate = currentStats.lastVisit.split('T')[0];
-
-    if (today !== lastVisitDate) {
-      const yesterday = new Date();
-      yesterday.setDate(yesterday.getDate() - 1);
-      const yesterdayStr = yesterday.toISOString().split('T')[0];
-
-      if (lastVisitDate === yesterdayStr) {
-        currentStats.streak += 1;
-      } else {
-        currentStats.streak = 1;
-      }
-      currentStats.lastVisit = new Date().toISOString();
-    }
-
-    setStats(currentStats);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(currentStats));
   }, []);
 
   // Save stats whenever they change
   useEffect(() => {
     if (stats.dharmaId) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(stats));
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(stats));
+      } catch (e) {
+        console.error("Failed to save user stats to localStorage:", e);
+      }
     }
   }, [stats]);
 

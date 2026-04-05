@@ -147,28 +147,28 @@ export function UIOverlay({
             highlight
           />
           <ActionButton 
-            icon={<BookText size={22} strokeWidth={1.5} />} 
+            icon={<BookText size={24} strokeWidth={1.2} />} 
             label={t('prayer.title')} 
             onClick={onOpenPrayerBook} 
             disabled={isBowing}
             highlight
           />
           <ActionButton 
-            icon={<Droplets size={22} strokeWidth={1.5} />} 
+            icon={<Droplets size={24} strokeWidth={1.2} />} 
             label={t('release.title')} 
             onClick={onOpenLifeRelease} 
             disabled={isBowing}
             highlight
           />
           <ActionButton 
-            icon={<Sparkles size={22} strokeWidth={1.5} />} 
+            icon={<Sparkles size={24} strokeWidth={1.2} />} 
             label={t('ui.fortune')} 
             onClick={onAIGuidance} 
             disabled={isBowing}
             highlight
           />
           <ActionButton 
-            icon={<HeartHandshake size={22} strokeWidth={1.5} />} 
+            icon={<HeartHandshake size={24} strokeWidth={1.2} />} 
             label={t('ui.donate')} 
             onClick={onDonate} 
             disabled={isBowing}
@@ -217,18 +217,18 @@ function ActionButton({
       disabled={disabled}
       className={`
         pointer-events-auto flex flex-col items-center justify-center gap-2 
-        w-[76px] h-[86px] sm:w-20 sm:h-24 md:w-28 md:h-32 rounded-2xl  transition-all duration-500
-        ${disabled ? 'opacity-40 cursor-not-allowed' : 'hover:-translate-y-1 cursor-pointer active:scale-95'}
+        w-[76px] h-[90px] sm:w-22 sm:h-28 md:w-32 md:h-36 rounded-2xl transition-all duration-700
+        ${disabled ? 'opacity-30 cursor-not-allowed grayscale' : 'hover:-translate-y-2 cursor-pointer active:scale-95'}
         ${highlight 
-          ? 'bg-gradient-to-b from-amber-900/60 to-amber-950/60 border border-amber-400/40 text-amber-200 shadow-[0_4px_20px_rgba(245,158,11,0.2)] hover:shadow-[0_4px_30px_rgba(245,158,11,0.4)] hover:border-amber-300/60' 
-          : 'bg-black/50 border border-white/10 text-white/80 hover:text-white hover:bg-white/20 hover:border-amber-200/30 hover:shadow-[0_4px_20px_rgba(255,255,255,0.1)]'
+          ? 'bg-gradient-to-b from-amber-900/40 to-amber-950/80 border border-amber-400/30 text-amber-100 shadow-[0_8px_32px_rgba(0,0,0,0.4)] hover:shadow-[0_12px_40px_rgba(245,158,11,0.25)] hover:border-amber-300/60 backdrop-blur-md' 
+          : 'bg-black/40 border border-white/5 text-white/70 hover:text-white hover:bg-white/10 hover:border-amber-200/20 hover:shadow-[0_8px_32px_rgba(0,0,0,0.3)] backdrop-blur-sm'
         }
       `}
     >
-      <div className={`transition-transform duration-500 ${!disabled && 'group-hover:scale-110'} ${highlight ? 'text-amber-400' : ''}`}>
+      <div className={`transition-all duration-700 ${!disabled && 'group-hover:scale-110 group-hover:rotate-3'} ${highlight ? 'text-amber-400 drop-shadow-[0_0_8px_rgba(245,158,11,0.5)]' : ''}`}>
         {icon}
       </div>
-      <span className="text-[9px] sm:text-[10px] md:text-xs tracking-[0.1em] uppercase font-medium text-center px-1 leading-tight">
+      <span className="text-[8px] sm:text-[9px] md:text-[10px] tracking-[0.2em] uppercase font-light text-center px-1 leading-tight opacity-80">
         {label}
       </span>
     </button>

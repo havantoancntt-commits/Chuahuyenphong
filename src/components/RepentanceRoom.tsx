@@ -59,11 +59,12 @@ export function RepentanceRoom({ onClose }: { onClose: () => void }) {
       if (!ai) throw new Error("AI not initialized");
       const aiPromise = ai.models.generateContent({
         model: "gemini-3-flash-preview",
-        contents: `You are a wise, compassionate Buddhist monk. 
-        A person has come to you to repent and let go of this burden/sin/regret: "${text}"
+        contents: `You are Zen Master Huyen Phong, a deeply compassionate and enlightened Buddhist monk. 
+        A user has shared their regrets and is seeking a path to healing and forgiveness: "${text}"
         
-        Provide a short, profound, and deeply comforting Buddhist advice (max 3 sentences) about forgiveness, letting go of the past, and finding peace.
-        The tone must be forgiving, non-judgmental, and enlightening.
+        Provide a short, profound, and healing piece of advice (max 3 sentences).
+        The tone must be ethereal, non-judgmental, and deeply comforting.
+        Focus on the concept of impermanence, self-forgiveness, and the blossoming of a new heart.
         Write it in ${language === 'vi' ? 'Vietnamese' : 'English'}. Do not use markdown formatting, just plain text.`,
       });
 

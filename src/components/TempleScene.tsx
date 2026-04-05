@@ -1,6 +1,7 @@
-import { useRef, useState, useMemo, Suspense, useCallback } from 'react';
+import { useRef, useState, useMemo, Suspense, useCallback, useEffect } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { OrbitControls, Sparkles, Environment, Float, useTexture, PointMaterial, SpotLight, Text } from '@react-three/drei';
+import { EffectComposer, Bloom, Vignette, Noise, ChromaticAberration } from '@react-three/postprocessing';
 import * as THREE from 'three';
 import { useUserStats } from '../lib/userStats';
 import { useLanguage } from '../lib/i18n';
@@ -34,14 +35,12 @@ function Statue({ hasDonated, isBowing }: { hasDonated: boolean, isBowing: boole
   const innerHaloRef = useRef<THREE.MeshBasicMaterial>(null);
   const lightRef = useRef<THREE.PointLight>(null);
   
-  const statueMaterial = useMemo(() => new THREE.MeshPhysicalMaterial({
+  const statueMaterial = useMemo(() => new THREE.MeshStandardMaterial({
     color: "#FFD700",
-    metalness: 0.95,
-    roughness: 0.1,
-    clearcoat: 1.0,
-    clearcoatRoughness: 0.1,
+    metalness: 0.8,
+    roughness: 0.2,
     emissive: new THREE.Color("#FFD700"),
-    emissiveIntensity: 0.05
+    emissiveIntensity: 0.1
   }), []);
 
   useFrame((state) => {
@@ -529,9 +528,9 @@ function TempleArchitecture() {
   return (
     <group>
       {/* Floor */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]} receiveShadow>
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]}>
         <planeGeometry args={[20, 20]} />
-        <meshStandardMaterial color="#2a1a10" roughness={0.8} metalness={0.1} />
+        <meshBasicMaterial color="#2a1a10" />
       </mesh>
 
       {/* Back Wall */}
@@ -830,8 +829,9 @@ function BowingAura({ isBowing }: { isBowing: boolean }) {
 
 export function TempleScene({ isIncenseLit, isBowing, hasDonated }: { isIncenseLit: boolean, isBowing: boolean, hasDonated: boolean }) {
   const controlsRef = useRef<any>(null);
+  const [isReady, setIsReady] = useState(false);
   
-  // Feature 4: Dynamic Environment Logic
+  // Dynamic Environment Logic based on real time
   const [timeState] = useState(() => {
     const hour = new Date().getHours();
     if (hour >= 5 && hour < 10) return 'morning';
@@ -840,105 +840,121 @@ export function TempleScene({ isIncenseLit, isBowing, hasDonated }: { isIncenseL
     return 'night';
   });
 
-  const envConfig = useMemo(() => ({
-    morning: {
-      bg: '#0a0806',
-      fog: '#0a0806',
-      ambient: 0.2,
-      spot: { color: '#ffcc80', intensity: 120, opacity: 0.3, pos: [8, 10, 5] },
-      fill: { color: '#ff9966', intensity: 3 },
-      envIntensity: 0.2
-    },
-    noon: {
-      bg: '#0f0d0a',
-      fog: '#0f0d0a',
-      ambient: 0.4,
-      spot: { color: '#ffffff', intensity: 200, opacity: 0.5, pos: [2, 12, 2] },
-      fill: { color: '#ffffff', intensity: 5 },
-      envIntensity: 0.4
-    },
-    afternoon: {
-      bg: '#080503',
-      fog: '#080503',
-      ambient: 0.25,
-      spot: { color: '#ff6600', intensity: 150, opacity: 0.4, pos: [-8, 8, 5] },
-      fill: { color: '#ff4400', intensity: 4 },
-      envIntensity: 0.25
-    },
-    night: {
-      bg: '#020101',
-      fog: '#020101',
-      ambient: 0.05,
-      spot: { color: '#4a6fa5', intensity: 40, opacity: 0.15, pos: [0, 10, -5] },
-      fill: { color: '#1a2a4a', intensity: 1.5 },
-      envIntensity: 0.1
-    }
-  }[timeState as 'morning' | 'noon' | 'afternoon' | 'night']), [timeState]);
+  const envConfig = useMemo(() => {
+    const configs = {
+      morning: {
+        bg: '#0a0806',
+        fog: '#1a140f',
+        ambient: 0.6,
+        spot: { color: '#ffcc80', intensity: 80, pos: [5, 10, 5] },
+        fill: { color: '#ff9966', intensity: 0.8 },
+        bloom: 1.2
+      },
+      noon: {
+        bg: '#0c0a08',
+        fog: '#15120f',
+        ambient: 0.8,
+        spot: { color: '#ffffff', intensity: 100, pos: [0, 15, 0] },
+        fill: { color: '#fff5e6', intensity: 1.0 },
+        bloom: 0.8
+      },
+      afternoon: {
+        bg: '#0a0604',
+        fog: '#1a0f0a',
+        ambient: 0.5,
+        spot: { color: '#ff8844', intensity: 120, pos: [-5, 8, 5] },
+        fill: { color: '#ff5500', intensity: 1.2 },
+        bloom: 1.5
+      },
+      night: {
+        bg: '#020203',
+        fog: '#050508',
+        ambient: 0.3,
+        spot: { color: '#4466ff', intensity: 60, pos: [0, 10, -5] },
+        fill: { color: '#223366', intensity: 0.5 },
+        bloom: 2.0
+      }
+    };
+    return configs[timeState as keyof typeof configs];
+  }, [timeState]);
 
   return (
-    <div className="w-full h-full absolute inset-0">
-      <Canvas shadows dpr={[1, 2]} camera={{ position: [0, 2.0, 3.5], fov: 60 }}>
+    <div className={`w-full h-full absolute inset-0 bg-black transition-opacity duration-1000 ${isReady ? 'opacity-100' : 'opacity-0'}`}>
+      <Canvas 
+        shadows 
+        dpr={[1, 2]} 
+        camera={{ position: [0, 2.5, 6], fov: 45 }}
+        onCreated={() => setIsReady(true)}
+        gl={{ antialias: true, stencil: false, depth: true }}
+      >
+        <color attach="background" args={[envConfig.bg]} />
+        <fog attach="fog" args={[envConfig.fog, 5, 25]} />
+        
         <Suspense fallback={null}>
-          <color attach="background" args={[envConfig.bg]} />
-          <fog attach="fog" args={[envConfig.fog, 2, 18]} />
+          <Environment preset="sunset" blur={0.8} />
           
-          {/* Lighting */}
-          <ambientLight intensity={envConfig.ambient + (hasDonated ? 0.2 : 0)} />
-          
-          {/* Dynamic Main Light (Sun/Moon) */}
-          <SpotLight
-            position={envConfig.spot.pos as [number, number, number]}
-            angle={0.4}
-            penumbra={1}
-            intensity={envConfig.spot.intensity * (hasDonated ? 1.5 : 1)}
-            color={envConfig.spot.color}
-            castShadow
-            distance={30}
-            attenuation={5}
-            anglePower={4}
-            volumetric
-            opacity={envConfig.spot.opacity * (hasDonated ? 1.5 : 1)}
-            radiusTop={0.1}
-            radiusBottom={5}
+          {/* Lighting Setup */}
+          <ambientLight intensity={envConfig.ambient} />
+          <SpotLight 
+            position={envConfig.spot.pos as any} 
+            angle={0.3} 
+            penumbra={1} 
+            intensity={envConfig.spot.intensity} 
+            color={envConfig.spot.color} 
+            castShadow 
           />
-          
-          {/* Dynamic Fill light */}
           <pointLight position={[-5, 5, 5]} intensity={envConfig.fill.intensity} color={envConfig.fill.color} />
-
+          
+          {/* Scene Elements */}
           <TempleArchitecture />
           <Statue hasDonated={hasDonated} isBowing={isBowing} />
           <Altar isIncenseLit={isIncenseLit} />
           <TempleBell />
           <BowingAura isBowing={isBowing} />
-
-          {/* Dust Particles */}
           <DustParticles />
 
+          {/* Camera & Controls */}
           <CameraController isBowing={isBowing} controlsRef={controlsRef} />
-          
-          <Environment preset={timeState === 'night' ? 'night' : 'city'} environmentIntensity={envConfig.envIntensity} />
-
           <OrbitControls 
             ref={controlsRef}
-            target={[0, 2.5, -4]}
+            target={[0, 1.8, -2]}
             enableZoom={false} 
             enablePan={false}
-            maxPolarAngle={Math.PI / 2 + 0.1}
-            minPolarAngle={Math.PI / 2 - 0.3}
+            maxPolarAngle={Math.PI / 2}
+            minPolarAngle={Math.PI / 3}
             maxAzimuthAngle={Math.PI / 8}
             minAzimuthAngle={-Math.PI / 8}
-            rotateSpeed={0.2}
+            rotateSpeed={0.4}
             dampingFactor={0.05}
           />
+
+          {/* Post Processing */}
+          <EffectComposer>
+            <Bloom 
+              luminanceThreshold={0.2} 
+              mipmapBlur 
+              intensity={envConfig.bloom} 
+              radius={0.4} 
+            />
+            <Vignette eskil={false} offset={0.1} darkness={1.1} />
+            <ChromaticAberration offset={new THREE.Vector2(0.001, 0.001)} />
+            <Noise opacity={0.02} />
+          </EffectComposer>
         </Suspense>
       </Canvas>
-      
-      {/* Time of Day Indicator (Subtle) */}
-      <div className="absolute bottom-6 left-6 flex flex-col gap-1 pointer-events-none opacity-40 hover:opacity-100 transition-opacity duration-500">
-        <div className="text-[10px] tracking-[0.3em] text-amber-200/60 uppercase font-light">Không gian hiện tại</div>
-        <div className="text-xs tracking-[0.2em] text-amber-100 uppercase font-medium flex items-center gap-2">
-          <div className={`w-1.5 h-1.5 rounded-full ${timeState === 'morning' ? 'bg-orange-400' : timeState === 'noon' ? 'bg-yellow-400' : timeState === 'afternoon' ? 'bg-red-500' : 'bg-blue-400'} shadow-[0_0_8px_currentColor]`} />
-          {timeState === 'morning' ? 'Bình minh thanh tịnh' : timeState === 'noon' ? 'Chánh ngọ rực rỡ' : timeState === 'afternoon' ? 'Hoàng hôn huyền ảo' : 'Đêm thiền tĩnh lặng'}
+
+      {/* Time of Day Indicator */}
+      <div className="absolute bottom-8 left-8 flex flex-col gap-1.5 pointer-events-none select-none">
+        <div className="text-[10px] tracking-[0.4em] text-amber-500/40 uppercase font-light">Không gian hiện tại</div>
+        <div className="text-xs tracking-[0.2em] text-amber-100/80 uppercase font-medium flex items-center gap-3">
+          <div className={`w-2 h-2 rounded-full ${
+            timeState === 'morning' ? 'bg-orange-400' : 
+            timeState === 'noon' ? 'bg-yellow-400' : 
+            timeState === 'afternoon' ? 'bg-red-500' : 'bg-blue-600'
+          } shadow-[0_0_12px_currentColor] animate-pulse`} />
+          {timeState === 'morning' ? 'Bình minh thanh tịnh' : 
+           timeState === 'noon' ? 'Chánh ngọ rực rỡ' : 
+           timeState === 'afternoon' ? 'Hoàng hôn huyền ảo' : 'Đêm thiền tĩnh lặng'}
         </div>
       </div>
     </div>
