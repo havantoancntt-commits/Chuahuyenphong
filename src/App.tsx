@@ -212,16 +212,6 @@ export default function App() {
           </motion.div>
         )}
       </AnimatePresence>
-
-      {/* Initial Audio Prompt */}
-      {!hasEntered && (
-        <WelcomeScreen 
-          onEnter={() => {
-            setHasEntered(true);
-            setAudioEnabled(true);
-          }} 
-        />
-      )}
     </div>
   );
 }

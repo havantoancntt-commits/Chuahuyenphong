@@ -8,6 +8,8 @@
     <!-- Polyfills & Critical Fixes for Social Media In-App Browsers -->
     <script>
       (function() {
+        console.log('Huyền Phong Phật Đạo: Khởi tạo hệ thống...');
+        
         // Polyfills
         window.global = window;
         window.process = { 
@@ -18,6 +20,19 @@
           nextTick: function(fn) { setTimeout(fn, 0); }
         };
         window.Buffer = window.Buffer || { isBuffer: function() { return false; } };
+        
+        // Unregister old service workers to prevent caching issues
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.getRegistrations().then(function(registrations) {
+            for(let registration of registrations) {
+              registration.unregister().then(function(boolean) {
+                console.log('ServiceWorker unregistered:', boolean);
+              });
+            }
+          }).catch(function(err) {
+            console.error('ServiceWorker unregistration failed:', err);
+          });
+        }
         
         // Dynamic Meta Tags to fix sharing issues on Vercel/Social Media
         var currentUrl = window.location.href;
@@ -39,18 +54,28 @@
         }
 
         // Global Error Handling
-        window.addEventListener('error', function(e) {
-          console.error('Critical Error:', e);
+        function showError(message) {
           var root = document.getElementById('root');
           // Only show error if app hasn't rendered anything yet
           if (root && !root.innerHTML.trim()) {
-            document.body.innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;background:#000;color:#f59e0b;font-family:serif;text-align:center;padding:20px;">' +
-              '<h1 style="font-size:2rem;margin-bottom:1rem;letter-spacing:0.2em;">HUYỀN PHONG PHẬT ĐẠO</h1>' +
-              '<p style="opacity:0.8;margin-bottom:2rem;font-style:italic;">Đang gặp sự cố kỹ thuật. Vui lòng tải lại trang hoặc kiểm tra kết nối mạng.</p>' +
-              '<button onclick="window.location.reload()" style="background:linear-gradient(to right, #b45309, #d97706);color:#fff;border:none;padding:12px 30px;border-radius:99px;font-weight:bold;cursor:pointer;box-shadow:0 0 20px rgba(217,119,6,0.4);text-transform:uppercase;letter-spacing:0.1em;">Tải lại trang</button>' +
-              '<div style="margin-top:3rem;font-size:0.6rem;opacity:0.2;max-width:80%;word-break:break-all;">' + e.message + '</div>' +
+            document.body.style.background = '#000';
+            document.body.innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;background:#000;color:#f59e0b;font-family:serif;text-align:center;padding:20px;box-sizing:border-box;">' +
+              '<h1 style="font-size:1.8rem;margin-bottom:1rem;letter-spacing:0.2em;text-shadow:0 0 10px rgba(245,158,11,0.5);">HUYỀN PHONG PHẬT ĐẠO</h1>' +
+              '<p style="opacity:0.9;margin-bottom:2rem;font-style:italic;line-height:1.6;">Đang gặp sự cố khởi tạo. Vui lòng tải lại trang hoặc kiểm tra kết nối mạng.</p>' +
+              '<button onclick="window.location.reload()" style="background:linear-gradient(to right, #b45309, #d97706);color:#fff;border:none;padding:14px 35px;border-radius:99px;font-weight:bold;cursor:pointer;box-shadow:0 0 25px rgba(217,119,6,0.5);text-transform:uppercase;letter-spacing:0.1em;font-size:0.9rem;">Tải lại trang</button>' +
+              '<div style="margin-top:4rem;font-size:0.7rem;opacity:0.3;max-width:90%;word-break:break-all;font-family:monospace;">' + (message || 'Unknown Error') + '</div>' +
               '</div>';
           }
+        }
+
+        window.addEventListener('error', function(e) {
+          console.error('Global Error:', e);
+          showError(e.message || 'Script Error');
+        });
+
+        window.addEventListener('unhandledrejection', function(e) {
+          console.error('Unhandled Rejection:', e);
+          showError(e.reason ? (e.reason.message || String(e.reason)) : 'Promise Rejection');
         });
       })();
     </script>

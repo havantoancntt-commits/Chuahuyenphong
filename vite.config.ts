@@ -12,7 +12,16 @@ export default defineConfig(({mode}) => {
       tailwindcss(),
       legacy({
         targets: ['defaults', 'not IE 11'],
-        polyfills: ['es.promise.finally', 'es/map', 'es/set'],
+        polyfills: [
+          'es.promise.finally', 
+          'es/map', 
+          'es/set', 
+          'es.array.iterator', 
+          'es.object.assign', 
+          'es.promise', 
+          'es.symbol',
+          'web.dom-collections.for-each'
+        ],
         modernPolyfills: ['es.promise.finally']
       })
     ],
