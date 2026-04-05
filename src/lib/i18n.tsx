@@ -45,6 +45,11 @@ const translations: Translations = {
     'ai.result': 'Quẻ Xăm',
     'ai.redraw': 'Xin xăm lại',
     'ai.stick': 'XĂM',
+    'ai.mode_fortune': 'Xin Xăm',
+    'ai.mode_master': 'Thiền Sư AI',
+    'ai.master_welcome': 'Chào đạo hữu, tôi là Thiền sư Huyền Phong. Bạn có điều gì muốn chia sẻ hoặc cần chỉ dẫn trên con đường tâm linh không?',
+    'ai.chat_placeholder': 'Nhập lời muốn nói...',
+    'ai.sending': 'Đang đàm đạo...',
     'ai.fallback': 'Tâm tĩnh lặng, vạn sự bình an. Hãy giữ tâm trong sáng như đóa sen.',
 
     // RepentanceRoom.tsx
@@ -223,6 +228,11 @@ const translations: Translations = {
     'ai.result': 'Your Fortune',
     'ai.redraw': 'Draw Again',
     'ai.stick': 'FORTUNE',
+    'ai.mode_fortune': 'Fortune',
+    'ai.mode_master': 'Zen Master AI',
+    'ai.master_welcome': 'Welcome, friend. I am Zen Master Huyen Phong. Is there anything you wish to share or need guidance on your spiritual path?',
+    'ai.chat_placeholder': 'Type your message...',
+    'ai.sending': 'Consulting...',
     'ai.fallback': 'A quiet mind brings universal peace. Keep your heart as pure as a lotus.',
 
     // RepentanceRoom.tsx

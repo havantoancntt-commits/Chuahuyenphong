@@ -14,10 +14,55 @@ try {
 
 export function AIGuidance({ onClose }: { onClose: () => void }) {
   const { t, language } = useLanguage();
+  const [mode, setMode] = useState<'selection' | 'fortune' | 'chat'>('selection');
   const [intention, setIntention] = useState<'peace' | 'health' | 'clarity' | 'wealth' | 'family' | 'study' | 'business' | 'travel' | null>(null);
   const [blessing, setBlessing] = useState<string | null>(null);
   const [isShaking, setIsShaking] = useState(false);
   const [isDrawn, setIsDrawn] = useState(false);
+  
+  // Chat state
+  const [messages, setMessages] = useState<{ role: 'user' | 'model', text: string }[]>([]);
+  const [inputValue, setInputValue] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
+  const [chatSession, setChatSession] = useState<any>(null);
+
+  const startChat = () => {
+    if (ai) {
+      const session = ai.chats.create({
+        model: "gemini-3-flash-preview",
+        config: {
+          systemInstruction: `You are Zen Master Huyen Phong (Thiền sư Huyền Phong), a wise, compassionate, and deeply enlightened Buddhist monk in a sacred virtual temple. 
+          Your goal is to provide spiritual guidance, explain Buddhist philosophy in simple yet profound ways, and offer comfort to those in need.
+          Maintain a peaceful, calm, and poetic tone. Use metaphors from nature (lotus, moon, stream, mountain).
+          Always respond in ${language === 'vi' ? 'Vietnamese' : 'English'}. 
+          Keep responses concise but meaningful (max 4-5 sentences). 
+          If the user is stressed, offer a short breathing exercise or a Zen koan.`,
+        },
+      });
+      setChatSession(session);
+      setMessages([{ role: 'model', text: t('ai.master_welcome') }]);
+      setMode('chat');
+    }
+  };
+
+  const handleSendMessage = async () => {
+    if (!inputValue.trim() || !chatSession || isTyping) return;
+
+    const userMsg = inputValue.trim();
+    setMessages(prev => [...prev, { role: 'user', text: userMsg }]);
+    setInputValue('');
+    setIsTyping(true);
+
+    try {
+      const result = await chatSession.sendMessage({ message: userMsg });
+      setMessages(prev => [...prev, { role: 'model', text: result.text }]);
+    } catch (error) {
+      console.error("Chat error:", error);
+      setMessages(prev => [...prev, { role: 'model', text: t('ai.fallback') }]);
+    } finally {
+      setIsTyping(false);
+    }
+  };
 
   const handleXinXam = async (selectedIntention: 'peace' | 'health' | 'clarity' | 'wealth' | 'family' | 'study' | 'business' | 'travel') => {
     setIntention(selectedIntention);
@@ -25,7 +70,6 @@ export function AIGuidance({ onClose }: { onClose: () => void }) {
     setIsDrawn(false);
     setBlessing(null);
 
-    // Ensure shaking lasts at least 2.5 seconds for a realistic feel
     const shakePromise = new Promise(resolve => setTimeout(resolve, 2500));
 
     try {
@@ -52,7 +96,6 @@ export function AIGuidance({ onClose }: { onClose: () => void }) {
           Write it in ${language === 'vi' ? 'Vietnamese' : 'English'}. Do not use markdown formatting, just plain text.`,
         });
       } else {
-        // Fallback if API key is missing
         aiPromise = Promise.resolve({ text: t('ai.fallback') });
       }
 
@@ -61,7 +104,6 @@ export function AIGuidance({ onClose }: { onClose: () => void }) {
       setIsShaking(false);
       setIsDrawn(true);
       
-      // Wait a moment for the stick to fly out before showing the text
       setTimeout(() => {
         setBlessing(response.text || t('ai.fallback'));
       }, 800);
@@ -83,17 +125,20 @@ export function AIGuidance({ onClose }: { onClose: () => void }) {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 20 }}
-        className="relative w-full max-w-lg max-h-[95vh] flex flex-col bg-[#110e0c] border border-amber-900/40 rounded-2xl shadow-2xl overflow-hidden"
+        className="relative w-full max-w-lg h-[90vh] max-h-[900px] flex flex-col bg-[#110e0c] border border-amber-900/40 rounded-2xl shadow-2xl overflow-hidden"
       >
         {/* Header with Back Button */}
         <div className="flex items-center justify-between p-4 border-b border-white/5 bg-black/20 shrink-0">
           <button 
-            onClick={intention ? () => { setIntention(null); setBlessing(null); } : onClose}
+            onClick={mode !== 'selection' ? () => { setMode('selection'); setIntention(null); setBlessing(null); } : onClose}
             className="flex items-center gap-1 text-amber-500/80 hover:text-amber-400 transition-colors text-sm font-light tracking-wider"
           >
             <ChevronLeft size={18} />
             {t('ai.back')}
           </button>
+          <div className="text-amber-200/40 text-[10px] tracking-[0.4em] uppercase font-medium">
+            {mode === 'chat' ? t('ai.mode_master') : t('ai.title')}
+          </div>
           <button 
             onClick={onClose}
             className="text-white/40 hover:text-white/80 transition-colors"
@@ -102,160 +147,163 @@ export function AIGuidance({ onClose }: { onClose: () => void }) {
           </button>
         </div>
 
-        <div className="p-6 md:p-10 overflow-y-auto flex-1 custom-scrollbar flex flex-col items-center relative">
+        <div className="flex-1 overflow-hidden flex flex-col relative">
           {/* Background Ambient Glow */}
           <div className="absolute inset-0 pointer-events-none overflow-hidden">
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-amber-500/5 rounded-full blur-[100px]" />
           </div>
 
-          <motion.div 
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
-            className="w-24 h-24 rounded-full bg-gradient-to-br from-amber-500/20 to-amber-900/40 flex items-center justify-center mb-8 border border-amber-500/30 shrink-0 shadow-[0_0_50px_rgba(245,158,11,0.4)] relative"
-          >
-            <div className="absolute inset-0 rounded-full border-2 border-amber-400/30 animate-[spin_6s_linear_infinite] border-dashed" />
-            <div className="absolute inset-2 rounded-full border border-amber-500/20 animate-[spin_4s_linear_infinite_reverse]" />
-            <Sparkles className="text-amber-400 drop-shadow-[0_0_10px_rgba(251,191,36,0.8)]" size={40} strokeWidth={1.5} />
-          </motion.div>
-          
-          <h2 className="text-3xl md:text-4xl text-amber-100 font-light tracking-widest uppercase mb-4 text-center drop-shadow-[0_0_20px_rgba(251,191,36,0.6)]">
-            {t('ai.title')}
-          </h2>
-          
           <AnimatePresence mode="wait">
-            {!intention ? (
+            {mode === 'selection' ? (
               <motion.div 
-                key="selection"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="w-full flex flex-col items-center"
+                key="mode-selection"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 20 }}
+                className="p-6 md:p-10 flex flex-col items-center h-full overflow-y-auto custom-scrollbar"
               >
-                <p className="text-white/60 text-sm text-center mb-8 font-light leading-relaxed">
-                  {t('ai.prompt')}
-                </p>
+                <motion.div 
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  className="w-20 h-20 rounded-full bg-gradient-to-br from-amber-500/20 to-amber-900/40 flex items-center justify-center mb-6 border border-amber-500/30 shrink-0 shadow-[0_0_40px_rgba(245,158,11,0.3)] relative"
+                >
+                  <Sparkles className="text-amber-400" size={32} />
+                </motion.div>
+                
+                <h2 className="text-2xl md:text-3xl text-amber-100 font-light tracking-widest uppercase mb-8 text-center">
+                  {t('ai.title')}
+                </h2>
 
-                <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <IntentionButton 
-                    icon={<Wind size={20} className="text-blue-300/70" />}
-                    label={t('prayer.need.peace')}
-                    onClick={() => handleXinXam('peace')}
-                  />
-                  <IntentionButton 
-                    icon={<Heart size={20} className="text-rose-300/70" />}
-                    label={t('prayer.need.health')}
-                    onClick={() => handleXinXam('health')}
-                  />
-                  <IntentionButton 
-                    icon={<Leaf size={20} className="text-emerald-300/70" />}
-                    label={t('ai.clarity')}
-                    onClick={() => handleXinXam('clarity')}
-                  />
-                  <IntentionButton 
-                    icon={<Sparkles size={20} className="text-amber-300/70" />}
-                    label={t('prayer.need.wealth')}
-                    onClick={() => handleXinXam('wealth')}
-                  />
-                  <IntentionButton 
-                    icon={<Heart size={20} className="text-pink-300/70" />}
-                    label={t('prayer.need.family')}
-                    onClick={() => handleXinXam('family')}
-                  />
-                  <IntentionButton 
-                    icon={<Sparkles size={20} className="text-purple-300/70" />}
-                    label={t('prayer.need.study')}
-                    onClick={() => handleXinXam('study')}
-                  />
-                  <IntentionButton 
-                    icon={<Wind size={20} className="text-orange-300/70" />}
-                    label={t('prayer.need.business')}
-                    onClick={() => handleXinXam('business')}
-                  />
-                  <IntentionButton 
-                    icon={<Wind size={20} className="text-teal-300/70" />}
-                    label={t('prayer.need.travel')}
-                    onClick={() => handleXinXam('travel')}
-                  />
+                <div className="w-full space-y-4">
+                  <button 
+                    onClick={() => setMode('fortune')}
+                    className="w-full group relative p-6 rounded-2xl bg-gradient-to-br from-amber-900/20 to-black border border-amber-500/20 hover:border-amber-500/50 transition-all duration-500 overflow-hidden"
+                  >
+                    <div className="absolute inset-0 bg-amber-500/0 group-hover:bg-amber-500/5 transition-colors duration-500" />
+                    <div className="relative flex items-center gap-5">
+                      <div className="w-12 h-12 rounded-full bg-amber-500/10 flex items-center justify-center text-amber-400 group-hover:scale-110 transition-transform duration-500">
+                        <Wind size={24} />
+                      </div>
+                      <div className="flex flex-col text-left">
+                        <span className="text-amber-100 text-lg font-medium tracking-wide">{t('ai.mode_fortune')}</span>
+                        <span className="text-white/40 text-xs font-light">{t('ai.prompt')}</span>
+                      </div>
+                    </div>
+                  </button>
+
+                  <button 
+                    onClick={startChat}
+                    className="w-full group relative p-6 rounded-2xl bg-gradient-to-br from-blue-900/10 to-black border border-blue-500/20 hover:border-blue-500/50 transition-all duration-500 overflow-hidden"
+                  >
+                    <div className="absolute inset-0 bg-blue-500/0 group-hover:bg-blue-500/5 transition-colors duration-500" />
+                    <div className="relative flex items-center gap-5">
+                      <div className="w-12 h-12 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-400 group-hover:scale-110 transition-transform duration-500">
+                        <Heart size={24} />
+                      </div>
+                      <div className="flex flex-col text-left">
+                        <span className="text-blue-100 text-lg font-medium tracking-wide">{t('ai.mode_master')}</span>
+                        <span className="text-white/40 text-xs font-light">Đàm đạo, giải đáp thắc mắc và nhận chỉ dẫn thiền định</span>
+                      </div>
+                    </div>
+                  </button>
                 </div>
+              </motion.div>
+            ) : mode === 'fortune' ? (
+              <motion.div 
+                key="fortune-mode"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                className="p-6 md:p-10 flex flex-col items-center h-full overflow-y-auto custom-scrollbar"
+              >
+                {!intention ? (
+                  <div className="w-full flex flex-col items-center">
+                    <p className="text-white/60 text-sm text-center mb-8 font-light leading-relaxed">
+                      {t('ai.prompt')}
+                    </p>
+                    <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <IntentionButton icon={<Wind size={20} className="text-blue-300/70" />} label={t('prayer.need.peace')} onClick={() => handleXinXam('peace')} />
+                      <IntentionButton icon={<Heart size={20} className="text-rose-300/70" />} label={t('prayer.need.health')} onClick={() => handleXinXam('health')} />
+                      <IntentionButton icon={<Leaf size={20} className="text-emerald-300/70" />} label={t('ai.clarity')} onClick={() => handleXinXam('clarity')} />
+                      <IntentionButton icon={<Sparkles size={20} className="text-amber-300/70" />} label={t('prayer.need.wealth')} onClick={() => handleXinXam('wealth')} />
+                      <IntentionButton icon={<Heart size={20} className="text-pink-300/70" />} label={t('prayer.need.family')} onClick={() => handleXinXam('family')} />
+                      <IntentionButton icon={<Sparkles size={20} className="text-purple-300/70" />} label={t('prayer.need.study')} onClick={() => handleXinXam('study')} />
+                      <IntentionButton icon={<Wind size={20} className="text-orange-300/70" />} label={t('prayer.need.business')} onClick={() => handleXinXam('business')} />
+                      <IntentionButton icon={<Wind size={20} className="text-teal-300/70" />} label={t('prayer.need.travel')} onClick={() => handleXinXam('travel')} />
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center justify-center w-full py-4">
+                    <FortuneTube isShaking={isShaking} isDrawn={isDrawn} />
+                    {isShaking && <p className="text-amber-200/50 tracking-widest font-light text-sm uppercase animate-pulse text-center mt-6">{t('ai.shaking')}</p>}
+                    {isDrawn && blessing && (
+                      <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col items-center w-full mt-8">
+                        <div className="relative w-full p-8 bg-gradient-to-b from-black/80 to-black/60 border border-amber-500/40 rounded-3xl mb-8 shadow-2xl">
+                          <p className="text-amber-50 text-lg font-light leading-relaxed text-center italic">"{blessing}"</p>
+                        </div>
+                        <button onClick={() => { setIntention(null); setBlessing(null); setIsDrawn(false); }} className="px-10 py-3 rounded-full bg-amber-900/40 border border-amber-500/50 text-amber-100 uppercase text-xs tracking-widest">{t('ai.redraw')}</button>
+                      </motion.div>
+                    )}
+                  </div>
+                )}
               </motion.div>
             ) : (
               <motion.div 
-                key="shaking-or-result"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="flex flex-col items-center justify-center w-full py-4"
+                key="chat-mode"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                className="flex-1 flex flex-col h-full overflow-hidden"
               >
-                <FortuneTube isShaking={isShaking} isDrawn={isDrawn} />
-                
-                {isShaking && (
-                  <motion.p 
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    className="text-amber-200/50 tracking-widest font-light text-sm uppercase animate-pulse text-center mt-6"
-                  >
-                    {t('ai.shaking')}
-                  </motion.p>
-                )}
-
-                {isDrawn && blessing && (
-                  <motion.div 
-                    initial={{ opacity: 0, y: 30, scale: 0.9 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    transition={{ duration: 0.8, ease: [0.23, 1, 0.32, 1] }}
-                    className="flex flex-col items-center w-full mt-8 relative z-10"
-                  >
-                    {/* Divine Light Background */}
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-gradient-to-b from-amber-500/10 via-amber-500/5 to-transparent rounded-full blur-3xl pointer-events-none" />
-                    
+                {/* Chat Messages */}
+                <div className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar">
+                  {messages.map((msg, i) => (
                     <motion.div 
-                      className="absolute -inset-4 bg-amber-500/5 rounded-3xl blur-xl pointer-events-none"
-                      animate={{
-                        scale: [1, 1.05, 1],
-                        opacity: [0.5, 0.8, 0.5],
-                      }}
-                      transition={{
-                        duration: 3,
-                        repeat: Infinity,
-                        ease: "easeInOut"
-                      }}
-                    />
-
-                    <div className="relative w-full p-8 sm:p-10 bg-gradient-to-b from-black/80 to-black/60 border border-amber-500/40 rounded-3xl mb-8 shadow-[0_0_50px_rgba(0,0,0,0.8),inset_0_0_30px_rgba(245,158,11,0.1)]  overflow-hidden">
-                      {/* Inner subtle glow */}
-                      <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 to-transparent pointer-events-none" />
-                      
-                      <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-amber-900 to-amber-800 px-8 py-1.5 border border-amber-500/50 rounded-full text-amber-200 text-xs tracking-[0.3em] uppercase shadow-[0_0_20px_rgba(245,158,11,0.4)] font-medium z-20">
-                        {t('ai.result')}
-                      </div>
-                      
-                      {/* Decorative corners */}
-                      <div className="absolute top-4 left-4 w-6 h-6 border-t-2 border-l-2 border-amber-500/50" />
-                      <div className="absolute top-4 right-4 w-6 h-6 border-t-2 border-r-2 border-amber-500/50" />
-                      <div className="absolute bottom-4 left-4 w-6 h-6 border-b-2 border-l-2 border-amber-500/50" />
-                      <div className="absolute bottom-4 right-4 w-6 h-6 border-b-2 border-r-2 border-amber-500/50" />
-
-                      <p className="text-amber-50 text-lg sm:text-xl font-light leading-relaxed text-center italic drop-shadow-[0_2px_10px_rgba(251,191,36,0.3)] relative z-10">
-                        "{blessing}"
-                      </p>
-                    </div>
-
-                    <motion.button 
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      onClick={() => {
-                        setIntention(null);
-                        setBlessing(null);
-                        setIsDrawn(false);
-                        setIsShaking(false);
-                      }}
-                      className="px-12 py-4 rounded-full bg-gradient-to-r from-amber-900/40 to-amber-800/40 border border-amber-500/50 text-amber-100 hover:from-amber-800/50 hover:to-amber-700/50 hover:border-amber-400/80 tracking-[0.2em] uppercase text-xs font-medium transition-all duration-300 shrink-0 shadow-[0_0_30px_rgba(245,158,11,0.2)] relative z-10"
+                      key={i}
+                      initial={{ opacity: 0, y: 10, x: msg.role === 'user' ? 10 : -10 }}
+                      animate={{ opacity: 1, y: 0, x: 0 }}
+                      className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
                     >
-                      {t('ai.redraw')}
-                    </motion.button>
-                  </motion.div>
-                )}
+                      <div className={`max-w-[85%] p-4 rounded-2xl text-sm font-light leading-relaxed shadow-lg ${
+                        msg.role === 'user' 
+                          ? 'bg-amber-600/20 border border-amber-500/30 text-amber-50 rounded-tr-none' 
+                          : 'bg-white/5 border border-white/10 text-white/90 rounded-tl-none'
+                      }`}>
+                        {msg.text}
+                      </div>
+                    </motion.div>
+                  ))}
+                  {isTyping && (
+                    <div className="flex justify-start">
+                      <div className="bg-white/5 border border-white/10 p-4 rounded-2xl rounded-tl-none flex gap-1">
+                        <div className="w-1.5 h-1.5 bg-amber-500/50 rounded-full animate-bounce" />
+                        <div className="w-1.5 h-1.5 bg-amber-500/50 rounded-full animate-bounce [animation-delay:0.2s]" />
+                        <div className="w-1.5 h-1.5 bg-amber-500/50 rounded-full animate-bounce [animation-delay:0.4s]" />
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Chat Input */}
+                <div className="p-4 border-t border-white/5 bg-black/40">
+                  <div className="relative flex items-center gap-2">
+                    <input 
+                      type="text"
+                      value={inputValue}
+                      onChange={(e) => setInputValue(e.target.value)}
+                      onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
+                      placeholder={t('ai.chat_placeholder')}
+                      className="flex-1 bg-white/5 border border-white/10 rounded-full py-3 px-6 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-amber-500/50 transition-colors"
+                    />
+                    <button 
+                      onClick={handleSendMessage}
+                      disabled={!inputValue.trim() || isTyping}
+                      className="w-10 h-10 rounded-full bg-amber-500 flex items-center justify-center text-black hover:bg-amber-400 disabled:opacity-50 disabled:hover:bg-amber-500 transition-all shadow-[0_0_15px_rgba(245,158,11,0.4)]"
+                    >
+                      <Wind size={18} />
+                    </button>
+                  </div>
+                </div>
               </motion.div>
             )}
           </AnimatePresence>
