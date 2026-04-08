@@ -271,7 +271,7 @@ function Statue({ hasDonated, isBowing }: { hasDonated: boolean, isBowing: boole
 }
 
 function IncenseSmoke() {
-  const count = 300;
+  const count = 150;
   const mesh = useRef<THREE.Points>(null);
   const materialRef = useRef<THREE.PointsMaterial>(null);
 
@@ -689,7 +689,7 @@ function CameraController({ isBowing, controlsRef }: { isBowing: boolean, contro
 
 // Advanced Dust Particles reacting to camera movement
 function DustParticles() {
-  const count = 1000;
+  const count = 500;
   const mesh = useRef<THREE.Points>(null);
   
   const [positions, phases] = useMemo(() => {
@@ -789,7 +789,7 @@ function BowingAura({ isBowing }: { isBowing: boolean }) {
   const ringMatRef = useRef<THREE.MeshBasicMaterial>(null);
   const bowTime = useRef(0);
   
-  const count = 200;
+  const count = 100;
   const particles = useMemo(() => {
     const positions = new Float32Array(count * 3);
     const phases = new Float32Array(count);

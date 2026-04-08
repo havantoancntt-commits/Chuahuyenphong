@@ -5,10 +5,12 @@ import { useUserStats } from '../lib/userStats';
 import { ChevronLeft, BookText, Sparkles, Heart, Briefcase, GraduationCap, Home, Plane, Cross, Wind } from 'lucide-react';
 import { GoogleGenAI } from '@google/genai';
 
-const apiKey = process.env.GEMINI_API_KEY || "AIzaSyBqwWTRtCv8meMbpGqweC9Sxzm456LxsyQ";
+const apiKey = process.env.GEMINI_API_KEY;
 let ai: GoogleGenAI | null = null;
 try {
-  ai = apiKey ? new GoogleGenAI({ apiKey }) : null;
+  if (apiKey) {
+    ai = new GoogleGenAI({ apiKey });
+  }
 } catch (e) {
   console.warn("Failed to initialize GoogleGenAI:", e);
 }

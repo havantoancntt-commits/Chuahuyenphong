@@ -4,10 +4,12 @@ import { X, Sparkles, Leaf, Heart, Wind, ChevronLeft } from 'lucide-react';
 import { GoogleGenAI } from '@google/genai';
 import { useLanguage } from '../lib/i18n';
 
-const apiKey = process.env.GEMINI_API_KEY || "AIzaSyBqwWTRtCv8meMbpGqweC9Sxzm456LxsyQ";
+const apiKey = process.env.GEMINI_API_KEY;
 let ai: GoogleGenAI | null = null;
 try {
-  ai = apiKey ? new GoogleGenAI({ apiKey }) : null;
+  if (apiKey) {
+    ai = new GoogleGenAI({ apiKey });
+  }
 } catch (e) {
   console.warn("Failed to initialize GoogleGenAI:", e);
 }
@@ -28,21 +30,34 @@ export function AIGuidance({ onClose }: { onClose: () => void }) {
 
   const startChat = () => {
     if (ai) {
-      const session = ai.chats.create({
-        model: "gemini-3-flash-preview",
-        config: {
-          systemInstruction: `You are Zen Master Huyen Phong (Thiền sư Huyền Phong), a legendary, deeply enlightened Buddhist monk residing in the ethereal Huyền Phong Temple. 
-          Your wisdom is as vast as the ocean and as steady as the mountain. 
-          Your goal is to provide profound spiritual guidance, explain the subtle essence of Buddhist philosophy, and offer deep healing comfort.
-          Maintain a serene, poetic, and highly respectful tone. Use rich metaphors from nature (the scent of sandalwood, the reflection of the moon in a still pond, the blossoming of a thousand-petaled lotus).
-          Always respond in ${language === 'vi' ? 'Vietnamese' : 'English'}. 
-          Keep responses concise yet multi-layered and meaningful (max 4-5 sentences). 
-          If the user is troubled, offer a short mindful breathing practice or a paradoxical Zen koan to shift their perspective.`,
-        },
-      });
-      setChatSession(session);
-      setMessages([{ id: 'initial-msg', role: 'model', text: t('ai.master_welcome') }]);
-      setMode('chat');
+      try {
+        const session = ai.chats.create({
+          model: "gemini-3-flash-preview",
+          config: {
+            systemInstruction: `Bạn là Thiền sư Huyền Phong (Zen Master Huyen Phong), một bậc đại sư đắc đạo, từ bi và trí tuệ, đang trụ trì tại ngôi chùa Huyền Phong linh thiêng giữa chốn bồng lai tiên cảnh.
+            
+            Phong thái của bạn:
+            - Điềm tĩnh, thoát tục, ngôn ngữ thanh tao, giàu tính triết lý và hình ảnh.
+            - Sử dụng các ẩn dụ từ thiên nhiên (hương trầm, ánh trăng, hoa sen, dòng suối) để truyền tải thông điệp.
+            - Luôn giữ thái độ tôn trọng tuyệt đối và thấu cảm sâu sắc với nỗi lòng của chúng sinh.
+            
+            Nhiệm vụ của bạn:
+            - Lắng nghe và giải đáp các thắc mắc về tâm linh, cuộc sống, thiền định theo góc nhìn Phật giáo.
+            - Đưa ra những lời khuyên giúp xoa dịu tâm hồn, hướng con người đến sự tỉnh thức và bình an nội tại.
+            - Nếu người dùng đang gặp muộn phiền, hãy hướng dẫn họ một bài tập thở ngắn hoặc một câu công án (koan) để chuyển hóa tâm thức.
+            
+            Quy tắc trả lời:
+            - Luôn trả lời bằng tiếng Việt (trừ khi người dùng hỏi bằng tiếng Anh).
+            - Câu trả lời súc tích nhưng sâu sắc (tối đa 4-5 câu).
+            - Không sử dụng định dạng markdown phức tạp, hãy giữ cho văn bản thuần khiết và trang trọng.`,
+          },
+        });
+        setChatSession(session);
+        setMessages([{ id: 'initial-msg', role: 'model', text: t('ai.master_welcome') }]);
+        setMode('chat');
+      } catch (error) {
+        console.error("Failed to start chat session:", error);
+      }
     }
   };
 
@@ -57,8 +72,12 @@ export function AIGuidance({ onClose }: { onClose: () => void }) {
 
     try {
       const result = await chatSession.sendMessage({ message: userMsg });
-      const modelMsgId = `model-${Date.now()}`;
-      setMessages(prev => [...prev, { id: modelMsgId, role: 'model', text: result.text }]);
+      const responseText = result.text;
+      
+      if (responseText) {
+        const modelMsgId = `model-${Date.now()}`;
+        setMessages(prev => [...prev, { id: modelMsgId, role: 'model', text: responseText }]);
+      }
     } catch (error) {
       console.error("Chat error:", error);
       setMessages(prev => [...prev, { id: `error-${Date.now()}`, role: 'model', text: t('ai.fallback') }]);
@@ -181,11 +200,11 @@ export function AIGuidance({ onClose }: { onClose: () => void }) {
                 <div className="w-full space-y-4">
                   <button 
                     onClick={() => setMode('fortune')}
-                    className="w-full group relative p-6 rounded-2xl bg-gradient-to-br from-amber-900/20 to-black border border-amber-500/20 hover:border-amber-500/50 transition-all duration-500 overflow-hidden"
+                    className="w-full group relative p-6 rounded-2xl bg-white/5 backdrop-blur-xl border border-amber-500/20 hover:border-amber-500/50 transition-all duration-500 overflow-hidden shadow-2xl"
                   >
                     <div className="absolute inset-0 bg-amber-500/0 group-hover:bg-amber-500/5 transition-colors duration-500" />
                     <div className="relative flex items-center gap-5">
-                      <div className="w-12 h-12 rounded-full bg-amber-500/10 flex items-center justify-center text-amber-400 group-hover:scale-110 transition-transform duration-500">
+                      <div className="w-12 h-12 rounded-full bg-amber-500/10 flex items-center justify-center text-amber-400 group-hover:scale-110 transition-transform duration-500 shadow-[0_0_15px_rgba(245,158,11,0.2)]">
                         <Wind size={24} />
                       </div>
                       <div className="flex flex-col text-left">
@@ -197,11 +216,11 @@ export function AIGuidance({ onClose }: { onClose: () => void }) {
 
                   <button 
                     onClick={startChat}
-                    className="w-full group relative p-6 rounded-2xl bg-gradient-to-br from-blue-900/10 to-black border border-blue-500/20 hover:border-blue-500/50 transition-all duration-500 overflow-hidden"
+                    className="w-full group relative p-6 rounded-2xl bg-white/5 backdrop-blur-xl border border-blue-500/20 hover:border-blue-500/50 transition-all duration-500 overflow-hidden shadow-2xl"
                   >
                     <div className="absolute inset-0 bg-blue-500/0 group-hover:bg-blue-500/5 transition-colors duration-500" />
                     <div className="relative flex items-center gap-5">
-                      <div className="w-12 h-12 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-400 group-hover:scale-110 transition-transform duration-500">
+                      <div className="w-12 h-12 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-400 group-hover:scale-110 transition-transform duration-500 shadow-[0_0_15px_rgba(59,130,246,0.2)]">
                         <Heart size={24} />
                       </div>
                       <div className="flex flex-col text-left">
@@ -317,13 +336,13 @@ export function AIGuidance({ onClose }: { onClose: () => void }) {
   );
 }
 
-function IntentionButton({ icon, label, onClick }: { icon: React.ReactNode, label: string, onClick: () => void }) {
+export function IntentionButton({ icon, label, onClick }: { icon: React.ReactNode, label: string, onClick: () => void }) {
   return (
     <button
       onClick={onClick}
-      className="w-full flex items-center gap-4 p-3 sm:p-4 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 hover:border-amber-500/30 transition-all duration-300 group"
+      className="w-full flex items-center gap-4 p-3 sm:p-4 rounded-xl bg-white/5 backdrop-blur-md hover:bg-white/10 border border-white/5 hover:border-amber-500/30 transition-all duration-300 group shadow-lg"
     >
-      <div className="w-10 h-10 shrink-0 rounded-full bg-black/50 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+      <div className="w-10 h-10 shrink-0 rounded-full bg-black/50 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-inner">
         {icon}
       </div>
       <span className="text-white/80 group-hover:text-amber-100 tracking-wider font-light text-sm sm:text-base text-left">
