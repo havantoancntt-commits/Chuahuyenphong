@@ -5,10 +5,12 @@ import { ArrowRight, Sparkles } from 'lucide-react';
 
 interface WelcomeScreenProps {
   onEnter: () => void;
+  onOpenKnowledge: () => void;
+  onOpenLegal: (type: 'privacy' | 'terms' | 'contact') => void;
   isSceneReady?: boolean;
 }
 
-export function WelcomeScreen({ onEnter, isSceneReady = true }: WelcomeScreenProps) {
+export function WelcomeScreen({ onEnter, onOpenKnowledge, onOpenLegal, isSceneReady = true }: WelcomeScreenProps) {
   const { t } = useLanguage();
   const [isOpening, setIsOpening] = useState(false);
   const [showLoading, setShowLoading] = useState(false);
@@ -183,10 +185,21 @@ export function WelcomeScreen({ onEnter, isSceneReady = true }: WelcomeScreenPro
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 2, duration: 1.5 }}
-              className="mb-12 text-xs md:text-sm lg:text-base font-light tracking-[0.25em] text-center text-amber-100/80 uppercase max-w-2xl leading-relaxed drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]"
+              className="mb-8 text-xs md:text-sm lg:text-base font-light tracking-[0.25em] text-center text-amber-100/80 uppercase max-w-2xl leading-relaxed drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]"
             >
               {t('app.headphone_prompt')}
             </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 2.5, duration: 1.5 }}
+              className="mb-12 text-center max-w-3xl px-6"
+            >
+              <p className="text-amber-100/40 text-[10px] md:text-xs font-light tracking-widest leading-relaxed uppercase">
+                {t('app.welcome_desc')}
+              </p>
+            </motion.div>
 
             {/* Premium Button or Loading Indicator */}
             <div className="relative h-24 flex items-center justify-center">
@@ -234,6 +247,12 @@ export function WelcomeScreen({ onEnter, isSceneReady = true }: WelcomeScreenPro
                   </motion.button>
                 )}
               </AnimatePresence>
+            </div>
+            <div className="flex flex-wrap justify-center items-center gap-x-6 gap-y-3 text-amber-200/20 text-[8px] sm:text-[9px] font-light tracking-[0.2em] uppercase mt-8 pointer-events-auto">
+              <button onClick={onOpenKnowledge} className="hover:text-amber-400/60 transition-all duration-300">{t('knowledge.title')}</button>
+              <button onClick={() => onOpenLegal('privacy')} className="hover:text-amber-400/60 transition-all duration-300">{t('legal.privacy.title')}</button>
+              <button onClick={() => onOpenLegal('terms')} className="hover:text-amber-400/60 transition-all duration-300">{t('legal.terms.title')}</button>
+              <button onClick={() => onOpenLegal('contact')} className="hover:text-amber-400/60 transition-all duration-300">{t('legal.contact.title')}</button>
             </div>
           </motion.div>
         )}

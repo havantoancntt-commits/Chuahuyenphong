@@ -17,6 +17,7 @@ import { LifeRelease } from './components/LifeRelease';
 import { GuideModal } from './components/GuideModal';
 import { LegalModal } from './components/LegalModal';
 import { UserProfile } from './components/UserProfile';
+import { KnowledgeBase } from './components/KnowledgeBase';
 import { useLanguage } from './lib/i18n';
 import { useUserStats } from './lib/userStats';
 
@@ -36,6 +37,7 @@ export default function App() {
   const [showLifeRelease, setShowLifeRelease] = useState(false);
   const [showGuide, setShowGuide] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
+  const [showKnowledge, setShowKnowledge] = useState(false);
   const [legalModalType, setLegalModalType] = useState<'privacy' | 'terms' | 'contact' | null>(null);
   const [blessingMessage, setBlessingMessage] = useState<string | null>(null);
   const [bowMessage, setBowMessage] = useState<string | null>(null);
@@ -77,6 +79,8 @@ export default function App() {
           <WelcomeScreen 
             key="welcome"
             onEnter={() => setHasEntered(true)} 
+            onOpenKnowledge={() => setShowKnowledge(true)}
+            onOpenLegal={(type) => setLegalModalType(type)}
             isSceneReady={isSceneReady} 
           />
         )}
@@ -136,6 +140,7 @@ export default function App() {
         }}
         onOpenGuide={() => setShowGuide(true)}
         onOpenProfile={() => setShowProfile(true)}
+        onOpenKnowledge={() => setShowKnowledge(true)}
         onOpenLegal={(type) => setLegalModalType(type)}
         isIncenseLit={isIncenseLit}
         isBowing={isBowing}
@@ -191,6 +196,12 @@ export default function App() {
         {showProfile && (
           <UserProfile 
             onClose={() => setShowProfile(false)} 
+          />
+        )}
+
+        {showKnowledge && (
+          <KnowledgeBase 
+            onClose={() => setShowKnowledge(false)} 
           />
         )}
 

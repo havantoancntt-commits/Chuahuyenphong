@@ -13,6 +13,7 @@ interface UIOverlayProps {
   onOpenLifeRelease: () => void;
   onOpenGuide: () => void;
   onOpenProfile: () => void;
+  onOpenKnowledge: () => void;
   onOpenLegal: (type: 'privacy' | 'terms' | 'contact') => void;
   isIncenseLit: boolean;
   isBowing: boolean;
@@ -31,6 +32,7 @@ export function UIOverlay({
   onOpenLifeRelease,
   onOpenGuide,
   onOpenProfile,
+  onOpenKnowledge,
   onOpenLegal,
   isIncenseLit,
   isBowing,
@@ -64,6 +66,13 @@ export function UIOverlay({
           >
             <Globe size={16} strokeWidth={1.5} />
             <span className="text-[10px] font-bold tracking-widest uppercase">{language}</span>
+          </button>
+          <button 
+            onClick={onOpenKnowledge}
+            className="pointer-events-auto p-2.5 rounded-full bg-black/60 backdrop-blur-md border border-amber-500/30 text-amber-200/90 hover:text-amber-100 hover:bg-amber-500/20 transition-all duration-300 shadow-lg"
+            title={t('ui.knowledge')}
+          >
+            <BookText size={18} strokeWidth={1.5} />
           </button>
           <button 
             onClick={onOpenGuide}

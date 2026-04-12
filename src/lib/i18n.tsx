@@ -29,6 +29,7 @@ const translations: Translations = {
     'app.online_users': 'Đang trực tuyến',
     'app.total_visits': 'Tổng lượt viếng thăm',
     'app.loading_scene': 'Đang khởi tạo không gian...',
+    'app.welcome_desc': 'Chào mừng bạn đến với Huyền Phong Phật Đạo - Nơi hội tụ tinh hoa văn hóa tâm linh Việt. Hãy cùng trải nghiệm không gian chánh niệm, tìm lại sự bình yên và nuôi dưỡng lòng từ bi thông qua các nghi thức dâng hương, lễ bái và thiền định 3D siêu thực.',
     'og.description': 'Trải nghiệm không gian tâm linh ảo Huyền Phong Phật Đạo - Dâng hương, lễ bái, xin xăm online.',
 
     // UIOverlay.tsx
@@ -193,7 +194,7 @@ const translations: Translations = {
 
     // LegalModal.tsx
     'legal.privacy.title': 'Chính Sách Bảo Mật',
-    'legal.privacy.text': 'Chúng tôi tôn trọng quyền riêng tư của bạn và cam kết bảo vệ dữ liệu cá nhân. Không gian tâm linh này không thu thập bất kỳ thông tin nhận dạng cá nhân nào mà không có sự đồng ý rõ ràng của bạn. Mọi dữ liệu được xử lý trong quá trình bạn viếng thăm, chẳng hạn như thống kê sử dụng ẩn danh hoặc tương tác AI, chỉ được sử dụng để nâng cao trải nghiệm và duy trì sự thanh tịnh của ứng dụng. Chúng tôi không bán, trao đổi hoặc chuyển giao thông tin của bạn cho bên ngoài.',
+    'legal.privacy.text': 'Chúng tôi tôn trọng quyền riêng tư của bạn và cam kết bảo vệ dữ liệu cá nhân. Không gian tâm linh này không thu thập bất kỳ thông tin nhận dạng cá nhân nào mà không có sự đồng ý rõ ràng của bạn. Mọi dữ liệu được xử lý trong quá trình bạn viếng thăm, chẳng hạn như thống kê sử dụng ẩn danh hoặc tương tác AI, chỉ được sử dụng để nâng cao trải nghiệm và duy trì sự thanh tịnh của ứng dụng. Chúng tôi không bán, trao đổi hoặc chuyển giao thông tin của bạn cho bên ngoài. Chúng tôi tuân thủ các tiêu chuẩn bảo mật nghiêm ngặt để đảm bảo an toàn cho người dùng.',
     'legal.terms.title': 'Điều Khoản Dịch Vụ',
     'legal.terms.text': 'Khi bước vào không gian linh thiêng ảo này, bạn đồng ý duy trì thái độ tôn trọng và trang nghiêm. Ứng dụng này được cung cấp cho mục đích tĩnh tâm, thiền định và tôn vinh văn hóa. Đây không phải là sự thay thế cho các nghi thức tôn giáo thực tế hoặc lời khuyên tâm lý chuyên nghiệp. Chúng tôi có quyền sửa đổi hoặc chấm dứt dịch vụ bất cứ lúc nào để bảo vệ tính toàn vẹn của trải nghiệm. Việc bạn tiếp tục sử dụng đồng nghĩa với việc chấp nhận các điều khoản này.',
     'legal.contact.title': 'Liên Hệ',
@@ -201,6 +202,15 @@ const translations: Translations = {
     'legal.contact.email_label': 'Email Trực Tiếp',
     'legal.back': 'Trở lại',
     'legal.header': 'Pháp Lý & Thông Tin',
+
+    // KnowledgeBase.tsx
+    'knowledge.title': 'Kiến Thức Phật Pháp',
+    'knowledge.subtitle': 'Tìm hiểu về thiền định, nghi lễ và chánh niệm',
+    'knowledge.search_placeholder': 'Tìm kiếm bài viết...',
+    'knowledge.read_more': 'Đọc thêm',
+    'knowledge.back_to_list': 'Quay lại danh sách',
+    'knowledge.no_results': 'Không tìm thấy bài viết nào',
+    'ui.knowledge': 'KIẾN THỨC',
   },
   en: {
     // App.tsx
@@ -222,6 +232,7 @@ const translations: Translations = {
     'app.online_users': 'Online now',
     'app.total_visits': 'Total visits',
     'app.loading_scene': 'Initializing sacred space...',
+    'app.welcome_desc': 'Welcome to Huyen Phong Zen Temple - A convergence of Vietnamese spiritual cultural essence. Experience a mindful space, find peace, and nurture compassion through surreal 3D incense offering, bowing, and meditation rituals.',
     'og.description': 'Experience the virtual spiritual space of Huyen Phong Zen Temple - Offer incense, bow, and draw fortune online.',
 
     // UIOverlay.tsx
@@ -386,7 +397,7 @@ const translations: Translations = {
 
     // LegalModal.tsx
     'legal.privacy.title': 'Privacy Policy',
-    'legal.privacy.text': 'We respect your privacy and are committed to protecting your personal data. This spiritual space does not collect any personally identifiable information without your explicit consent. Any data processed during your visit, such as anonymous usage statistics or AI interactions, is used solely to enhance your experience and maintain the tranquility of the application. We do not sell, trade, or otherwise transfer your information to outside parties.',
+    'legal.privacy.text': 'We respect your privacy and are committed to protecting your personal data. This spiritual space does not collect any personally identifiable information without your explicit consent. Any data processed during your visit, such as anonymous usage statistics or AI interactions, is used solely to enhance your experience and maintain the tranquility of the application. We do not sell, trade, or otherwise transfer your information to outside parties. We adhere to strict security standards to ensure user safety.',
     'legal.terms.title': 'Terms of Service',
     'legal.terms.text': 'By entering this virtual sacred space, you agree to maintain a respectful and peaceful demeanor. This application is provided for spiritual reflection, meditation, and cultural appreciation. It is not a replacement for actual religious practices or professional mental health advice. We reserve the right to modify or terminate the service at any time to preserve the integrity of the experience. Your continued use signifies your acceptance of these terms.',
     'legal.contact.title': 'Contact Us',
@@ -394,6 +405,15 @@ const translations: Translations = {
     'legal.contact.email_label': 'Direct Email',
     'legal.back': 'Back',
     'legal.header': 'Legal & Info',
+
+    // KnowledgeBase.tsx
+    'knowledge.title': 'Buddhist Wisdom',
+    'knowledge.subtitle': 'Learn about meditation, rituals, and mindfulness',
+    'knowledge.search_placeholder': 'Search articles...',
+    'knowledge.read_more': 'Read more',
+    'knowledge.back_to_list': 'Back to list',
+    'knowledge.no_results': 'No articles found',
+    'ui.knowledge': 'WISDOM',
   }
 };
 
