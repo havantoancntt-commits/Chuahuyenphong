@@ -37,39 +37,44 @@ function Statue({ hasDonated, isBowing }: { hasDonated: boolean, isBowing: boole
   
   const statueMaterial = useMemo(() => new THREE.MeshPhysicalMaterial({
     color: "#FFD700",
-    metalness: 1.0,
-    roughness: 0.1,
+    metalness: 0.9,
+    roughness: 0.15,
     emissive: new THREE.Color("#FFD700"),
-    emissiveIntensity: 0.15,
+    emissiveIntensity: 0.1,
     clearcoat: 1.0,
-    clearcoatRoughness: 0.05,
+    clearcoatRoughness: 0.1,
     reflectivity: 1.0,
     sheen: 1.0,
-    sheenRoughness: 0.1,
+    sheenRoughness: 0.2,
     sheenColor: new THREE.Color("#ffffff"),
-    ior: 2.5,
-    thickness: 0.5,
+    ior: 1.5,
   }), []);
+
+  const heartLightRef = useRef<THREE.PointLight>(null);
 
   useFrame((state) => {
     const t = state.clock.getElapsedTime();
     // Subtle breathing animation for the statue's aura
-    const baseEmissive = isBowing ? 0.5 : (hasDonated ? 0.3 : 0.05);
+    const baseEmissive = isBowing ? 0.6 : (hasDonated ? 0.4 : 0.1);
     const pulse = Math.sin(t * 0.5) * 0.05;
     statueMaterial.emissiveIntensity = THREE.MathUtils.lerp(statueMaterial.emissiveIntensity, baseEmissive + pulse, 0.05);
 
     if (haloRef.current) {
-      const targetOpacity = isBowing ? 0.5 : (hasDonated ? 0.3 : 0.1);
+      const targetOpacity = isBowing ? 0.6 : (hasDonated ? 0.4 : 0.15);
       haloRef.current.opacity = THREE.MathUtils.lerp(haloRef.current.opacity, targetOpacity, 0.05);
     }
     if (innerHaloRef.current) {
-      const targetOpacity = isBowing ? 0.8 : (hasDonated ? 0.5 : 0.2);
+      const targetOpacity = isBowing ? 0.9 : (hasDonated ? 0.6 : 0.25);
       innerHaloRef.current.opacity = THREE.MathUtils.lerp(innerHaloRef.current.opacity, targetOpacity, 0.05);
     }
     if (lightRef.current) {
-      const targetIntensity = isBowing ? 2 : (hasDonated ? 1.5 : 0.5);
+      const targetIntensity = isBowing ? 2.5 : (hasDonated ? 1.8 : 0.6);
       const pulseLight = Math.sin(t * 2) * 0.2;
       lightRef.current.intensity = THREE.MathUtils.lerp(lightRef.current.intensity, targetIntensity + pulseLight, 0.05);
+    }
+    if (heartLightRef.current) {
+      const heartPulse = Math.sin(t * 1.5) * 0.5 + 0.5;
+      heartLightRef.current.intensity = (isBowing ? 1.5 : (hasDonated ? 1.0 : 0.3)) * heartPulse;
     }
   });
 
@@ -117,17 +122,20 @@ function Statue({ hasDonated, isBowing }: { hasDonated: boolean, isBowing: boole
       
       {/* Dynamic Halo Rings */}
       <group position={[0, 3.5, -0.5]}>
-        {[...Array(3)].map((_, i) => (
-          <mesh key={`halo-ring-${i}`} rotation={[0, 0, (i * Math.PI) / 3]}>
-            <torusGeometry args={[3.8 + i * 0.2, 0.01, 16, 100]} />
-            <meshBasicMaterial color="#ffcc00" transparent opacity={0.1} blending={THREE.AdditiveBlending} />
+        {[...Array(5)].map((_, i) => (
+          <mesh key={`halo-ring-${i}`} rotation={[0, 0, (i * Math.PI) / 5]}>
+            <torusGeometry args={[3.5 + i * 0.3, 0.008, 16, 100]} />
+            <meshBasicMaterial color="#ffcc00" transparent opacity={0.15 - i * 0.02} blending={THREE.AdditiveBlending} />
           </mesh>
         ))}
       </group>
       
       {/* Sitting Buddha */}
-      <Float speed={1.5} rotationIntensity={0.05} floatIntensity={0.1}>
+      <Float speed={1.2} rotationIntensity={0.03} floatIntensity={0.08}>
         <group position={[0, 0.2, 0]}>
+          {/* Heart Light - The "Soul" of the statue */}
+          <pointLight ref={heartLightRef} position={[0, 1.8, 0.5]} color="#fff0b3" distance={3} decay={2} />
+          
           {/* Crossed Legs (Lotus Position) */}
           <mesh castShadow receiveShadow position={[0, 0.4, 0.2]} scale={[1.8, 0.4, 1.2]} material={statueMaterial}>
             <sphereGeometry args={[1, 32, 32]} />
@@ -190,22 +198,22 @@ function Statue({ hasDonated, isBowing }: { hasDonated: boolean, isBowing: boole
                 <torusGeometry args={[0.09, 0.012, 16, 32, Math.PI * 0.7]} />
               </mesh>
 
-              {/* Closed Eyes */}
+              {/* Closed Eyes - More serene and soulful */}
               <mesh position={[-0.18, 0.03, 0.04]} rotation={[0.1, 0, Math.PI * 1.1 + 0.05]} material={statueMaterial}>
-                <torusGeometry args={[0.08, 0.015, 16, 32, Math.PI * 0.8]} />
+                <torusGeometry args={[0.09, 0.018, 16, 32, Math.PI * 0.8]} />
               </mesh>
               <mesh position={[0.18, 0.03, 0.04]} rotation={[0.1, 0, Math.PI * 1.1 - 0.05]} material={statueMaterial}>
-                <torusGeometry args={[0.08, 0.015, 16, 32, Math.PI * 0.8]} />
+                <torusGeometry args={[0.09, 0.018, 16, 32, Math.PI * 0.8]} />
               </mesh>
 
               {/* Nose */}
               <mesh position={[0, -0.08, 0.07]} rotation={[0.15, 0, 0]} material={statueMaterial}>
-                <capsuleGeometry args={[0.025, 0.12, 8, 8]} />
+                <capsuleGeometry args={[0.028, 0.14, 8, 8]} />
               </mesh>
 
-              {/* Smile */}
-              <mesh position={[0, -0.22, 0.03]} rotation={[-0.1, 0, Math.PI * 1.15]} material={statueMaterial}>
-                <torusGeometry args={[0.07, 0.01, 16, 32, Math.PI * 0.7]} />
+              {/* Smile - More compassionate and gentle */}
+              <mesh position={[0, -0.24, 0.03]} rotation={[-0.1, 0, Math.PI * 1.15]} material={statueMaterial}>
+                <torusGeometry args={[0.08, 0.012, 16, 32, Math.PI * 0.7]} />
               </mesh>
             </group>
 
@@ -877,6 +885,15 @@ function BowingAura({ isBowing }: { isBowing: boolean }) {
   );
 }
 
+function SceneLoader({ onReady }: { onReady: () => void }) {
+  useEffect(() => {
+    // Small delay to ensure everything is truly ready and avoid flickering
+    const timer = setTimeout(onReady, 100);
+    return () => clearTimeout(timer);
+  }, [onReady]);
+  return null;
+}
+
 export function TempleScene({ isIncenseLit, isBowing, hasDonated }: { isIncenseLit: boolean, isBowing: boolean, hasDonated: boolean }) {
   const controlsRef = useRef<any>(null);
   const [isReady, setIsReady] = useState(false);
@@ -917,12 +934,12 @@ export function TempleScene({ isIncenseLit, isBowing, hasDonated }: { isIncenseL
         bloom: 1.5
       },
       night: {
-        bg: '#020203',
-        fog: '#050508',
-        ambient: 0.3,
-        spot: { color: '#4466ff', intensity: 60, pos: [0, 10, -5] },
-        fill: { color: '#223366', intensity: 0.5 },
-        bloom: 2.0
+        bg: '#050508',
+        fog: '#08080c',
+        ambient: 0.4,
+        spot: { color: '#4466ff', intensity: 80, pos: [0, 10, -5] },
+        fill: { color: '#223366', intensity: 0.6 },
+        bloom: 1.8
       }
     };
     return configs[timeState as keyof typeof configs];
@@ -934,13 +951,13 @@ export function TempleScene({ isIncenseLit, isBowing, hasDonated }: { isIncenseL
         shadows 
         dpr={[1, 2]} 
         camera={{ position: [0, 2.5, 6], fov: 45 }}
-        onCreated={() => setIsReady(true)}
         gl={{ antialias: true, stencil: false, depth: true }}
       >
         <color attach="background" args={[envConfig.bg]} />
         <fog attach="fog" args={[envConfig.fog, 5, 25]} />
         
         <Suspense fallback={null}>
+          <SceneLoader onReady={() => setIsReady(true)} />
           <Environment preset="sunset" blur={0.8} />
           
           {/* Lighting Setup */}
