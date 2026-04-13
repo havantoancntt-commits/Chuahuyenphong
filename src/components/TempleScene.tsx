@@ -5,6 +5,7 @@ import { EffectComposer, Bloom, Vignette, Noise, ChromaticAberration } from '@re
 import * as THREE from 'three';
 import { useUserStats } from '../lib/userStats';
 import { useLanguage } from '../lib/i18n';
+import { ErrorBoundary } from './ErrorBoundary';
 
 // Helper to create a soft particle texture
 const createSoftParticleTexture = () => {
@@ -37,10 +38,10 @@ function Statue({ hasDonated, isBowing }: { hasDonated: boolean, isBowing: boole
   
   const statueMaterial = useMemo(() => new THREE.MeshPhysicalMaterial({
     color: "#FFD700",
-    metalness: 0.9,
-    roughness: 0.15,
+    metalness: 0.7, // Reduced metalness for better visibility without env map
+    roughness: 0.2,
     emissive: new THREE.Color("#FFD700"),
-    emissiveIntensity: 0.1,
+    emissiveIntensity: 0.15, // Increased emissive
     clearcoat: 1.0,
     clearcoatRoughness: 0.1,
     reflectivity: 1.0,
@@ -48,6 +49,7 @@ function Statue({ hasDonated, isBowing }: { hasDonated: boolean, isBowing: boole
     sheenRoughness: 0.2,
     sheenColor: new THREE.Color("#ffffff"),
     ior: 1.5,
+    envMapIntensity: 2.0, // Increased env map intensity
   }), []);
 
   const heartLightRef = useRef<THREE.PointLight>(null);
@@ -886,17 +888,43 @@ function BowingAura({ isBowing }: { isBowing: boolean }) {
 }
 
 function SceneLoader({ onReady }: { onReady: () => void }) {
+  const { gl, scene } = useThree();
+  
   useEffect(() => {
-    // Small delay to ensure everything is truly ready and avoid flickering
-    const timer = setTimeout(onReady, 100);
-    return () => clearTimeout(timer);
-  }, [onReady]);
+    let mounted = true;
+    
+    // Force ready after a timeout regardless of other checks
+    const timeout = setTimeout(() => {
+      if (mounted) onReady();
+    }, 3000);
+
+    // Check if renderer is actually active
+    const checkReady = () => {
+      if (gl && mounted) {
+        onReady();
+      }
+    };
+
+    const timer = setTimeout(checkReady, 500);
+    
+    return () => {
+      mounted = false;
+      clearTimeout(timer);
+      clearTimeout(timeout);
+    };
+  }, [onReady, gl]);
+  
   return null;
 }
 
-export function TempleScene({ isIncenseLit, isBowing, hasDonated }: { isIncenseLit: boolean, isBowing: boolean, hasDonated: boolean }) {
+export function TempleScene({ isIncenseLit, isBowing, hasDonated, onReady }: { isIncenseLit: boolean, isBowing: boolean, hasDonated: boolean, onReady?: () => void }) {
   const controlsRef = useRef<any>(null);
   const [isReady, setIsReady] = useState(false);
+
+  const handleReady = useCallback(() => {
+    setIsReady(true);
+    onReady?.();
+  }, [onReady]);
   
   // Dynamic Environment Logic based on real time
   const [timeState] = useState(() => {
@@ -957,10 +985,16 @@ export function TempleScene({ isIncenseLit, isBowing, hasDonated }: { isIncenseL
         <fog attach="fog" args={[envConfig.fog, 5, 25]} />
         
         <Suspense fallback={null}>
-          <SceneLoader onReady={() => setIsReady(true)} />
-          <Environment preset="sunset" blur={0.8} />
+          <SceneLoader onReady={handleReady} />
           
-          {/* Lighting Setup */}
+          <ErrorBoundary fallback={<ambientLight intensity={0.5} />}>
+            <Environment preset="sunset" blur={0.8} />
+          </ErrorBoundary>
+          
+          {/* Fallback lights in case environment fails */}
+          <directionalLight position={[5, 5, 5]} intensity={0.8} color="#ffffff" />
+          <directionalLight position={[-5, 5, -5]} intensity={0.4} color="#ffffff" />
+          <pointLight position={[0, 5, 2]} intensity={1.5} color="#fff4d1" />
           <ambientLight intensity={envConfig.ambient} />
           <SpotLight 
             position={envConfig.spot.pos as any} 
@@ -984,7 +1018,7 @@ export function TempleScene({ isIncenseLit, isBowing, hasDonated }: { isIncenseL
           <CameraController isBowing={isBowing} controlsRef={controlsRef} />
           <OrbitControls 
             ref={controlsRef}
-            target={[0, 1.8, -2]}
+            target={[0, 2.5, -4]}
             enableZoom={false} 
             enablePan={false}
             maxPolarAngle={Math.PI / 2}
@@ -995,18 +1029,20 @@ export function TempleScene({ isIncenseLit, isBowing, hasDonated }: { isIncenseL
             dampingFactor={0.05}
           />
 
-          {/* Post Processing */}
-          <EffectComposer>
-            <Bloom 
-              luminanceThreshold={0.2} 
-              mipmapBlur 
-              intensity={envConfig.bloom} 
-              radius={0.4} 
-            />
-            <Vignette eskil={false} offset={0.1} darkness={1.1} />
-            <ChromaticAberration offset={new THREE.Vector2(0.001, 0.001)} />
-            <Noise opacity={0.02} />
-          </EffectComposer>
+          {/* Post Processing - Wrapped in ErrorBoundary to prevent total crash */}
+          <ErrorBoundary fallback={null}>
+            <EffectComposer multisampling={0}>
+              <Bloom 
+                luminanceThreshold={0.2} 
+                mipmapBlur 
+                intensity={envConfig.bloom} 
+                radius={0.4} 
+              />
+              <Vignette eskil={false} offset={0.1} darkness={1.1} />
+              <ChromaticAberration offset={new THREE.Vector2(0.001, 0.001)} />
+              <Noise opacity={0.02} />
+            </EffectComposer>
+          </ErrorBoundary>
         </Suspense>
       </Canvas>
 

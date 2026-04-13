@@ -18,6 +18,7 @@ import { GuideModal } from './components/GuideModal';
 import { LegalModal } from './components/LegalModal';
 import { UserProfile } from './components/UserProfile';
 import { KnowledgeBase } from './components/KnowledgeBase';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import { useLanguage } from './lib/i18n';
 import { useUserStats } from './lib/userStats';
 
@@ -45,14 +46,6 @@ export default function App() {
   const { t } = useLanguage();
   const { incrementBow, incrementIncense } = useUserStats();
 
-  // Simulate scene loading for a smoother experience
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsSceneReady(true);
-    }, 2000);
-    return () => clearTimeout(timer);
-  }, []);
-
   // Handle the bow animation trigger
   const handleBow = () => {
     if (isBowing) return;
@@ -73,25 +66,29 @@ export default function App() {
   };
 
   return (
-    <div className="relative w-full h-screen bg-[#050505] overflow-hidden font-serif">
-      <AnimatePresence mode="wait">
-        {!hasEntered && (
-          <WelcomeScreen 
-            key="welcome"
-            onEnter={() => setHasEntered(true)} 
-            onOpenKnowledge={() => setShowKnowledge(true)}
-            onOpenLegal={(type) => setLegalModalType(type)}
-            isSceneReady={isSceneReady} 
-          />
-        )}
-      </AnimatePresence>
+    <ErrorBoundary>
+      <div className="relative w-full h-screen bg-[#050505] overflow-hidden font-serif">
+        <AnimatePresence mode="wait">
+          {!hasEntered && (
+            <WelcomeScreen 
+              key="welcome"
+              onEnter={() => setHasEntered(true)} 
+              onOpenKnowledge={() => setShowKnowledge(true)}
+              onOpenLegal={(type) => setLegalModalType(type)}
+              isSceneReady={isSceneReady} 
+            />
+          )}
+        </AnimatePresence>
 
-      {/* 3D Scene */}
-      <TempleScene 
-        isIncenseLit={isIncenseLit} 
-        isBowing={isBowing} 
-        hasDonated={hasDonated} 
-      />
+        {/* 3D Scene */}
+        <ErrorBoundary fallback={<div className="absolute inset-0 bg-black flex items-center justify-center text-amber-500">3D Scene Error</div>}>
+          <TempleScene 
+            isIncenseLit={isIncenseLit} 
+            isBowing={isBowing} 
+            hasDonated={hasDonated} 
+            onReady={() => setIsSceneReady(true)}
+          />
+        </ErrorBoundary>
 
       {/* Audio Controller */}
       <AudioController 
@@ -263,6 +260,7 @@ export default function App() {
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+      </div>
+    </ErrorBoundary>
   );
 }
