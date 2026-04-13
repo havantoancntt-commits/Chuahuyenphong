@@ -1,6 +1,6 @@
 import { useRef, useState, useMemo, Suspense, useCallback, useEffect } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { OrbitControls, Sparkles, Environment, Float, useTexture, PointMaterial, SpotLight, Text } from '@react-three/drei';
+import { OrbitControls, Sparkles, Environment, Float, useTexture, PointMaterial, SpotLight, Text, Instances, Instance, Merged } from '@react-three/drei';
 import { EffectComposer, Bloom, Vignette, Noise, ChromaticAberration } from '@react-three/postprocessing';
 import * as THREE from 'three';
 import { useUserStats } from '../lib/userStats';
@@ -140,99 +140,99 @@ function Statue({ hasDonated, isBowing }: { hasDonated: boolean, isBowing: boole
           
           {/* Crossed Legs (Lotus Position) */}
           <mesh castShadow receiveShadow position={[0, 0.4, 0.2]} scale={[1.8, 0.4, 1.2]} material={statueMaterial}>
-            <sphereGeometry args={[1, 32, 32]} />
+            <sphereGeometry args={[1, 24, 24]} />
           </mesh>
 
           {/* Torso */}
           <mesh castShadow receiveShadow position={[0, 1.4, 0]} scale={[1.1, 1.3, 0.8]} material={statueMaterial}>
-            <sphereGeometry args={[1, 32, 32]} />
+            <sphereGeometry args={[1, 24, 24]} />
           </mesh>
 
           {/* Shoulders / Chest */}
           <mesh castShadow receiveShadow position={[0, 2.2, 0]} scale={[1.4, 0.6, 0.7]} material={statueMaterial}>
-            <sphereGeometry args={[1, 32, 32]} />
+            <sphereGeometry args={[1, 24, 24]} />
           </mesh>
 
           {/* Arms */}
           <mesh castShadow receiveShadow position={[-1.1, 1.5, 0]} rotation={[0, 0, -0.3]} scale={[0.3, 1.2, 0.4]} material={statueMaterial}>
-            <sphereGeometry args={[1, 32, 32]} />
+            <sphereGeometry args={[1, 16, 16]} />
           </mesh>
           <mesh castShadow receiveShadow position={[1.1, 1.5, 0]} rotation={[0, 0, 0.3]} scale={[0.3, 1.2, 0.4]} material={statueMaterial}>
-            <sphereGeometry args={[1, 32, 32]} />
+            <sphereGeometry args={[1, 16, 16]} />
           </mesh>
 
           {/* Hands resting on lap */}
           <mesh castShadow receiveShadow position={[0, 0.8, 0.7]} scale={[0.6, 0.2, 0.4]} material={statueMaterial}>
-            <sphereGeometry args={[1, 32, 32]} />
+            <sphereGeometry args={[1, 16, 16]} />
           </mesh>
 
           {/* Neck */}
           <mesh castShadow receiveShadow position={[0, 2.7, 0]} material={statueMaterial}>
-            <cylinderGeometry args={[0.3, 0.35, 0.4, 32]} />
+            <cylinderGeometry args={[0.3, 0.35, 0.4, 16]} />
           </mesh>
 
           {/* Head Group */}
           <group position={[0, 3.3, 0.1]}>
             {/* Main Head Sphere */}
             <mesh castShadow receiveShadow material={statueMaterial}>
-              <sphereGeometry args={[0.65, 32, 32]} />
+              <sphereGeometry args={[0.65, 24, 24]} />
             </mesh>
 
             {/* Face Features */}
             <group position={[0, 0, 0.58]}>
               {/* Urna (Third Eye) */}
               <mesh position={[0, 0.2, 0.04]}>
-                <sphereGeometry args={[0.03, 16, 16]} />
+                <sphereGeometry args={[0.03, 8, 8]} />
                 <meshStandardMaterial color="#ffffff" emissive="#ffffff" emissiveIntensity={1.5} />
               </mesh>
 
               {/* Bindi/Dot */}
               <mesh position={[0, 0.2, 0.05]}>
-                <circleGeometry args={[0.04, 32]} />
+                <circleGeometry args={[0.04, 16]} />
                 <meshBasicMaterial color="#ffffff" transparent opacity={0.5} blending={THREE.AdditiveBlending} />
               </mesh>
 
               {/* Eyebrows */}
               <mesh position={[-0.18, 0.14, 0.03]} rotation={[0, 0, Math.PI * 0.15 + 0.1]} material={statueMaterial}>
-                <torusGeometry args={[0.09, 0.012, 16, 32, Math.PI * 0.7]} />
+                <torusGeometry args={[0.09, 0.012, 8, 16, Math.PI * 0.7]} />
               </mesh>
               <mesh position={[0.18, 0.14, 0.03]} rotation={[0, 0, Math.PI * 0.15 - 0.1]} material={statueMaterial}>
-                <torusGeometry args={[0.09, 0.012, 16, 32, Math.PI * 0.7]} />
+                <torusGeometry args={[0.09, 0.012, 8, 16, Math.PI * 0.7]} />
               </mesh>
 
               {/* Closed Eyes - More serene and soulful */}
               <mesh position={[-0.18, 0.03, 0.04]} rotation={[0.1, 0, Math.PI * 1.1 + 0.05]} material={statueMaterial}>
-                <torusGeometry args={[0.09, 0.018, 16, 32, Math.PI * 0.8]} />
+                <torusGeometry args={[0.09, 0.018, 8, 16, Math.PI * 0.8]} />
               </mesh>
               <mesh position={[0.18, 0.03, 0.04]} rotation={[0.1, 0, Math.PI * 1.1 - 0.05]} material={statueMaterial}>
-                <torusGeometry args={[0.09, 0.018, 16, 32, Math.PI * 0.8]} />
+                <torusGeometry args={[0.09, 0.018, 8, 16, Math.PI * 0.8]} />
               </mesh>
 
               {/* Nose */}
               <mesh position={[0, -0.08, 0.07]} rotation={[0.15, 0, 0]} material={statueMaterial}>
-                <capsuleGeometry args={[0.028, 0.14, 8, 8]} />
+                <capsuleGeometry args={[0.028, 0.14, 4, 8]} />
               </mesh>
 
               {/* Smile - More compassionate and gentle */}
               <mesh position={[0, -0.24, 0.03]} rotation={[-0.1, 0, Math.PI * 1.15]} material={statueMaterial}>
-                <torusGeometry args={[0.08, 0.012, 16, 32, Math.PI * 0.7]} />
+                <torusGeometry args={[0.08, 0.012, 8, 16, Math.PI * 0.7]} />
               </mesh>
             </group>
 
             {/* Ushnisha (Top bump) */}
             <mesh castShadow receiveShadow position={[0, 0.62, 0]} material={statueMaterial}>
-              <sphereGeometry args={[0.25, 32, 32]} />
+              <sphereGeometry args={[0.25, 16, 16]} />
             </mesh>
             <mesh castShadow receiveShadow position={[0, 0.82, 0]} material={statueMaterial}>
-              <sphereGeometry args={[0.08, 32, 32]} />
+              <sphereGeometry args={[0.08, 12, 12]} />
             </mesh>
 
             {/* Ears (Elongated) */}
             <mesh castShadow receiveShadow position={[-0.65, -0.1, 0]} scale={[0.1, 0.4, 0.2]} material={statueMaterial}>
-              <sphereGeometry args={[1, 16, 16]} />
+              <sphereGeometry args={[1, 12, 12]} />
             </mesh>
             <mesh castShadow receiveShadow position={[0.65, -0.1, 0]} scale={[0.1, 0.4, 0.2]} material={statueMaterial}>
-              <sphereGeometry args={[1, 16, 16]} />
+              <sphereGeometry args={[1, 12, 12]} />
             </mesh>
           </group>
           
@@ -252,29 +252,37 @@ function Statue({ hasDonated, isBowing }: { hasDonated: boolean, isBowing: boole
       <group position={[0, -0.2, 0]}>
         {/* Base cylinder */}
         <mesh receiveShadow position={[0, 0.25, 0]}>
-          <cylinderGeometry args={[2.4, 2.8, 0.6, 64]} />
+          <cylinderGeometry args={[2.4, 2.8, 0.6, 32]} />
           <meshStandardMaterial color="#4a3219" roughness={0.9} metalness={0.1} />
         </mesh>
         
-        {/* Lotus Petals - Layer 1 */}
-        {Array.from({ length: 12 }).map((_, i) => (
-          <group key={`petal-1-${i}`} rotation={[0, (i / 12) * Math.PI * 2, 0]}>
-            <mesh position={[0, 0.6, 2.2]} rotation={[-0.4, 0, 0]}>
-              <sphereGeometry args={[0.6, 16, 16]} scale={[1, 0.2, 1.5]} />
-              <meshPhysicalMaterial color="#d4af37" metalness={0.7} roughness={0.3} clearcoat={0.5} />
-            </mesh>
-          </group>
-        ))}
-
-        {/* Lotus Petals - Layer 2 */}
-        {Array.from({ length: 8 }).map((_, i) => (
-          <group key={`petal-2-${i}`} rotation={[0, (i / 8) * Math.PI * 2 + 0.3, 0]}>
-            <mesh position={[0, 0.8, 1.6]} rotation={[-0.6, 0, 0]}>
-              <sphereGeometry args={[0.5, 16, 16]} scale={[1, 0.2, 1.3]} />
-              <meshPhysicalMaterial color="#ffd700" metalness={0.8} roughness={0.2} clearcoat={0.8} />
-            </mesh>
-          </group>
-        ))}
+        {/* Lotus Petals - Layer 1 (Instanced) */}
+        <Instances range={12}>
+          <sphereGeometry args={[0.6, 12, 12]} />
+          <meshPhysicalMaterial color="#d4af37" metalness={0.7} roughness={0.3} clearcoat={0.5} />
+          {Array.from({ length: 12 }).map((_, i) => (
+            <Instance 
+              key={`petal-1-${i}`} 
+              position={[Math.sin((i / 12) * Math.PI * 2) * 2.2, 0.6, Math.cos((i / 12) * Math.PI * 2) * 2.2]} 
+              rotation={[-0.4, (i / 12) * Math.PI * 2, 0]} 
+              scale={[1, 0.2, 1.5]} 
+            />
+          ))}
+        </Instances>
+        
+        {/* Lotus Petals - Layer 2 (Instanced) */}
+        <Instances range={8}>
+          <sphereGeometry args={[0.5, 12, 12]} />
+          <meshPhysicalMaterial color="#ffd700" metalness={0.8} roughness={0.2} clearcoat={0.8} />
+          {Array.from({ length: 8 }).map((_, i) => (
+            <Instance 
+              key={`petal-2-${i}`} 
+              position={[Math.sin((i / 8) * Math.PI * 2 + 0.3) * 1.6, 0.8, Math.cos((i / 8) * Math.PI * 2 + 0.3) * 1.6]} 
+              rotation={[-0.6, (i / 8) * Math.PI * 2 + 0.3, 0]} 
+              scale={[1, 0.2, 1.3]} 
+            />
+          ))}
+        </Instances>
       </group>
     </group>
   );
@@ -374,7 +382,7 @@ function Altar({ isIncenseLit }: { isIncenseLit: boolean }) {
 
       {/* Incense Burner */}
       <mesh position={[0, 0.6, 0]} castShadow>
-        <cylinderGeometry args={[0.3, 0.4, 0.4, 32]} />
+        <cylinderGeometry args={[0.3, 0.4, 0.4, 16]} />
         <meshStandardMaterial color="#b87333" metalness={0.6} roughness={0.4} />
       </mesh>
 
@@ -427,27 +435,11 @@ function Altar({ isIncenseLit }: { isIncenseLit: boolean }) {
 
       {/* Candles */}
       <group position={[-1.5, 0.6, 0]}>
-        <mesh castShadow>
-          <cylinderGeometry args={[0.08, 0.08, 0.3]} />
-          <meshStandardMaterial color="#ffcc80" />
-        </mesh>
-        <pointLight ref={candleLight1} position={[0, 0.3, 0]} color="#ffaa00" distance={5} decay={2} />
-        <mesh position={[0, 0.2, 0]}>
-          <sphereGeometry args={[0.05]} />
-          <meshBasicMaterial color="#ffffff" />
-        </mesh>
+        <Candle lightRef={candleLight1} />
       </group>
 
       <group position={[1.5, 0.6, 0]}>
-        <mesh castShadow>
-          <cylinderGeometry args={[0.08, 0.08, 0.3]} />
-          <meshStandardMaterial color="#ffcc80" />
-        </mesh>
-        <pointLight ref={candleLight2} position={[0, 0.3, 0]} color="#ffaa00" distance={5} decay={2} />
-        <mesh position={[0, 0.2, 0]}>
-          <sphereGeometry args={[0.05]} />
-          <meshBasicMaterial color="#ffffff" />
-        </mesh>
+        <Candle lightRef={candleLight2} />
       </group>
 
       {/* Stylized Lotus Flowers */}
@@ -476,7 +468,21 @@ function Altar({ isIncenseLit }: { isIncenseLit: boolean }) {
   );
 }
 
-// Temple Bell Component
+function Candle({ lightRef }: { lightRef: React.RefObject<THREE.PointLight> }) {
+  return (
+    <group>
+      <mesh castShadow>
+        <cylinderGeometry args={[0.08, 0.08, 0.3, 8]} />
+        <meshStandardMaterial color="#ffcc80" />
+      </mesh>
+      <pointLight ref={lightRef} position={[0, 0.3, 0]} color="#ffaa00" distance={5} decay={2} />
+      <mesh position={[0, 0.2, 0]}>
+        <sphereGeometry args={[0.05, 8, 8]} />
+        <meshBasicMaterial color="#ffffff" />
+      </mesh>
+    </group>
+  );
+}
 function TempleBell() {
   const { incrementBell } = useUserStats();
   const { t } = useLanguage();
@@ -566,8 +572,8 @@ function TempleArchitecture() {
     const t = state.clock.getElapsedTime();
     
     // Calculate wind effect on rotation (sway)
-    const windSwayX = windVelocity.current.z * 0.5; // Moving Z causes X rotation
-    const windSwayZ = -windVelocity.current.x * 0.5; // Moving X causes Z rotation
+    const windSwayX = windVelocity.current.z * 0.5;
+    const windSwayZ = -windVelocity.current.x * 0.5;
 
     if (lanternRef1.current) {
       const targetZ = Math.sin(t * 0.5) * 0.05 + windSwayZ;
@@ -599,70 +605,50 @@ function TempleArchitecture() {
         <meshStandardMaterial color="#3e2723" roughness={0.9} />
       </mesh>
 
-      {/* Pillars */}
-      <mesh position={[-4, 4, -4]} castShadow receiveShadow>
-        <cylinderGeometry args={[0.4, 0.4, 8, 16]} />
+      {/* Pillars (Instanced) */}
+      <Instances range={4}>
+        <cylinderGeometry args={[0.4, 0.4, 8, 12]} />
         <meshStandardMaterial color="#2e1b12" roughness={0.8} />
-      </mesh>
-      <mesh position={[4, 4, -4]} castShadow receiveShadow>
-        <cylinderGeometry args={[0.4, 0.4, 8, 16]} />
-        <meshStandardMaterial color="#2e1b12" roughness={0.8} />
-      </mesh>
-      <mesh position={[-4, 4, 2]} castShadow receiveShadow>
-        <cylinderGeometry args={[0.4, 0.4, 8, 16]} />
-        <meshStandardMaterial color="#2e1b12" roughness={0.8} />
-      </mesh>
-      <mesh position={[4, 4, 2]} castShadow receiveShadow>
-        <cylinderGeometry args={[0.4, 0.4, 8, 16]} />
-        <meshStandardMaterial color="#2e1b12" roughness={0.8} />
-      </mesh>
+        <Instance position={[-4, 4, -4]} />
+        <Instance position={[4, 4, -4]} />
+        <Instance position={[-4, 4, 2]} />
+        <Instance position={[4, 4, 2]} />
+      </Instances>
 
       {/* Hanging Lanterns */}
       <group position={[-3, 6, -2]} ref={lanternRef1}>
-        {/* String */}
-        <mesh position={[0, 1, 0]}>
-          <cylinderGeometry args={[0.02, 0.02, 2]} />
-          <meshStandardMaterial color="#1a1a1a" />
-        </mesh>
-        {/* Lantern Body */}
-        <mesh position={[0, 0, 0]}>
-          <cylinderGeometry args={[0.4, 0.4, 0.8, 8]} />
-          <meshStandardMaterial color="#8b0000" emissive="#8b0000" emissiveIntensity={0.2} transparent opacity={0.9} />
-        </mesh>
-        {/* Lantern Top/Bottom */}
-        <mesh position={[0, 0.45, 0]}>
-          <cylinderGeometry args={[0.45, 0.45, 0.1, 8]} />
-          <meshStandardMaterial color="#d4af37" metalness={0.8} roughness={0.2} />
-        </mesh>
-        <mesh position={[0, -0.45, 0]}>
-          <cylinderGeometry args={[0.45, 0.45, 0.1, 8]} />
-          <meshStandardMaterial color="#d4af37" metalness={0.8} roughness={0.2} />
-        </mesh>
-        <pointLight position={[0, 0, 0]} color="#ffaa00" intensity={1} distance={4} decay={2} />
+        <Lantern />
       </group>
-
       <group position={[3, 6, -2]} ref={lanternRef2}>
-        {/* String */}
-        <mesh position={[0, 1, 0]}>
-          <cylinderGeometry args={[0.02, 0.02, 2]} />
-          <meshStandardMaterial color="#1a1a1a" />
-        </mesh>
-        {/* Lantern Body */}
-        <mesh position={[0, 0, 0]}>
-          <cylinderGeometry args={[0.4, 0.4, 0.8, 8]} />
-          <meshStandardMaterial color="#8b0000" emissive="#8b0000" emissiveIntensity={0.2} transparent opacity={0.9} />
-        </mesh>
-        {/* Lantern Top/Bottom */}
-        <mesh position={[0, 0.45, 0]}>
-          <cylinderGeometry args={[0.45, 0.45, 0.1, 8]} />
-          <meshStandardMaterial color="#d4af37" metalness={0.8} roughness={0.2} />
-        </mesh>
-        <mesh position={[0, -0.45, 0]}>
-          <cylinderGeometry args={[0.45, 0.45, 0.1, 8]} />
-          <meshStandardMaterial color="#d4af37" metalness={0.8} roughness={0.2} />
-        </mesh>
-        <pointLight position={[0, 0, 0]} color="#ffaa00" intensity={1} distance={4} decay={2} />
+        <Lantern />
       </group>
+    </group>
+  );
+}
+
+function Lantern() {
+  return (
+    <group>
+      {/* String */}
+      <mesh position={[0, 1, 0]}>
+        <cylinderGeometry args={[0.02, 0.02, 2, 4]} />
+        <meshStandardMaterial color="#1a1a1a" />
+      </mesh>
+      {/* Lantern Body */}
+      <mesh position={[0, 0, 0]}>
+        <cylinderGeometry args={[0.4, 0.4, 0.8, 8]} />
+        <meshStandardMaterial color="#8b0000" emissive="#8b0000" emissiveIntensity={0.2} transparent opacity={0.9} />
+      </mesh>
+      {/* Lantern Top/Bottom */}
+      <mesh position={[0, 0.45, 0]}>
+        <cylinderGeometry args={[0.45, 0.45, 0.1, 8]} />
+        <meshStandardMaterial color="#d4af37" metalness={0.8} roughness={0.2} />
+      </mesh>
+      <mesh position={[0, -0.45, 0]}>
+        <cylinderGeometry args={[0.45, 0.45, 0.1, 8]} />
+        <meshStandardMaterial color="#d4af37" metalness={0.8} roughness={0.2} />
+      </mesh>
+      <pointLight position={[0, 0, 0]} color="#ffaa00" intensity={1} distance={4} decay={2} />
     </group>
   );
 }
